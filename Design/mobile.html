@@ -1,0 +1,925 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Crush On You – Mobile</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+    <style>
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        :root {
+            --rose: #F2708A;
+            --rose-light: #FDE8ED;
+            --rose-soft: #FAD4DC;
+            --rose-dark: #C0455E;
+            --lavender: #E8E4F8;
+            --lavender-mid: #C9C0F0;
+            --lavender-deep: #7C6FD4;
+            --cream: #FDF8F5;
+            --blush: #FFF0F3;
+            --text-primary: #1A1520;
+            --text-secondary: #6B5D68;
+            --text-muted: #A898A4;
+            --surface: #FFFFFF;
+            --surface-alt: #FBF7F8;
+            --border: rgba(194, 160, 172, 0.2);
+            --border-strong: rgba(194, 160, 172, 0.35);
+            --online: #4ECFA8;
+            --shadow-sm: 0 1px 8px rgba(180, 130, 150, 0.08);
+            --shadow-md: 0 4px 24px rgba(180, 130, 150, 0.12);
+            --safe-top: env(safe-area-inset-top);
+            --safe-bottom: env(safe-area-inset-bottom);
+        }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background: var(--cream);
+            color: var(--text-primary);
+            min-height: 100vh;
+            overflow-x: hidden;
+            padding-bottom: calc(80px + var(--safe-bottom));
+        }
+
+        /* Background decoration */
+        body::before {
+            content: '';
+            position: fixed;
+            top: -100px;
+            right: -100px;
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(circle, rgba(232, 228, 248, 0.6) 0%, transparent 70%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* Header */
+        .mobile-header {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: rgba(253, 248, 245, 0.95);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border);
+            padding: 12px 16px calc(12px + var(--safe-top));
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+        }
+
+        .header-logo {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-family: 'Playfair Display', serif;
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--rose-dark);
+        }
+
+        .logo-icon {
+            width: 32px;
+            height: 32px;
+            background: linear-gradient(135deg, var(--rose), var(--rose-dark));
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .icon-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--surface-alt);
+            border: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            position: relative;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .icon-btn:active {
+            transform: scale(0.95);
+            background: var(--rose-light);
+        }
+
+        .notif-badge {
+            position: absolute;
+            top: 6px;
+            right: 6px;
+            width: 8px;
+            height: 8px;
+            background: var(--rose);
+            border-radius: 50%;
+            border: 2px solid var(--surface-alt);
+        }
+
+        .avatar-sm {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border: 2px solid var(--rose-soft);
+            overflow: hidden;
+        }
+
+        /* Stories/Online Strip */
+        .stories-strip {
+            background: var(--surface);
+            border-bottom: 1px solid var(--border);
+            padding: 12px 0;
+            overflow-x: auto;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+        }
+
+        .stories-strip::-webkit-scrollbar {
+            display: none;
+        }
+
+        .stories-container {
+            display: flex;
+            gap: 16px;
+            padding: 0 16px;
+        }
+
+        .story-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            flex-shrink: 0;
+            cursor: pointer;
+        }
+
+        .story-avatar {
+            width: 64px;
+            height: 64px;
+            border-radius: 50%;
+            padding: 3px;
+            background: linear-gradient(135deg, var(--rose), var(--lavender-deep));
+            position: relative;
+        }
+
+        .story-avatar img, .story-avatar-inner {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            border: 3px solid white;
+            object-fit: cover;
+            background: var(--surface);
+        }
+
+        .story-online {
+            position: absolute;
+            bottom: 2px;
+            right: 2px;
+            width: 12px;
+            height: 12px;
+            background: var(--online);
+            border-radius: 50%;
+            border: 2px solid white;
+        }
+
+        .story-name {
+            font-size: 11px;
+            color: var(--text-secondary);
+            max-width: 64px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .add-story {
+            position: relative;
+        }
+
+        .add-story::after {
+            content: '+';
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            width: 20px;
+            height: 20px;
+            background: var(--rose);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            font-weight: 500;
+            border: 2px solid white;
+        }
+
+        /* Main Content */
+        .mobile-feed {
+            padding: 12px 12px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        /* Compose Card */
+        .compose-card {
+            background: var(--surface);
+            border-radius: 20px;
+            border: 1px solid var(--border);
+            box-shadow: var(--shadow-sm);
+            padding: 14px;
+        }
+
+        .compose-row {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 12px;
+        }
+
+        .compose-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border: 2px solid var(--rose-soft);
+            overflow: hidden;
+            flex-shrink: 0;
+        }
+
+        .compose-input {
+            flex: 1;
+            background: var(--surface-alt);
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            padding: 10px 16px;
+            font-family: 'DM Sans', sans-serif;
+            font-size: 14px;
+            color: var(--text-muted);
+            outline: none;
+        }
+
+        .compose-actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 12px;
+            border-top: 1px solid var(--border);
+        }
+
+        .compose-quick-actions {
+            display: flex;
+            gap: 16px;
+        }
+
+        .quick-action {
+            font-size: 20px;
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .quick-action:active {
+            transform: scale(0.9);
+        }
+
+        .compose-btn {
+            background: linear-gradient(135deg, var(--rose), var(--rose-dark));
+            color: white;
+            border: none;
+            border-radius: 20px;
+            padding: 8px 20px;
+            font-family: 'DM Sans', sans-serif;
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            box-shadow: 0 2px 12px rgba(242, 112, 138, 0.35);
+        }
+
+        /* Post Card */
+        .post-card {
+            background: var(--surface);
+            border-radius: 20px;
+            border: 1px solid var(--border);
+            box-shadow: var(--shadow-sm);
+            overflow: hidden;
+        }
+
+        .post-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 14px;
+        }
+
+        .post-avatar {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            border: 2px solid var(--rose-soft);
+            overflow: hidden;
+            flex-shrink: 0;
+        }
+
+        .post-meta {
+            flex: 1;
+        }
+
+        .post-author {
+            font-size: 15px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 2px;
+        }
+
+        .post-time {
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+
+        .post-more {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            color: var(--text-muted);
+            cursor: pointer;
+        }
+
+        .post-more:active {
+            background: var(--surface-alt);
+        }
+
+        .post-content {
+            padding: 0 14px 12px;
+            font-size: 14px;
+            line-height: 1.5;
+            color: var(--text-primary);
+        }
+
+        .post-images {
+            display: grid;
+            gap: 2px;
+            background: var(--border);
+        }
+
+        .post-images.single {
+            grid-template-columns: 1fr;
+        }
+
+        .post-images.double {
+            grid-template-columns: 1fr 1fr;
+        }
+
+        .post-img {
+            aspect-ratio: 1;
+            background: var(--surface-alt);
+            overflow: hidden;
+            position: relative;
+        }
+
+        .post-img img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .img-placeholder {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 48px;
+        }
+
+        .post-profile-embed {
+            background: var(--surface-alt);
+            margin: 12px 14px;
+            border-radius: 12px;
+            padding: 12px;
+            border: 1px solid var(--border);
+        }
+
+        .embed-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+
+        .embed-item {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .embed-label {
+            font-size: 11px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.03em;
+        }
+
+        .embed-value {
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--text-primary);
+        }
+
+        .post-actions {
+            display: flex;
+            align-items: center;
+            padding: 8px 14px 14px;
+            gap: 8px;
+        }
+
+        .action-btn {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 8px 12px;
+            border-radius: 20px;
+            font-size: 13px;
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .action-btn:active {
+            background: var(--rose-light);
+            color: var(--rose-dark);
+        }
+
+        .action-btn.liked {
+            color: var(--rose);
+        }
+
+        .action-btn span {
+            font-size: 18px;
+        }
+
+        .action-btn.bookmark {
+            margin-left: auto;
+            padding: 8px;
+        }
+
+        /* Bottom Navigation */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(255, 255, 255, 0.98);
+            backdrop-filter: blur(20px);
+            border-top: 1px solid var(--border);
+            padding: 8px 0 calc(8px + var(--safe-bottom));
+            z-index: 1000;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            padding: 4px 16px;
+            cursor: pointer;
+            color: var(--text-muted);
+            transition: all 0.2s;
+        }
+
+        .nav-item.active {
+            color: var(--rose-dark);
+        }
+
+        .nav-item:active {
+            transform: scale(0.95);
+        }
+
+        .nav-icon {
+            font-size: 24px;
+            position: relative;
+        }
+
+        .nav-label {
+            font-size: 10px;
+            font-weight: 500;
+        }
+
+        .nav-badge {
+            position: absolute;
+            top: -2px;
+            right: -2px;
+            width: 8px;
+            height: 8px;
+            background: var(--rose);
+            border-radius: 50%;
+            border: 2px solid white;
+        }
+
+        .fab {
+            width: 56px;
+            height: 56px;
+            background: linear-gradient(135deg, var(--rose), var(--rose-dark));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 28px;
+            box-shadow: 0 4px 20px rgba(242, 112, 138, 0.4);
+            margin-top: -28px;
+            border: 4px solid var(--cream);
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .fab:active {
+            transform: scale(0.95);
+        }
+
+        /* Avatar styles */
+        .av {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 500;
+            font-size: 14px;
+        }
+
+        .av-rose { background: var(--rose-light); color: var(--rose-dark); }
+        .av-lav { background: var(--lavender); color: var(--lavender-deep); }
+        .av-mint { background: #E1F5EE; color: #0F6E56; }
+        .av-amber { background: #FAEEDA; color: #854F0B; }
+        .av-blue { background: #E6F1FB; color: #185FA5; }
+
+        /* Pull to refresh indicator */
+        .ptr-indicator {
+            text-align: center;
+            padding: 12px;
+            color: var(--text-muted);
+            font-size: 13px;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .ptr-indicator.visible {
+            opacity: 1;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 380px) {
+            .story-avatar {
+                width: 56px;
+                height: 56px;
+            }
+            .story-name {
+                max-width: 56px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header -->
+    <header class="mobile-header">
+        <div class="header-logo">
+            <div class="logo-icon">🤍</div>
+            <span>Crush On You</span>
+        </div>
+        <div class="header-actions">
+            <div class="icon-btn">
+                🔍
+            </div>
+            <div class="icon-btn" style="position: relative;">
+                🔔
+                <span class="notif-badge"></span>
+            </div>
+            <div class="avatar-sm">
+                <div class="av av-rose" style="border-radius: 50%;">VC</div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Stories / Online Contacts -->
+    <div class="stories-strip">
+        <div class="stories-container">
+            <div class="story-item add-story">
+                <div class="story-avatar">
+                    <div class="story-avatar-inner">
+                        <div class="av av-rose" style="font-size: 24px;">+</div>
+                    </div>
+                </div>
+                <span class="story-name">My Story</span>
+            </div>
+            <div class="story-item">
+                <div class="story-avatar">
+                    <div class="story-avatar-inner">
+                        <div class="av av-amber">Pe</div>
+                    </div>
+                    <div class="story-online"></div>
+                </div>
+                <span class="story-name">Pedro</span>
+            </div>
+            <div class="story-item">
+                <div class="story-avatar">
+                    <div class="story-avatar-inner">
+                        <div class="av av-lav">Ma</div>
+                    </div>
+                    <div class="story-online"></div>
+                </div>
+                <span class="story-name">Mads</span>
+            </div>
+            <div class="story-item">
+                <div class="story-avatar">
+                    <div class="story-avatar-inner">
+                        <div class="av av-mint">Ti</div>
+                    </div>
+                    <div class="story-online"></div>
+                </div>
+                <span class="story-name">Timothée</span>
+            </div>
+            <div class="story-item">
+                <div class="story-avatar">
+                    <div class="story-avatar-inner">
+                        <div class="av av-rose">AG</div>
+                    </div>
+                </div>
+                <span class="story-name">Andrew</span>
+            </div>
+            <div class="story-item">
+                <div class="story-avatar">
+                    <div class="story-avatar-inner">
+                        <div class="av av-blue">TH</div>
+                    </div>
+                </div>
+                <span class="story-name">Tom</span>
+            </div>
+            <div class="story-item">
+                <div class="story-avatar">
+                    <div class="story-avatar-inner">
+                        <div class="av av-amber">Do</div>
+                    </div>
+                    <div class="story-online"></div>
+                </div>
+                <span class="story-name">Donnie</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Feed -->
+    <main class="mobile-feed">
+        
+        <!-- Pull to refresh -->
+        <div class="ptr-indicator" id="ptr">↓ Pull to refresh</div>
+
+        <!-- Compose -->
+        <div class="compose-card">
+            <div class="compose-row">
+                <div class="compose-avatar">
+                    <div class="av av-rose" style="border-radius: 50%;">VC</div>
+                </div>
+                <input type="text" class="compose-input" placeholder="What's on your mind?">
+            </div>
+            <div class="compose-actions">
+                <div class="compose-quick-actions">
+                    <span class="quick-action">🖼</span>
+                    <span class="quick-action">📎</span>
+                    <span class="quick-action">🔴</span>
+                    <span class="quick-action">#</span>
+                </div>
+                <button class="compose-btn">Post</button>
+            </div>
+        </div>
+
+        <!-- Post 1 -->
+        <article class="post-card">
+            <div class="post-header">
+                <div class="post-avatar">
+                    <div class="av av-lav" style="border-radius: 50%;">CW</div>
+                </div>
+                <div class="post-meta">
+                    <div class="post-author">Cameron Williamson</div>
+                    <div class="post-time">14 Aug at 4:21 PM</div>
+                </div>
+                <div class="post-more">⋯</div>
+            </div>
+            
+            <div class="post-images double">
+                <div class="post-img">
+                    <div class="img-placeholder" style="background: linear-gradient(135deg, #d8d0f0 0%, #b8a8e8 100%);">🎧</div>
+                </div>
+                <div class="post-img">
+                    <div class="img-placeholder" style="background: linear-gradient(135deg, #b8d0f4 0%, #a0bef0 100%);">🌀</div>
+                </div>
+            </div>
+
+            <div class="post-actions">
+                <div class="action-btn liked">
+                    <span>♡</span>
+                    <span>30</span>
+                </div>
+                <div class="action-btn">
+                    <span>💬</span>
+                    <span>12</span>
+                </div>
+                <div class="action-btn">
+                    <span>↗</span>
+                    <span>5</span>
+                </div>
+                <div class="action-btn bookmark">
+                    <span>🔖</span>
+                </div>
+            </div>
+        </article>
+
+        <!-- Post 2 -->
+        <article class="post-card">
+            <div class="post-header">
+                <div class="post-avatar">
+                    <div class="av av-mint" style="border-radius: 50%;">TL</div>
+                </div>
+                <div class="post-meta">
+                    <div class="post-author">Terry Lipshutz</div>
+                    <div class="post-time">14 Aug at 4:21 PM</div>
+                </div>
+                <div class="post-more">⋯</div>
+            </div>
+
+            <div class="post-images single">
+                <div class="post-img" style="aspect-ratio: 16/9;">
+                    <div class="img-placeholder" style="background: linear-gradient(135deg, #f0d0e0 0%, #e8b8cc 100%);">🌸</div>
+                </div>
+            </div>
+
+            <div class="post-profile-embed">
+                <div class="embed-grid">
+                    <div class="embed-item">
+                        <span class="embed-label">Education</span>
+                        <span class="embed-value">Bachelor of Software Eng.</span>
+                    </div>
+                    <div class="embed-item">
+                        <span class="embed-label">Drink</span>
+                        <span class="embed-value">Sometimes</span>
+                    </div>
+                    <div class="embed-item">
+                        <span class="embed-label">Languages</span>
+                        <span class="embed-value">English, Russian</span>
+                    </div>
+                    <div class="embed-item">
+                        <span class="embed-label">Marijuana</span>
+                        <span class="embed-value">Yes</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="post-actions">
+                <div class="action-btn">
+                    <span>♡</span>
+                    <span>18</span>
+                </div>
+                <div class="action-btn">
+                    <span>💬</span>
+                    <span>6</span>
+                </div>
+                <div class="action-btn">
+                    <span>↗</span>
+                    <span>2</span>
+                </div>
+                <div class="action-btn bookmark">
+                    <span>🔖</span>
+                </div>
+            </div>
+        </article>
+
+        <!-- Post 3 -->
+        <article class="post-card">
+            <div class="post-header">
+                <div class="post-avatar">
+                    <div class="av av-amber" style="border-radius: 50%;">PP</div>
+                </div>
+                <div class="post-meta">
+                    <div class="post-author">Pedro Pascal</div>
+                    <div class="post-time">14 Aug at 2:15 PM</div>
+                </div>
+                <div class="post-more">⋯</div>
+            </div>
+            
+            <div class="post-content">
+                It's okay baby girl, I got you... 🥺❤️
+            </div>
+
+            <div class="post-actions">
+                <div class="action-btn liked">
+                    <span>♡</span>
+                    <span>2.4k</span>
+                </div>
+                <div class="action-btn">
+                    <span>💬</span>
+                    <span>89</span>
+                </div>
+                <div class="action-btn">
+                    <span>↗</span>
+                    <span>156</span>
+                </div>
+                <div class="action-btn bookmark">
+                    <span>🔖</span>
+                </div>
+            </div>
+        </article>
+
+    </main>
+
+    <!-- Bottom Navigation -->
+    <nav class="bottom-nav">
+        <div class="nav-item active">
+            <div class="nav-icon">🏠</div>
+            <span class="nav-label">Home</span>
+        </div>
+        <div class="nav-item">
+            <div class="nav-icon">🔍</div>
+            <span class="nav-label">Search</span>
+        </div>
+        <div class="fab">+</div>
+        <div class="nav-item">
+            <div class="nav-icon" style="position: relative;">
+                💬
+                <span class="nav-badge"></span>
+            </div>
+            <span class="nav-label">Messages</span>
+        </div>
+        <div class="nav-item">
+            <div class="nav-icon">👤</div>
+            <span class="nav-label">Profile</span>
+        </div>
+    </nav>
+
+    <script>
+        // Simple pull to refresh simulation
+        let touchStartY = 0;
+        let touchEndY = 0;
+        const ptr = document.getElementById('ptr');
+        
+        document.addEventListener('touchstart', e => {
+            touchStartY = e.changedTouches[0].screenY;
+        }, {passive: true});
+        
+        document.addEventListener('touchend', e => {
+            touchEndY = e.changedTouches[0].screenY;
+            handleSwipe();
+        }, {passive: true});
+        
+        function handleSwipe() {
+            if (touchEndY > touchStartY + 100 && window.scrollY === 0) {
+                ptr.classList.add('visible');
+                ptr.textContent = '↻ Refreshing...';
+                setTimeout(() => {
+                    ptr.classList.remove('visible');
+                    ptr.textContent = '↓ Pull to refresh';
+                }, 1500);
+            }
+        }
+
+        // Double tap to like
+        document.querySelectorAll('.post-img').forEach(img => {
+            let lastTap = 0;
+            img.addEventListener('touchend', (e) => {
+                const currentTime = new Date().getTime();
+                const tapLength = currentTime - lastTap;
+                if (tapLength < 300 && tapLength > 0) {
+                    // Double tap detected
+                    const likeBtn = img.closest('.post-card').querySelector('.action-btn');
+                    likeBtn.classList.add('liked');
+                    likeBtn.style.transform = 'scale(1.2)';
+                    setTimeout(() => likeBtn.style.transform = 'scale(1)', 200);
+                }
+                lastTap = currentTime;
+            });
+        });
+    </script>
+</body>
+</html>

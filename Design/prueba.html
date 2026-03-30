@@ -1,0 +1,1355 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crush On You – Redesign</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600&family=DM+Sans:wght@300;400;500&display=swap"
+        rel="stylesheet">
+    <style>
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        :root {
+            --rose: #F2708A;
+            --rose-light: #FDE8ED;
+            --rose-soft: #FAD4DC;
+            --rose-dark: #C0455E;
+            --lavender: #E8E4F8;
+            --lavender-mid: #C9C0F0;
+            --lavender-deep: #7C6FD4;
+            --cream: #FDF8F5;
+            --blush: #FFF0F3;
+            --text-primary: #1A1520;
+            --text-secondary: #6B5D68;
+            --text-muted: #A898A4;
+            --surface: #FFFFFF;
+            --surface-alt: #FBF7F8;
+            --border: rgba(194, 160, 172, 0.2);
+            --border-strong: rgba(194, 160, 172, 0.35);
+            --online: #4ECFA8;
+            --shadow-sm: 0 1px 8px rgba(180, 130, 150, 0.08);
+            --shadow-md: 0 4px 24px rgba(180, 130, 150, 0.12);
+            --shadow-lg: 0 8px 40px rgba(180, 130, 150, 0.16);
+            --r-sm: 10px;
+            --r-md: 16px;
+            --r-lg: 22px;
+            --r-xl: 32px;
+        }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background: var(--cream);
+            color: var(--text-primary);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* ─── BACKGROUND DECORATION ─── */
+        body::before {
+            content: '';
+            position: fixed;
+            top: -200px;
+            right: -200px;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(232, 228, 248, 0.6) 0%, transparent 70%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        body::after {
+            content: '';
+            position: fixed;
+            bottom: -150px;
+            left: -150px;
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, rgba(242, 112, 138, 0.1) 0%, transparent 70%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* ─── NAVBAR ─── */
+        nav {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: rgba(253, 248, 245, 0.88);
+            backdrop-filter: blur(16px);
+            border-bottom: 1px solid var(--border);
+            padding: 0 32px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            gap: 24px;
+        }
+
+        .nav-logo {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-family: 'Playfair Display', serif;
+            font-size: 17px;
+            font-weight: 600;
+            color: var(--rose-dark);
+            white-space: nowrap;
+        }
+
+        .nav-logo-icon {
+            width: 32px;
+            height: 32px;
+            background: linear-gradient(135deg, var(--rose), var(--rose-dark));
+            border-radius: 9px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 15px;
+        }
+
+        .nav-search {
+            flex: 1;
+            max-width: 280px;
+            position: relative;
+        }
+
+        .nav-search input {
+            width: 100%;
+            background: var(--surface-alt);
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            padding: 7px 16px 7px 36px;
+            font-family: 'DM Sans', sans-serif;
+            font-size: 13px;
+            color: var(--text-primary);
+            outline: none;
+            transition: border-color 0.2s, background 0.2s;
+        }
+
+        .nav-search input:focus {
+            border-color: var(--rose);
+            background: white;
+        }
+
+        .nav-search input::placeholder {
+            color: var(--text-muted);
+        }
+
+        .nav-search-icon {
+            position: absolute;
+            left: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-muted);
+            font-size: 13px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 4px;
+            margin-left: auto;
+        }
+
+        .nav-link {
+            padding: 6px 14px;
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--text-secondary);
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-decoration: none;
+        }
+
+        .nav-link:hover {
+            background: var(--rose-light);
+            color: var(--rose-dark);
+        }
+
+        .nav-link.active {
+            background: var(--rose-light);
+            color: var(--rose-dark);
+        }
+
+        .nav-actions {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .nav-avatar {
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            border: 2px solid var(--rose-soft);
+            overflow: hidden;
+            cursor: pointer;
+            transition: border-color 0.2s;
+        }
+
+        .nav-avatar:hover {
+            border-color: var(--rose);
+        }
+
+        .nav-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .nav-notif {
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            background: var(--surface-alt);
+            border: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 15px;
+            position: relative;
+            transition: background 0.2s;
+        }
+
+        .nav-notif:hover {
+            background: var(--rose-light);
+        }
+
+        .notif-dot {
+            position: absolute;
+            top: 6px;
+            right: 6px;
+            width: 7px;
+            height: 7px;
+            background: var(--rose);
+            border-radius: 50%;
+            border: 2px solid var(--cream);
+        }
+
+        /* ─── LAYOUT ─── */
+        .app-layout {
+            position: relative;
+            z-index: 1;
+            display: grid;
+            grid-template-columns: 220px 1fr 280px;
+            gap: 20px;
+            max-width: 1140px;
+            margin: 0 auto;
+            padding: 24px 16px;
+        }
+
+        /* ─── CARD BASE ─── */
+        .card {
+            background: var(--surface);
+            border-radius: var(--r-lg);
+            border: 1px solid var(--border);
+            box-shadow: var(--shadow-sm);
+        }
+
+        /* ─── LEFT SIDEBAR ─── */
+        .sidebar-left {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .profile-card {
+            padding: 24px 20px 20px;
+            text-align: center;
+        }
+
+        .profile-avatar-wrap {
+            position: relative;
+            display: inline-block;
+            margin-bottom: 12px;
+        }
+
+        .profile-avatar {
+            width: 72px;
+            height: 72px;
+            border-radius: 50%;
+            border: 3px solid white;
+            box-shadow: 0 0 0 3px var(--rose-soft), var(--shadow-md);
+            overflow: hidden;
+        }
+
+        .profile-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .profile-status {
+            position: absolute;
+            bottom: 3px;
+            right: 3px;
+            width: 14px;
+            height: 14px;
+            background: var(--online);
+            border-radius: 50%;
+            border: 2px solid white;
+        }
+
+        .profile-name {
+            font-family: 'Playfair Display', serif;
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 3px;
+        }
+
+        .profile-location {
+            font-size: 12px;
+            color: var(--text-muted);
+            margin-bottom: 16px;
+        }
+
+        .profile-stats {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 0;
+            border-top: 1px solid var(--border);
+            padding-top: 14px;
+        }
+
+        .stat {
+            text-align: center;
+        }
+
+        .stat+.stat {
+            border-left: 1px solid var(--border);
+        }
+
+        .stat-num {
+            font-family: 'Playfair Display', serif;
+            font-size: 16px;
+            font-weight: 500;
+            color: var(--text-primary);
+        }
+
+        .stat-label {
+            font-size: 10px;
+            font-weight: 500;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-top: 1px;
+        }
+
+        .suggestions-card {
+            padding: 18px 16px;
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 14px;
+        }
+
+        .section-title {
+            font-size: 12px;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.07em;
+            color: var(--text-muted);
+        }
+
+        .see-all {
+            font-size: 12px;
+            font-weight: 500;
+            color: var(--rose-dark);
+            cursor: pointer;
+            text-decoration: none;
+        }
+
+        .see-all:hover {
+            text-decoration: underline;
+        }
+
+        .suggestion-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 6px 0;
+        }
+
+        .sugg-avatar {
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            overflow: hidden;
+            flex-shrink: 0;
+            border: 2px solid var(--border);
+        }
+
+        .sugg-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .sugg-avatar.placeholder {
+            background: var(--lavender);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--lavender-deep);
+        }
+
+        .sugg-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .sugg-name {
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--text-primary);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .sugg-sub {
+            font-size: 11px;
+            color: var(--text-muted);
+        }
+
+        .sugg-btn {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            border: 1.5px solid var(--rose-soft);
+            background: var(--blush);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 14px;
+            color: var(--rose);
+            transition: all 0.2s;
+            flex-shrink: 0;
+        }
+
+        .sugg-btn:hover {
+            background: var(--rose);
+            color: white;
+            border-color: var(--rose);
+        }
+
+        /* ─── FEED ─── */
+        .feed {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        /* Compose box */
+        .compose-card {
+            padding: 16px 18px;
+        }
+
+        .compose-top {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 14px;
+        }
+
+        .compose-avatar {
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            overflow: hidden;
+            flex-shrink: 0;
+            border: 2px solid var(--rose-soft);
+        }
+
+        .compose-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .compose-input {
+            flex: 1;
+            background: var(--surface-alt);
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            padding: 9px 18px;
+            font-family: 'DM Sans', sans-serif;
+            font-size: 14px;
+            color: var(--text-muted);
+            outline: none;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .compose-input:focus {
+            border-color: var(--rose);
+            background: white;
+            color: var(--text-primary);
+        }
+
+        .compose-share-btn {
+            padding: 9px 18px;
+            background: linear-gradient(135deg, var(--rose), var(--rose-dark));
+            color: white;
+            border: none;
+            border-radius: 24px;
+            font-family: 'DM Sans', sans-serif;
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            white-space: nowrap;
+            box-shadow: 0 2px 12px rgba(242, 112, 138, 0.35);
+            transition: all 0.2s;
+        }
+
+        .compose-share-btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 18px rgba(242, 112, 138, 0.45);
+        }
+
+        .compose-actions {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding-top: 12px;
+            border-top: 1px solid var(--border);
+        }
+
+        .compose-action {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 500;
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .compose-action:hover {
+            background: var(--surface-alt);
+        }
+
+        .compose-action span {
+            font-size: 13px;
+        }
+
+        .compose-visibility {
+            margin-left: auto;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            font-size: 12px;
+            color: var(--text-muted);
+            cursor: pointer;
+        }
+
+        /* Post card */
+        .post-card {
+            overflow: hidden;
+        }
+
+        .post-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 16px 18px 12px;
+        }
+
+        .post-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            overflow: hidden;
+            flex-shrink: 0;
+            border: 2px solid var(--rose-soft);
+        }
+
+        .post-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .post-meta {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .post-author {
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--text-primary);
+        }
+
+        .post-time {
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+
+        .post-more {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 16px;
+            color: var(--text-muted);
+            transition: background 0.2s;
+        }
+
+        .post-more:hover {
+            background: var(--surface-alt);
+        }
+
+        .post-images {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3px;
+            margin-bottom: 0;
+        }
+
+        .post-images.single {
+            grid-template-columns: 1fr;
+        }
+
+        .post-img {
+            aspect-ratio: 4/3;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .post-img:first-child:only-child {
+            border-radius: 0;
+        }
+
+        .post-img img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s;
+        }
+
+        .post-img:hover img {
+            transform: scale(1.03);
+        }
+
+        /* Profile embed in post */
+        .post-profile-embed {
+            padding: 14px 18px;
+            background: var(--surface-alt);
+            border-top: 1px solid var(--border);
+        }
+
+        .embed-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 6px 20px;
+        }
+
+        .embed-field {}
+
+        .embed-label {
+            font-size: 11px;
+            color: var(--text-muted);
+            margin-bottom: 1px;
+        }
+
+        .embed-value {
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--text-primary);
+        }
+
+        .post-actions {
+            display: flex;
+            align-items: center;
+            gap: 0;
+            padding: 4px 12px 8px;
+            border-top: 1px solid var(--border);
+        }
+
+        .post-action-btn {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            padding: 7px 10px;
+            border-radius: var(--r-sm);
+            font-size: 13px;
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: all 0.2s;
+            font-weight: 400;
+        }
+
+        .post-action-btn:hover {
+            background: var(--rose-light);
+            color: var(--rose-dark);
+        }
+
+        .post-action-btn.liked {
+            color: var(--rose);
+        }
+
+        .post-action-btn span {
+            font-size: 15px;
+        }
+
+        .post-bookmark {
+            margin-left: auto;
+            width: 32px;
+            height: 32px;
+            border-radius: var(--r-sm);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            color: var(--text-muted);
+            font-size: 15px;
+            transition: all 0.2s;
+        }
+
+        .post-bookmark:hover {
+            color: var(--rose);
+            background: var(--rose-light);
+        }
+
+        /* Sort bar */
+        .sort-bar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px 18px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .sort-bar-label {
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+
+        .sort-select {
+            font-size: 12px;
+            font-weight: 500;
+            color: var(--rose-dark);
+            background: none;
+            border: none;
+            cursor: pointer;
+            outline: none;
+            font-family: 'DM Sans', sans-serif;
+        }
+
+        /* ─── RIGHT PANEL ─── */
+        .panel-right {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .messages-card {
+            overflow: hidden;
+        }
+
+        .messages-header {
+            padding: 16px 18px 12px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .messages-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 16px;
+            font-weight: 500;
+            color: var(--text-primary);
+            margin-bottom: 10px;
+        }
+
+        .msg-tabs {
+            display: flex;
+            gap: 4px;
+            background: var(--surface-alt);
+            padding: 3px;
+            border-radius: 24px;
+        }
+
+        .msg-tab {
+            flex: 1;
+            padding: 6px 12px;
+            text-align: center;
+            font-size: 12px;
+            font-weight: 500;
+            color: var(--text-secondary);
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .msg-tab.active {
+            background: white;
+            color: var(--rose-dark);
+            box-shadow: 0 1px 4px rgba(180, 130, 150, 0.15);
+        }
+
+        .msg-list {
+            padding: 6px 0;
+        }
+
+        .msg-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 16px;
+            cursor: pointer;
+            transition: background 0.15s;
+            position: relative;
+        }
+
+        .msg-item:hover {
+            background: var(--blush);
+        }
+
+        .msg-item.unread::after {
+            content: '';
+            position: absolute;
+            right: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 7px;
+            height: 7px;
+            background: var(--online);
+            border-radius: 50%;
+        }
+
+        .msg-avatar {
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            overflow: hidden;
+            flex-shrink: 0;
+            position: relative;
+        }
+
+        .msg-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .msg-avatar-online {
+            position: absolute;
+            bottom: 1px;
+            right: 1px;
+            width: 9px;
+            height: 9px;
+            background: var(--online);
+            border-radius: 50%;
+            border: 1.5px solid white;
+        }
+
+        .msg-content {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .msg-name {
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--text-primary);
+        }
+
+        .msg-preview {
+            font-size: 12px;
+            color: var(--text-muted);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 160px;
+        }
+
+        .msg-time {
+            font-size: 11px;
+            color: var(--text-muted);
+            align-self: flex-start;
+            padding-top: 2px;
+        }
+
+        /* Online contacts */
+        .contacts-card {
+            padding: 16px 18px;
+        }
+
+        .online-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 10px 6px;
+            margin-top: 12px;
+        }
+
+        .contact-item {
+            text-align: center;
+            cursor: pointer;
+        }
+
+        .contact-avatar {
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            overflow: hidden;
+            margin: 0 auto 4px;
+            position: relative;
+            border: 2px solid var(--border);
+            transition: border-color 0.2s, transform 0.2s;
+        }
+
+        .contact-item:hover .contact-avatar {
+            border-color: var(--rose-soft);
+            transform: translateY(-2px);
+        }
+
+        .contact-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .contact-avatar.placeholder {
+            background: var(--lavender);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--lavender-deep);
+        }
+
+        .contact-dot {
+            position: absolute;
+            bottom: 1px;
+            right: 1px;
+            width: 9px;
+            height: 9px;
+            background: var(--online);
+            border-radius: 50%;
+            border: 1.5px solid white;
+        }
+
+        .contact-name {
+            font-size: 10px;
+            color: var(--text-secondary);
+        }
+
+        /* ─── PLACEHOLDER images via CSS ─── */
+        .img-placeholder-a {
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #d8d0f0 0%, #b8a8e8 40%, #c4b4f4 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+        }
+
+        .img-placeholder-b {
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #b8d0f4 0%, #a0bef0 50%, #c0d4f8 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+        }
+
+        .img-placeholder-c {
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #f0d0e0 0%, #e8b8cc 60%, #f4c8d8 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+        }
+
+        /* Avatar initials */
+        .av {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 500;
+            font-size: 13px;
+        }
+
+        .av-rose {
+            background: var(--rose-light);
+            color: var(--rose-dark);
+        }
+
+        .av-lav {
+            background: var(--lavender);
+            color: var(--lavender-deep);
+        }
+
+        .av-mint {
+            background: #E1F5EE;
+            color: #0F6E56;
+        }
+
+        .av-amber {
+            background: #FAEEDA;
+            color: #854F0B;
+        }
+
+        .av-blue {
+            background: #E6F1FB;
+            color: #185FA5;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- ═══ NAVBAR ═══ -->
+    <nav>
+        <div class="nav-logo">
+            <div class="nav-logo-icon">🤍</div>
+            Crush On You
+        </div>
+
+        <div class="nav-search">
+            <span class="nav-search-icon">⌕</span>
+            <input type="text" placeholder="Search people, posts…" />
+        </div>
+
+        <div class="nav-links">
+            <a class="nav-link active" href="#">Feed</a>
+            <a class="nav-link" href="#">Timeline</a>
+            <a class="nav-link" href="#">People</a>
+        </div>
+
+        <div class="nav-actions">
+            <div class="nav-notif">🔔<span class="notif-dot"></span></div>
+            <div class="nav-avatar">
+                <div class="av av-rose" style="border-radius:50%;width:34px;height:34px;font-size:13px;">VC</div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- ═══ MAIN LAYOUT ═══ -->
+    <div class="app-layout">
+
+        <!-- ─ LEFT SIDEBAR ─ -->
+        <aside class="sidebar-left">
+
+            <!-- Profile card -->
+            <div class="card profile-card">
+                <div class="profile-avatar-wrap">
+                    <div class="profile-avatar">
+                        <div class="av av-rose" style="width:72px;height:72px;font-size:22px;border-radius:50%;">VC
+                        </div>
+                    </div>
+                    <div class="profile-status"></div>
+                </div>
+                <div class="profile-name">Vera Cherry</div>
+                <div class="profile-location">📍 Bremen, Germany</div>
+                <div class="profile-stats">
+                    <div class="stat">
+                        <div class="stat-num">578</div>
+                        <div class="stat-label">Posts</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-num">37.2k</div>
+                        <div class="stat-label">Followers</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-num">989</div>
+                        <div class="stat-label">Following</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Suggestions -->
+            <div class="card suggestions-card">
+                <div class="section-header">
+                    <span class="section-title">Suggested for you</span>
+                    <a class="see-all" href="#">See all</a>
+                </div>
+
+                <div class="suggestion-item">
+                    <div class="sugg-avatar placeholder"><span
+                            style="font-size:14px;font-weight:500;color:var(--rose-dark);">ul</span></div>
+                    <div class="sugg-info">
+                        <div class="sugg-name">ulanjad</div>
+                        <div class="sugg-sub">Recently active</div>
+                    </div>
+                    <div class="sugg-btn">+</div>
+                </div>
+
+                <div class="suggestion-item">
+                    <div class="sugg-avatar placeholder">
+                        <div class="av av-lav">gt</div>
+                    </div>
+                    <div class="sugg-info">
+                        <div class="sugg-name">gouthamgfronkics</div>
+                        <div class="sugg-sub">Suggested for you</div>
+                    </div>
+                    <div class="sugg-btn">+</div>
+                </div>
+
+                <div class="suggestion-item">
+                    <div class="sugg-avatar placeholder">
+                        <div class="av av-mint">ma</div>
+                    </div>
+                    <div class="sugg-info">
+                        <div class="sugg-name">mandaruluz</div>
+                        <div class="sugg-sub">Followed by m.aldosel</div>
+                    </div>
+                    <div class="sugg-btn">+</div>
+                </div>
+
+                <div class="suggestion-item">
+                    <div class="sugg-avatar placeholder">
+                        <div class="av av-amber">ul</div>
+                    </div>
+                    <div class="sugg-info">
+                        <div class="sugg-name">uleshraju</div>
+                        <div class="sugg-sub">Followed by sfelin12y</div>
+                    </div>
+                    <div class="sugg-btn">+</div>
+                </div>
+
+                <div class="suggestion-item">
+                    <div class="sugg-avatar placeholder">
+                        <div class="av av-blue">md</div>
+                    </div>
+                    <div class="sugg-info">
+                        <div class="sugg-name">manoel_designer</div>
+                        <div class="sugg-sub">Followed by vide_linku</div>
+                    </div>
+                    <div class="sugg-btn">+</div>
+                </div>
+            </div>
+
+        </aside>
+
+        <!-- ─ FEED ─ -->
+        <main class="feed">
+
+            <!-- Compose -->
+            <div class="card compose-card">
+                <div class="compose-top">
+                    <div class="compose-avatar">
+                        <div class="av av-rose" style="width:38px;height:38px;border-radius:50%;font-size:13px;">VC
+                        </div>
+                    </div>
+                    <input class="compose-input" type="text" placeholder="What's on your mind?" />
+                    <button class="compose-share-btn">Share Post</button>
+                </div>
+                <div class="compose-actions">
+                    <div class="compose-action"><span>🖼</span> Image/Video</div>
+                    <div class="compose-action"><span>📎</span> Attachment</div>
+                    <div class="compose-action"><span>🔴</span> Live</div>
+                    <div class="compose-action"><span>#</span> Hashtag</div>
+                    <div class="compose-action"><span>@</span> Mention</div>
+                    <div class="compose-visibility"><span>🌍</span> Public ▾</div>
+                </div>
+            </div>
+
+            <!-- Sort bar -->
+            <div class="card" style="padding:0;">
+                <div class="sort-bar">
+                    <span class="sort-bar-label">Sort by</span>
+                    <select class="sort-select">
+                        <option>Following</option>
+                        <option>Latest</option>
+                        <option>Popular</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Post 1 – Cameron -->
+            <div class="card post-card">
+                <div class="post-header">
+                    <div class="post-avatar">
+                        <div class="av av-lav" style="width:40px;height:40px;border-radius:50%;">CW</div>
+                    </div>
+                    <div class="post-meta">
+                        <div class="post-author">Cameron Williamson</div>
+                        <div class="post-time">14 Aug at 4:21 PM</div>
+                    </div>
+                    <div class="post-more">⋯</div>
+                </div>
+
+                <div class="post-images">
+                    <div class="post-img">
+                        <div class="img-placeholder-a">🎧</div>
+                    </div>
+                    <div class="post-img">
+                        <div class="img-placeholder-b">🌀</div>
+                    </div>
+                </div>
+
+                <div class="post-actions">
+                    <div class="post-action-btn liked"><span>♡</span> 30</div>
+                    <div class="post-action-btn"><span>💬</span> 12</div>
+                    <div class="post-action-btn"><span>↗</span> 5</div>
+                    <div class="post-bookmark">🔖</div>
+                </div>
+            </div>
+
+            <!-- Post 2 – Terry -->
+            <div class="card post-card">
+                <div class="post-header">
+                    <div class="post-avatar">
+                        <div class="av av-mint" style="width:40px;height:40px;border-radius:50%;">TL</div>
+                    </div>
+                    <div class="post-meta">
+                        <div class="post-author">Terry Lipshutz</div>
+                        <div class="post-time">14 Aug at 4:21 PM</div>
+                    </div>
+                    <div class="post-more">⋯</div>
+                </div>
+
+                <div class="post-images single">
+                    <div class="post-img" style="aspect-ratio: 16/7;">
+                        <div class="img-placeholder-c" style="height:100%;">🌸</div>
+                    </div>
+                </div>
+
+                <div class="post-profile-embed">
+                    <div class="embed-row">
+                        <div class="embed-field">
+                            <div class="embed-label">Education</div>
+                            <div class="embed-value">Bachelor of Software Eng.</div>
+                        </div>
+                        <div class="embed-field">
+                            <div class="embed-label">Drink</div>
+                            <div class="embed-value">Sometimes</div>
+                        </div>
+                        <div class="embed-field">
+                            <div class="embed-label">Languages</div>
+                            <div class="embed-value">English, Russian</div>
+                        </div>
+                        <div class="embed-field">
+                            <div class="embed-label">Marijuana</div>
+                            <div class="embed-value">Yes</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="post-actions">
+                    <div class="post-action-btn"><span>♡</span> 18</div>
+                    <div class="post-action-btn"><span>💬</span> 6</div>
+                    <div class="post-action-btn"><span>↗</span> 2</div>
+                    <div class="post-bookmark">🔖</div>
+                </div>
+            </div>
+
+        </main>
+
+        <!-- ─ RIGHT PANEL ─ -->
+        <aside class="panel-right">
+
+            <!-- Contacts online -->
+            <div class="card contacts-card">
+                <div class="section-header">
+                    <span class="section-title">My contacts online</span>
+                </div>
+                <div class="online-grid">
+                    <div class="contact-item">
+                        <div class="contact-avatar">
+                            <div class="av av-amber" style="border-radius:50%;font-size:12px;">Pe</div>
+                            <div class="contact-dot"></div>
+                        </div>
+                        <div class="contact-name">Pedro</div>
+                    </div>
+                    <div class="contact-item">
+                        <div class="contact-avatar">
+                            <div class="av av-lav" style="border-radius:50%;font-size:12px;">Ma</div>
+                            <div class="contact-dot"></div>
+                        </div>
+                        <div class="contact-name">Mads</div>
+                    </div>
+                    <div class="contact-item">
+                        <div class="contact-avatar">
+                            <div class="av av-mint" style="border-radius:50%;font-size:12px;">Do</div>
+                            <div class="contact-dot"></div>
+                        </div>
+                        <div class="contact-name">Donnie</div>
+                    </div>
+                    <div class="contact-item">
+                        <div class="contact-avatar">
+                            <div class="av av-rose" style="border-radius:50%;font-size:12px;">Da</div>
+                            <div class="contact-dot"></div>
+                        </div>
+                        <div class="contact-name">Darin</div>
+                    </div>
+                    <div class="contact-item">
+                        <div class="contact-avatar">
+                            <div class="av av-blue" style="border-radius:50%;font-size:12px;">He</div>
+                            <div class="contact-dot"></div>
+                        </div>
+                        <div class="contact-name">Herman</div>
+                    </div>
+                    <div class="contact-item">
+                        <div class="contact-avatar">
+                            <div class="av av-amber" style="border-radius:50%;font-size:12px;">Je</div>
+                            <div class="contact-dot"></div>
+                        </div>
+                        <div class="contact-name">Jesse</div>
+                    </div>
+                    <div class="contact-item">
+                        <div class="contact-avatar">
+                            <div class="av av-lav" style="border-radius:50%;font-size:12px;">Ja</div>
+                            <div class="contact-dot"></div>
+                        </div>
+                        <div class="contact-name">Jack</div>
+                    </div>
+                    <div class="contact-item">
+                        <div class="contact-avatar">
+                            <div class="av av-mint" style="border-radius:50%;font-size:12px;">Ti</div>
+                            <div class="contact-dot"></div>
+                        </div>
+                        <div class="contact-name">Tim</div>
+                    </div>
+                    <div class="contact-item">
+                        <div class="contact-avatar">
+                            <div class="av av-rose" style="border-radius:50%;font-size:12px;">Sh</div>
+                            <div class="contact-dot"></div>
+                        </div>
+                        <div class="contact-name">Shaan</div>
+                    </div>
+                    <div class="contact-item">
+                        <div class="contact-avatar">
+                            <div class="av av-blue" style="border-radius:50%;font-size:12px;">Na</div>
+                            <div class="contact-dot"></div>
+                        </div>
+                        <div class="contact-name">Nathan</div>
+                    </div>
+                </div>
+            </div>
+
+        </aside>
+
+    </div>
+</body>
+
+</html>
