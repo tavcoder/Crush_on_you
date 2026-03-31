@@ -1,0 +1,107 @@
+:root {
+
+  /* Base  tokens */
+  --rose: #F2708A;
+  --rose-light: #FDE8ED;
+  --rose-soft: #FAD4DC;
+  --rose-dark: #C0455E;
+  --lavender: #E8E4F8;
+  --lavender-mid: #C9C0F0;
+  --lavender-deep: #7C6FD4;
+  --yellow: #FAEEDA;
+  --yellow-mid: #cfcd4e;
+  --yellow-deep: #854F0B;
+  --green: #D1F5EC;
+  --green-mid: #4ECFA8;
+  --green-deep: #0F6E56;
+  --blue: #E6F1FB;
+  --blue-mid: #4e4ecf;
+  --blue-deep: #185FA5;
+  --cream: #FDF8F5;
+  --blush: #FFF0F3;
+  --white: #FFFFFF;
+  --gray: #6B5D68;
+  --gray-light: #A898A4;
+  --gray-dark: #1A1520;
+
+  /* Shadow */
+  --shadow-sm: 0 1px 2px rgba(26, 21, 32, 0.05);
+  --shadow-md: 0 4px 12px rgba(26, 21, 32, 0.08);
+
+  /* Border */
+  --border: rgba(194, 160, 172, 0.2);
+  --border-strong: rgba(194, 160, 172, 0.35);
+
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.25rem;
+  --space-6: 1.5rem;
+  --space-7: 1.75rem;
+  --space-8: 2rem;
+  --space-9: 2.25rem;
+  --space-10: 2.5rem;
+  --space-11: 2.75rem;
+  --space-12: 3rem;
+
+  --radius-sm: 0.5rem;
+  --radius-md: 0.75rem;
+  --radius-lg: 1.5rem;
+  --radius-xl: 2rem;
+  --radius-full: 9999px;
+
+  /* Typography */
+  --font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --fs-xs: 0.75rem;
+  --fs-sm: 0.875rem;
+  --fs-xl: 1.5rem;
+  --fs-base: 1rem;
+  --fs-md: 1.125rem;
+  --fs-lg: 1.25rem;
+
+  --fw-medium: 500;
+  --fw-semibold: 600;
+  --fw-bold: 700;
+
+  /* Semantic tokens [type]-[role]-[variant] */
+
+  --color-primary: var(--rose);
+  --color-primary-hover: var(--rose-dark);
+  --color-primary-soft: var(--rose-light);
+  --color-gradient-primary: linear-gradient(135deg, var(--rose), var(--rose-dark));
+
+  --color-background: var(--cream);
+  --color-background-alt: var(--blush);
+
+  --color-surface: var(--white);
+  --color-surface-hover: var(--rose-light);
+
+  --color-border: var(--border);
+  --color-border-strong: var(--border-strong);
+
+  --color-avatar-green: var(--green);
+  --color-avatar-blue: var(--blue);
+  --color-avatar-yellow: var(--yellow);
+  --color-avatar-rose: var(--rose-soft);
+
+  --color-online: var(--green-mid);
+  --color-success: var(--green-mid);
+  --color-warning: var(--yellow-mid);
+  --color-error: var(--rose-dark);
+  --color-info: var(--blue-mid);
+
+  --text-primary: var(--gray-dark);
+  --text-secondary: var(--gray);
+  --text-muted: var(--gray-light);
+
+  --text-on-primary: var(--white);
+  --text-on-secondary: var(--rose-dark);
+
+  --text-avatar-green: var(--green-deep);
+  --text-avatar-blue: var(--blue-deep);
+  --text-avatar-yellow: var(--yellow-deep);
+  --text-avatar-rose: var(--rose-dark);
+
+
+}
