@@ -1,13 +1,20 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from './assets/vite.svg'
-import heroImg from './assets/hero.png'
+/*app.jsx*/
+import { Suspense } from 'react'
+import { BrowserRouter, Routes, Route } from 'react-router'
+import { LoadingFallback } from './components/feedback/LoadingFallback.jsx'
 import './App.css'
 
 function App() {
 
 
   return (
+    <BrowserRouter>
+      <Suspense fallback={LoadingFallback}>
+        <Routes>
+          <Route path="*" element={<p>404-Page Not Found</p>} />
+        </Routes>
+      </Suspense>
+    </BrowserRouter>
   )
 }
 
