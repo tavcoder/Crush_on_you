@@ -1,8 +1,8 @@
-import { getMetadataFormat } from '../../../utils/getFormat.js'
+import { getMetadataFormat } from '../../../utils/formatUtils.js'
 
 import './PostMedia.css'
 
-export function PostMedia({ img, metadata, content }) {
+export function PostMedia({ img, metadata }) {
 
     return (
         <div className='post-media'>
@@ -21,7 +21,6 @@ export function PostMedia({ img, metadata, content }) {
                         <span className='post-media__category-content'>{value}</span>
                     </div>))}
             </div>}
-            {content && <span className='post-media__content'>{content}</span>}
         </div>
     )
 }

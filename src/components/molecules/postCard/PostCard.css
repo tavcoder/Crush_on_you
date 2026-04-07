@@ -1,0 +1,11 @@
+.post-card{
+    background-color: var(--color-surface);
+    box-shadow: var(--shadow-sm);
+    border-radius: var(--radius-md);
+}
+
+.post-card__content {
+    text-align: start;
+    padding: var(--space-4);
+    margin-top: var(--space-4);
+}

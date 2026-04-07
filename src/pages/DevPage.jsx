@@ -1,15 +1,17 @@
 // pages/DevPage.jsx
+import { PostCard } from "../components/molecules/postCard/PostCard.jsx"
 import { UserInfo } from "../components/molecules/userInfo/UserInfo.jsx"
 import { PostMedia } from "../components/molecules/postMedia/PostMedia.jsx"
 import { PostStats } from "../components/molecules/postStats/PostStats.jsx"
 import { IconButton } from "../components/ui/iconButton/IconButton.jsx"
 import { RoundButton } from "../components/ui/roundButton/RoundButton.jsx"
+import { enrichPostsWithUserData } from "../utils/postsUtils.js"
 import { usersData } from "../services/mocks/users.mock.js"
 import { postsData } from "../services/mocks/post.mock.js"
 
 export function DevPage() {
-    const userName = `${usersData[0]?.userName ?? ""} ${usersData[0]?.userSurName ?? ""}`;
-    const userNick = usersData[0].userNick;
+    const enrichedPosts = enrichPostsWithUserData(postsData, usersData);
+    console.log(enrichedPosts[0]);
     return (
         <div style={{ padding: '2rem', display: 'flex', flexDirection: 'column', gap: '2rem' }}>
             {/* <h2>UserInfo</h2>
@@ -48,10 +50,8 @@ export function DevPage() {
                 isBookmarked={postsData[0].isBookmarked}
             />*/}
 
-            <PostMedia
-                img={postsData[0].images}
-                profileDetails={postsData[0].profileDetails}
-                content={postsData[0].content}
+            <PostCard
+                post={enrichedPosts[0]}
             />
         </div>
 

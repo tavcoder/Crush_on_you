@@ -1,3 +1,7 @@
+/* ========================================
+   FONTS
+   ======================================== */
+
 @font-face {
   font-family: 'DM Sans';
   src: url('fonts/DM_Sans,Playfair_Display/DM_Sans/DMSans-VariableFont_opsz,wght.ttf') format('truetype');
@@ -19,9 +23,12 @@
   font-style: normal;
 }
 
-:root {
+/* ========================================
+   BASE TOKENS (Primitive)
+   ======================================== */
 
-  /* Base  tokens */
+:root {
+  /* Colors */
   --rose: #F2708A;
   --rose-light: #FDE8ED;
   --rose-soft: #FAD4DC;
@@ -45,14 +52,15 @@
   --gray-light: #A898A4;
   --gray-dark: #1A1520;
 
-  /* Shadow */
+  /* Shadows */
   --shadow-sm: 0 1px 2px rgba(26, 21, 32, 0.05);
   --shadow-md: 0 4px 12px rgba(26, 21, 32, 0.08);
 
-  /* Border */
+  /* Borders */
   --border: rgba(194, 160, 172, 0.2);
   --border-strong: rgba(194, 160, 172, 0.35);
 
+  /* Spacing */
   --space-1: 0.25rem;
   --space-2: 0.5rem;
   --space-3: 0.75rem;
@@ -66,6 +74,7 @@
   --space-11: 2.75rem;
   --space-12: 3rem;
 
+  /* Radius */
   --radius-sm: 0.5rem;
   --radius-md: 0.75rem;
   --radius-lg: 1.5rem;
@@ -75,19 +84,17 @@
   /* Typography */
   --font-body: 'DM Sans', sans-serif;
   --font-display: 'Playfair Display', serif;
-
   --fs-xs: 0.75rem;
   --fs-sm: 0.875rem;
-  --fs-xl: 1.5rem;
   --fs-base: 1rem;
   --fs-md: 1.125rem;
   --fs-lg: 1.25rem;
-
+  --fs-xl: 1.5rem;
   --fw-medium: 500;
   --fw-semibold: 600;
   --fw-bold: 700;
 
-  /* Z-index scale */
+  /* Z-index */
   --z-base: 0;
   --z-dropdown: 10;
   --z-sticky: 20;
@@ -98,28 +105,35 @@
   --transition-fast: 150ms ease;
   --transition-base: 250ms ease;
 
-  /* Max widths */
+  /* Layout */
   --max-width-feed: 680px;
   --max-width-sidebar: 280px;
   --max-width-app: 1200px;
 
-  /* Semantic tokens [type]-[role]-[variant] */
+  /* ========================================
+     SEMANTIC TOKENS ([type]-[role]-[variant])
+     ======================================== */
 
+  /* Primary */
   --color-primary: var(--rose);
   --color-primary-hover: var(--rose-dark);
   --color-primary-soft: var(--rose-light);
   --color-gradient-primary: linear-gradient(135deg, var(--rose), var(--rose-dark));
 
+  /* Background */
   --color-background: var(--cream);
   --color-background-alt: var(--blush);
 
+  /* Surface */
   --color-surface: var(--white);
   --color-surface-hover: var(--rose-light);
 
+  /* Border */
   --color-border: var(--border);
   --color-border-strong: var(--border-strong);
   --color-border-white: var(--white);
 
+  /* Avatar */
   --color-avatar-green: var(--green);
   --color-avatar-blue: var(--blue);
   --color-avatar-yellow: var(--yellow);
@@ -127,30 +141,29 @@
   --border-avatar: var(--rose-soft);
   --border-gradient-avatar: linear-gradient(135deg, var(--lavender-deep), var(--rose-dark));
 
-
+  /* Status */
   --color-online: var(--green-mid);
   --color-success: var(--green-mid);
   --color-warning: var(--yellow-mid);
   --color-error: var(--rose-dark);
   --color-info: var(--blue-mid);
 
-
+  /* Text */
   --text-primary: var(--gray-dark);
   --text-secondary: var(--gray);
   --text-muted: var(--gray-light);
-
   --text-on-primary: var(--white);
   --text-on-secondary: var(--rose-dark);
-
   --text-avatar-green: var(--green-deep);
   --text-avatar-blue: var(--blue-deep);
   --text-avatar-yellow: var(--yellow-deep);
   --text-avatar-rose: var(--rose-dark);
-
-
 }
 
-/* base.css */
+/* ========================================
+   BASE STYLES
+   ======================================== */
+
 *,
 *::before,
 *::after {
@@ -177,6 +190,10 @@ textarea {
   font-family: inherit;
 }
 
+/* ========================================
+   UTILITIES
+   ======================================== */
+
 .btn-reset {
   cursor: pointer;
   border: none;
@@ -200,9 +217,9 @@ textarea {
   border: 0;
 }
 
-.card{
-    background-color: var(--color-surface);
-    box-shadow: var(--shadow-sm);
-    border: 2px solid var(--border);
-    border-radius: var(--radius-md);
+.card {
+  background-color: var(--color-surface);
+  box-shadow: var(--shadow-sm);
+  border: 2px solid var(--border);
+  border-radius: var(--radius-md);
 }

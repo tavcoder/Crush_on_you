@@ -1,5 +1,5 @@
 import { IconButton } from '../../ui/iconButton/IconButton.jsx'
-import { getStatsFormat } from '../../../utils/getFormat.js'
+import { getStatsFormat } from '../../../utils/formatUtils.js'
 import { Heart, MessageCircle, Share, Bookmark } from "lucide-react"
 import './PostStats.css'
 

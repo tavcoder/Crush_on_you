@@ -46,7 +46,3 @@
     font-size: var(--fs-sm);
 }
 
-.post-media__content {
-    text-align: start;
-    padding: var(--space-4);
-}
