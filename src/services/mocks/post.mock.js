@@ -4,7 +4,7 @@ export const postsData = [
         id: "post_1",
         authorId: "ver_c",
         content: "It's okay baby girl, I got you... 😍 ❤️",
-        images: [],
+        images: ["/img/lavander.png","/img/blue.png"],
         stats: {
             likesCount: 2400,
             commentsCount: 89,
@@ -12,6 +12,12 @@ export const postsData = [
         },
         isLiked: true,
         isBookmarked: true,
-        createdAt: "2024-08-14T14:15:00Z"
+        createdAt: "2024-08-14T14:15:00Z",
+        profileDetails: {
+            education: "Bachelor of Software Eng",
+            drink: "Sometimes",
+            languages: "Rusian",
+            marijuana: "No"
+        },
     }
 ]

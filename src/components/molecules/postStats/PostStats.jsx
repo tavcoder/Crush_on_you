@@ -1,5 +1,5 @@
 import { IconButton } from '../../ui/iconButton/IconButton.jsx'
-import { getFormat } from '../../../utils/postStatsUtils/getFormat.js'
+import { getStatsFormat } from '../../../utils/getFormat.js'
 import { Heart, MessageCircle, Share, Bookmark } from "lucide-react"
 import './PostStats.css'
 
@@ -14,7 +14,7 @@ export function PostStats({ stats, isLiked = false, isBookmarked = false }) {
                     ariaLabel={isLiked ? "Like" : "Dislike"}
                     variant="icon-text"
                     direction="row">
-                    {getFormat(stats?.likesCount ?? 0)}
+                    {getStatsFormat(stats?.likesCount ?? 0)}
                 </IconButton>
 
                 <IconButton
@@ -22,7 +22,7 @@ export function PostStats({ stats, isLiked = false, isBookmarked = false }) {
                     ariaLabel="coments count"
                     variant="icon-text"
                     direction="row">
-                    {getFormat(stats?.commentsCount ?? 0)}
+                    {getStatsFormat(stats?.commentsCount ?? 0)}
                 </IconButton>
 
                 <IconButton
@@ -30,7 +30,7 @@ export function PostStats({ stats, isLiked = false, isBookmarked = false }) {
                     ariaLabel="shares count"
                     variant="icon-text"
                     direction="row">
-                    {getFormat(stats?.sharesCount ?? 0)}
+                    {getStatsFormat(stats?.sharesCount ?? 0)}
                 </IconButton>
             </div>
             <IconButton

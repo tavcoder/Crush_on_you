@@ -14,6 +14,7 @@
  * @property {string} content
  * @property {string[]} images
  * @property {PostStats} stats
+ * @property {ProfileDetails} profileDetails
  * @property {boolean} isLiked
  * @property {boolean} isBookmarked
  * @property {string} createdAt
@@ -24,4 +25,11 @@
  * @property {number} likesCount
  * @property {number} commentsCount
  * @property {number} sharesCount
+ */
+/**
+ * @typedef {Object} ProfileDetails
+ * @property {string} education
+ * @property {string} drink
+ * @property {string} languages
+ * @property {string} marijuana
  */
