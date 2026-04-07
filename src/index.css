@@ -1,3 +1,24 @@
+@font-face {
+  font-family: 'DM Sans';
+  src: url('fonts/DM_Sans,Playfair_Display/DM_Sans/DMSans-VariableFont_opsz,wght.ttf') format('truetype');
+  font-weight: 100 900;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'DM Sans';
+  src: url('fonts/DM_Sans,Playfair_Display/DM_Sans/DMSans-Italic-VariableFont_opsz,wght.ttf') format('truetype');
+  font-weight: 100 900;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: 'Playfair Display';
+  src: url('fonts/.../PlayfairDisplay-VariableFont_wght.ttf') format('truetype');
+  font-weight: 100 900;
+  font-style: normal;
+}
+
 :root {
 
   /* Base  tokens */
@@ -52,7 +73,9 @@
   --radius-full: 9999px;
 
   /* Typography */
-  --font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-body: 'DM Sans', sans-serif;
+  --font-display: 'Playfair Display', serif;
+
   --fs-xs: 0.75rem;
   --fs-sm: 0.875rem;
   --fs-xl: 1.5rem;
@@ -63,6 +86,22 @@
   --fw-medium: 500;
   --fw-semibold: 600;
   --fw-bold: 700;
+
+  /* Z-index scale */
+  --z-base: 0;
+  --z-dropdown: 10;
+  --z-sticky: 20;
+  --z-modal: 30;
+  --z-toast: 40;
+
+  /* Transitions */
+  --transition-fast: 150ms ease;
+  --transition-base: 250ms ease;
+
+  /* Max widths */
+  --max-width-feed: 680px;
+  --max-width-sidebar: 280px;
+  --max-width-app: 1200px;
 
   /* Semantic tokens [type]-[role]-[variant] */
 
@@ -79,17 +118,22 @@
 
   --color-border: var(--border);
   --color-border-strong: var(--border-strong);
+  --color-border-white: var(--white);
 
   --color-avatar-green: var(--green);
   --color-avatar-blue: var(--blue);
   --color-avatar-yellow: var(--yellow);
   --color-avatar-rose: var(--rose-soft);
+  --border-avatar: var(--rose-soft);
+  --border-gradient-avatar: linear-gradient(135deg, var(--lavender-deep), var(--rose-dark));
+
 
   --color-online: var(--green-mid);
   --color-success: var(--green-mid);
   --color-warning: var(--yellow-mid);
   --color-error: var(--rose-dark);
   --color-info: var(--blue-mid);
+
 
   --text-primary: var(--gray-dark);
   --text-secondary: var(--gray);
@@ -104,4 +148,54 @@
   --text-avatar-rose: var(--rose-dark);
 
 
+}
+
+/* base.css */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: var(--font-body);
+  font-size: var(--fs-base);
+  color: var(--text-primary);
+  background-color: var(--color-background);
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+img,
+video {
+  max-width: 100%;
+  display: block;
+}
+
+input,
+textarea {
+  font-family: inherit;
+}
+
+.btn-reset {
+  cursor: pointer;
+  border: none;
+  background: none;
+  font-family: inherit;
+  padding: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
 }

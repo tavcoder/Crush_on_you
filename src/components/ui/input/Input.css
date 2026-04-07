@@ -1,0 +1,33 @@
+/*Input.css*/
+
+.input__field {
+    all: unset;
+    width: 100%;
+    cursor: text;
+    color: var(--text-primary);
+}
+
+.input__field::placeholder {
+    color: var(--text-muted);
+}
+
+.input {
+    border: 2px solid var(--border);
+    border-radius: var(--radius-lg);
+    background-color: var(--color-background);
+    padding: var(--space-2);
+    display: flex;
+    justify-content: start;
+    align-items: center;
+    gap: var(--space-2);
+    color: var(--text-muted);
+}
+
+.input:focus-within {
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 3px var(--color-primary-soft);
+}
+
+.input__icon {
+    font-size: var(--fs-sm);
+}

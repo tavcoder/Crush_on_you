@@ -1,0 +1,39 @@
+.user-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.user-info__content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: var(--space-4);
+
+}
+
+.user-info__content--row {
+    flex-direction: row;
+}
+
+.user-info__content--column {
+    flex-direction: column;
+    text-align: center;
+    gap: var(--space-2);
+}
+
+.user-info__text {
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+}
+
+.user-info__primary-text {
+    font-weight: var(--fw-bold);
+    font-size: var(--fs-sm);
+}
+
+.user-info__secondary-text {
+    color: var(--text-muted);
+    font-size: var(--fs-xs);
+}

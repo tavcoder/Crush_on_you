@@ -1,0 +1,91 @@
+/*Avatar.css*/
+.avatar {
+    position: relative;
+    padding: var(--space-2);
+    border-radius: var(--radius-full);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-shrink: 0;
+}
+
+
+.avatar--sm {
+    width: 2rem;
+    height: 2rem;
+    font-size: var(--fs-xs);
+}
+
+/* 32px — comentarios */
+.avatar--md {
+    width: 2.5rem;
+    height: 2.5rem;
+    font-size: var(--fs-sm);
+}
+
+/* 40px — post header */
+.avatar--lg {
+    width: 3.5rem;
+    height: 3.5rem;
+    font-size: var(--fs-base);
+}
+
+/* 56px — stories, profile */
+
+
+.avatar--no-story {
+    border: 2px solid var(--border-avatar);
+}
+
+.avatar--story::before {
+    content: '';
+    position: absolute;
+    inset: -2px;
+    border-radius: var(--radius-full);
+    background: var(--border-gradient-avatar);
+    z-index: -1;
+}
+
+.avatar--rose {
+    color: var(--text-avatar-rose);
+    background-color: var(--color-avatar-rose);
+}
+
+.avatar--green {
+    color: var(--text-avatar-green);
+    background-color: var(--color-avatar-green);
+}
+
+.avatar--blue {
+    color: var(--text-avatar-blue);
+    background-color: var(--color-avatar-blue);
+}
+
+.avatar--yellow {
+    color: var(--text-avatar-yellow);
+    background-color: var(--color-avatar-yellow);
+}
+
+.avatar__online {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    background-color: var(--color-online);
+    border: 2px solid var(--white);
+    border-radius: var(--radius-full);
+}
+
+.avatar__online--sm {
+    width: var(--space-2);
+    height: var(--space-2);
+}
+
+.avatar__online--md {
+    width: var(--space-3);
+    height: var(--space-3);
+}
+
+.avatar__online--lg {
+    width: var(--space-3);
+    height: var(--space-3);
+}
