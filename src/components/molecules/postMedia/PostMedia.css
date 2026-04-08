@@ -27,7 +27,7 @@
     gap: var(--space-6);
     padding: var(--space-4);
     background-color: var(--color-background);
-    border: 2px solid var(--border);
+    border: 2px solid var(---color-border);
     border-radius: var(--radius-sm);
 }
 
@@ -39,7 +39,7 @@
 }
 
 .post-media__category {
-    color: var(--text-muted);
+    color: var(--color-text-muted);
 }
 
 .post-media__category-content {

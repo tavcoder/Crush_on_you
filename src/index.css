@@ -150,14 +150,14 @@
 
   /* Text */
   --text-primary: var(--gray-dark);
-  --text-secondary: var(--gray);
-  --text-muted: var(--gray-light);
-  --text-on-primary: var(--white);
-  --text-on-secondary: var(--rose-dark);
-  --text-avatar-green: var(--green-deep);
-  --text-avatar-blue: var(--blue-deep);
-  --text-avatar-yellow: var(--yellow-deep);
-  --text-avatar-rose: var(--rose-dark);
+  --color-text-secondary: var(--gray);
+  --color-text-muted: var(--gray-light);
+  --color-text-on-primary: var(--white);
+  --color-text-on-secondary: var(--rose-dark);
+  --color-text-avatar-green: var(--green-deep);
+  --color-text-avatar-blue: var(--blue-deep);
+  --color-text-avatar-yellow: var(--yellow-deep);
+  --color-text-avatar-rose: var(--rose-dark);
 }
 
 /* ========================================
@@ -173,7 +173,7 @@
 body {
   font-family: var(--font-body);
   font-size: var(--fs-base);
-  color: var(--text-primary);
+  color: var(--color-text-primary);
   background-color: var(--color-background);
   line-height: 1.5;
   -webkit-font-smoothing: antialiased;
@@ -203,6 +203,9 @@ textarea {
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  min-height: 44px;
+  min-width: 44px;
+  flex-shrink: 0;
 }
 
 .sr-only {

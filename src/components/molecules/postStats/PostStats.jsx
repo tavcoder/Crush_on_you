@@ -3,7 +3,7 @@ import { getStatsFormat } from '../../../utils/formatUtils.js'
 import { Heart, MessageCircle, Share, Bookmark } from "lucide-react"
 import './PostStats.css'
 
-export function PostStats({ stats, isLiked = false, isBookmarked = false }) {
+export function PostStats({ stats, isLiked = false, isBookmarked = false, onLike, onBookmark }) {
 
     return (
         <div className='post-stats'>
@@ -11,7 +11,9 @@ export function PostStats({ stats, isLiked = false, isBookmarked = false }) {
                 <IconButton
                     icon={<Heart fill={isLiked ? "currentColor" : "none"} />}
                     active={isLiked}
-                    ariaLabel={isLiked ? "Like" : "Dislike"}
+                    ariaLabel={isLiked ? "Remove like" : "Like post"}
+                    ariaPressed={isLiked}
+                    onClick={onLike}
                     variant="icon-text"
                     direction="row">
                     {getStatsFormat(stats?.likesCount ?? 0)}
@@ -36,7 +38,9 @@ export function PostStats({ stats, isLiked = false, isBookmarked = false }) {
             <IconButton
                 icon={<Bookmark fill={isBookmarked ? "currentColor" : "none"} />}
                 active={isBookmarked}
-                ariaLabel={isBookmarked ? "Mark as favorite" : "Remove as favorite"}
+                ariaLabel={isBookmarked ? "Remove bookmark" : "Save post"}
+                ariaPressed={isBookmarked && true}
+                onClick={onBookmark}
                 variant="ghost"
             />
         </div>

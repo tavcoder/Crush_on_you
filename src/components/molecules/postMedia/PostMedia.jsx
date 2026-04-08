@@ -1,16 +1,24 @@
 import { getMetadataFormat } from '../../../utils/formatUtils.js'
-
 import './PostMedia.css'
 
-export function PostMedia({ img, metadata }) {
+/** @typedef {import('../../../services/contracts/types.js').ProfileDetails} ProfileDetails */
+
+
+/**
+ * @param {Object} props
+ * @param {string[]} [props.images]
+ * @param {ProfileDetails} [props.metadata]
+ */
+
+export function PostMedia({ images, metadata }) {
 
     return (
         <div className='post-media'>
-            {img && <div className='post-media__images'>
-                {img.map((item, index) => (
-                    <img key={`img-${index}`} className='post-media__img'
+            {images && <div className='post-media__images'>
+                {images.map((item, index) => (
+                    <img key={`images-${index}`} className='post-media__img'
                         src={`${item}`}
-                        alt={`Post image ${index + 1} of ${img.length}`}
+                        alt={`Post image ${index + 1} of ${images.length}`}
                     />))}
             </div>}
 

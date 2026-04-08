@@ -1,4 +1,12 @@
-/*Avatar.jsx*/
+/** @typedef {import('../../../services/contracts/types.js').User} User */
+
+/**
+ * @param {Object} props
+ * @param {User} props.user
+ * @param {boolean} [props.showStory]
+ * @param {'sm'|'md'|'lg'} [props.avatarSize]
+ */
+
 import { useCurrentUser } from '../../../hooks/useCurrentUser.js'
 import { getColorVariant, getUsersInitials } from "../../../utils/avatarUtils.js";
 import './Avatar.css'
