@@ -30,11 +30,13 @@
 }
 
 .user-info__primary-text {
+    margin: 0;
     font-weight: var(--fw-bold);
     font-size: var(--fs-sm);
 }
 
 .user-info__secondary-text {
+    margin: 0;
     color: var(--color-text-muted);
     font-size: var(--fs-xs);
 }

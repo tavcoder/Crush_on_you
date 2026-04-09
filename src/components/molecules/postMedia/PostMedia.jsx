@@ -16,7 +16,7 @@ export function PostMedia({ images, metadata }) {
         <div className='post-media'>
             {images && <div className='post-media__images'>
                 {images.map((item, index) => (
-                    <img key={`images-${index}`} className='post-media__img'
+                    <img key={item} className='post-media__img'
                         src={`${item}`}
                         alt={`Post image ${index + 1} of ${images.length}`}
                     />))}

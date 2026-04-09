@@ -1,0 +1,10 @@
+.post-feed {
+    list-style: none;
+    padding: 0;
+    margin: auto;
+    width: 100%;
+    max-width: var(--max-width-feed);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+}

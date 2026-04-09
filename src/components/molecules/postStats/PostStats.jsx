@@ -12,7 +12,6 @@ export function PostStats({ stats, isLiked = false, isBookmarked = false, onLike
                     icon={<Heart fill={isLiked ? "currentColor" : "none"} />}
                     active={isLiked}
                     ariaLabel={isLiked ? "Remove like" : "Like post"}
-                    ariaPressed={isLiked}
                     onClick={onLike}
                     variant="icon-text"
                     direction="row">
@@ -39,7 +38,6 @@ export function PostStats({ stats, isLiked = false, isBookmarked = false, onLike
                 icon={<Bookmark fill={isBookmarked ? "currentColor" : "none"} />}
                 active={isBookmarked}
                 ariaLabel={isBookmarked ? "Remove bookmark" : "Save post"}
-                ariaPressed={isBookmarked && true}
                 onClick={onBookmark}
                 variant="ghost"
             />

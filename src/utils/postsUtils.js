@@ -14,13 +14,15 @@ export function enrichPostsWithUserData(posts, users) {
 
     return {
       ...post,
-      author: {
-        id: post.authorId,
-        userName: author?.userName,
-        userSurName: author?.userSurName,
-        avatarUrl: author?.avatarUrl,
-        isOnline: author?.isOnline ?? false,
-      }
+      author: author
+        ? {
+          id: author.id,
+          userName: author.userName,
+          userSurName: author.userSurName,
+          avatarUrl: author.avatarUrl,
+          isOnline: author.isOnline ?? false,
+        }
+        : null
     };
   });
 }

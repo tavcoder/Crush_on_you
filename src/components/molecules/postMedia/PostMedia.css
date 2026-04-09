@@ -13,6 +13,11 @@
     grid-template-columns: 1fr;
 }
 
+.post-media__images:has(img:nth-child(3):last-child) img:first-child {
+    grid-column: 1 / -1;
+    aspect-ratio: 16 / 9;
+}
+
 .post-media__img {
     object-fit: cover;
     aspect-ratio: 1;
@@ -23,12 +28,10 @@
 .post-media__profile-details {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    grid-template-rows: repeat(2, 1fr);
     gap: var(--space-6);
     padding: var(--space-4);
     background-color: var(--color-background);
-    border: 2px solid var(---color-border);
-    border-radius: var(--radius-sm);
+    border: 1px solid var(--color-border);
 }
 
 .post-media__detail {
@@ -45,4 +48,3 @@
 .post-media__category-content {
     font-size: var(--fs-sm);
 }
-

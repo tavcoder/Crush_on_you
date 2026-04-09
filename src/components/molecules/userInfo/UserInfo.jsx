@@ -9,8 +9,8 @@ export function UserInfo({ user, avatarSize, primaryText, secondaryText, action,
                     user={user}
                     avatarSize={avatarSize} />
                 <div className="user-info__text">
-                    <span className='user-info__primary-text'>{primaryText}</span>
-                    <span className='user-info__secondary-text'>{secondaryText}</span>
+                    <p className='user-info__primary-text'>{primaryText}</p>
+                    <p className='user-info__secondary-text'>{secondaryText}</p>
                 </div>
             </div>
             {action && direction === "row" && action}

@@ -1,5 +1,6 @@
 // pages/DevPage.jsx
-import { PostCard } from "../components/molecules/postCard/PostCard.jsx"
+import { PostFeed } from "../pages/postFeed/PostFeed.jsx"
+import { PostCard } from "../components/organism/postCard/PostCard.jsx"
 import { UserInfo } from "../components/molecules/userInfo/UserInfo.jsx"
 import { PostMedia } from "../components/molecules/postMedia/PostMedia.jsx"
 import { PostStats } from "../components/molecules/postStats/PostStats.jsx"
@@ -11,7 +12,7 @@ import { postsData } from "../services/mocks/post.mock.js"
 
 export function DevPage() {
     const enrichedPosts = enrichPostsWithUserData(postsData, usersData);
-    console.log(enrichedPosts[0]);
+
     return (
         <div style={{ padding: '2rem', display: 'flex', flexDirection: 'column', gap: '2rem' }}>
             {/* <h2>UserInfo</h2>
@@ -50,8 +51,8 @@ export function DevPage() {
                 isBookmarked={postsData[0].isBookmarked}
             />*/}
 
-            <PostCard
-                post={enrichedPosts[0]}
+            <PostFeed
+                posts={enrichedPosts}
             />
         </div>
 

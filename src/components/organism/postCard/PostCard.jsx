@@ -1,7 +1,7 @@
 import { useState } from "react"
-import { UserInfo } from "../userInfo/UserInfo.jsx"
-import { PostMedia } from "../postMedia/PostMedia.jsx"
-import { PostStats } from "../postStats/PostStats.jsx"
+import { UserInfo } from "../../molecules/userInfo/UserInfo.jsx"
+import { PostMedia } from "../../molecules/postMedia/PostMedia.jsx"
+import { PostStats } from "../../molecules/postStats/PostStats.jsx"
 import { IconButton } from "../../ui/iconButton/IconButton.jsx"
 import { getDateFormat, getUserFullName } from "../../../utils/formatUtils.js"
 import './PostCard.css'
@@ -39,7 +39,7 @@ export function PostCard({ post }) {
     const secondaryText = getDateFormat(createdAt);
 
     return (
-        <article className='post-card'>
+        <article className='card post-card'>
             <UserInfo
                 user={author}
                 avatarSize="md"
