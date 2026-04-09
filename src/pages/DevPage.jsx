@@ -1,5 +1,5 @@
 // pages/DevPage.jsx
-import { PostFeed } from "../pages/postFeed/PostFeed.jsx"
+import { PostFeed } from "../components/organism/postFeed/PostFeed.jsx"
 import { PostCard } from "../components/organism/postCard/PostCard.jsx"
 import { UserInfo } from "../components/molecules/userInfo/UserInfo.jsx"
 import { PostMedia } from "../components/molecules/postMedia/PostMedia.jsx"

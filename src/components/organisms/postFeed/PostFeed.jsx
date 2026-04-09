@@ -1,5 +1,5 @@
-import { PostCard } from '../../components/organism/postCard/PostCard.jsx'
-import { EmptyState } from '../../components/feedback/EmptyState.jsx'
+import { PostCard } from '../postCard/PostCard.jsx'
+import { EmptyState } from '../../ui/feedback/EmptyState.jsx'
 import './PostFeed.css'
 
 export function PostFeed({ posts }) {
