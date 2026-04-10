@@ -1,7 +1,7 @@
 /*users.mock.js*/
 export const usersData = [
   {
-    id: "ver_c",
+    id: "erch",
     userName: "Vera",
     userSurName: "Cherry",
     userNick: "Cherry92",

@@ -1,0 +1,7 @@
+.stories-bar__users {
+    list-style: none;
+    display: flex;
+    justify-content: start;
+    align-items: center;
+    gap: var(--space-3);
+}
