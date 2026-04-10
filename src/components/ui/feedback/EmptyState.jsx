@@ -1,5 +1,5 @@
-/*EmptyStates.jsx*/
-export function EmptyStates({ content, onClick, buttonText }) {
+/*EmptyState.jsx*/
+export function EmptyState({ content, onClick, buttonText }) {
     return (
         <div role="status" className='empty-state'>
             <p>{content}</p>

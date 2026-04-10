@@ -1,7 +1,7 @@
 /*app.jsx*/
 import { Suspense } from 'react'
 import { BrowserRouter, Routes, Route } from 'react-router'
-import { LoadingFallback } from './components/feedback/LoadingFallback.jsx'
+import { LoadingFallback } from './components/ui/feedback/LoadingFallback.jsx'
 import { UserAuthProvider } from './context/UserAuthContext.jsx'
 import { DevPage } from './pages/DevPage.jsx'
 import './App.css'
