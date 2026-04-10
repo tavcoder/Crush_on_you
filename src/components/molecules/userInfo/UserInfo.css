@@ -2,6 +2,7 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
+    padding: var(--space-4);
 }
 
 .user-info__content {
@@ -29,11 +30,13 @@
 }
 
 .user-info__primary-text {
+    margin: 0;
     font-weight: var(--fw-bold);
     font-size: var(--fs-sm);
 }
 
 .user-info__secondary-text {
-    color: var(--text-muted);
+    margin: 0;
+    color: var(--color-text-muted);
     font-size: var(--fs-xs);
 }

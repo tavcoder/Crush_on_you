@@ -4,15 +4,15 @@
     all: unset;
     width: 100%;
     cursor: text;
-    color: var(--text-primary);
+    color: var(--color-text-primary);
 }
 
 .input__field::placeholder {
-    color: var(--text-muted);
+    color: var(--color-text-muted);
 }
 
 .input {
-    border: 2px solid var(--border);
+    border: 2px solid var(--color-border);
     border-radius: var(--radius-lg);
     background-color: var(--color-background);
     padding: var(--space-2);
@@ -20,7 +20,7 @@
     justify-content: start;
     align-items: center;
     gap: var(--space-2);
-    color: var(--text-muted);
+    color: var(--color-text-muted);
 }
 
 .input:focus-within {

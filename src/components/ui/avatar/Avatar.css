@@ -47,22 +47,22 @@
 }
 
 .avatar--rose {
-    color: var(--text-avatar-rose);
+    color: var(--color-text-avatar-rose);
     background-color: var(--color-avatar-rose);
 }
 
 .avatar--green {
-    color: var(--text-avatar-green);
+    color: var(--color-text-avatar-green);
     background-color: var(--color-avatar-green);
 }
 
 .avatar--blue {
-    color: var(--text-avatar-blue);
+    color: var(--color-text-avatar-blue);
     background-color: var(--color-avatar-blue);
 }
 
 .avatar--yellow {
-    color: var(--text-avatar-yellow);
+    color: var(--color-text-avatar-yellow);
     background-color: var(--color-avatar-yellow);
 }
 

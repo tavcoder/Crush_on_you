@@ -1,9 +1,9 @@
 import { IconButton } from '../../ui/iconButton/IconButton.jsx'
-import { getFormat } from '../../../utils/postStatsUtils/getFormat.js'
+import { getStatsFormat } from '../../../utils/formatUtils.js'
 import { Heart, MessageCircle, Share, Bookmark } from "lucide-react"
 import './PostStats.css'
 
-export function PostStats({ stats, isLiked = false, isBookmarked = false }) {
+export function PostStats({ stats, isLiked = false, isBookmarked = false, onLike, onBookmark }) {
 
     return (
         <div className='post-stats'>
@@ -11,10 +11,11 @@ export function PostStats({ stats, isLiked = false, isBookmarked = false }) {
                 <IconButton
                     icon={<Heart fill={isLiked ? "currentColor" : "none"} />}
                     active={isLiked}
-                    ariaLabel={isLiked ? "Like" : "Dislike"}
+                    ariaLabel={isLiked ? "Remove like" : "Like post"}
+                    onClick={onLike}
                     variant="icon-text"
                     direction="row">
-                    {getFormat(stats?.likesCount ?? 0)}
+                    {getStatsFormat(stats?.likesCount ?? 0)}
                 </IconButton>
 
                 <IconButton
@@ -22,7 +23,7 @@ export function PostStats({ stats, isLiked = false, isBookmarked = false }) {
                     ariaLabel="coments count"
                     variant="icon-text"
                     direction="row">
-                    {getFormat(stats?.commentsCount ?? 0)}
+                    {getStatsFormat(stats?.commentsCount ?? 0)}
                 </IconButton>
 
                 <IconButton
@@ -30,13 +31,14 @@ export function PostStats({ stats, isLiked = false, isBookmarked = false }) {
                     ariaLabel="shares count"
                     variant="icon-text"
                     direction="row">
-                    {getFormat(stats?.sharesCount ?? 0)}
+                    {getStatsFormat(stats?.sharesCount ?? 0)}
                 </IconButton>
             </div>
             <IconButton
                 icon={<Bookmark fill={isBookmarked ? "currentColor" : "none"} />}
                 active={isBookmarked}
-                ariaLabel={isBookmarked ? "Mark as favorite" : "Remove as favorite"}
+                ariaLabel={isBookmarked ? "Remove bookmark" : "Save post"}
+                onClick={onBookmark}
                 variant="ghost"
             />
         </div>

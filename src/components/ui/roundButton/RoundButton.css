@@ -5,21 +5,20 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    flex-shrink: 0;
     border-radius: var(--radius-full);
     background-color: var(--color-primary-soft);
-    color: var(--text-on-secondary);
-    border: 2px solid var(--border);
+    color: var(--color-text-on-secondary);
+    border: 2px solid var(--color-border);
     transition: var(--transition-base);
 }
 
 .btn--round:hover {
     background-color: var(--color-primary);
-    color: var(--text-on-primary);
+    color: var(--color-text-on-primary);
 }
 
 .btn--story {
     background: var(--color-gradient-primary);
-    color: var(--text-on-primary);
-    border: 2px solid var(--border);
+    color: var(--color-text-on-primary);
+    border: 2px solid var(--color-border);
 }
