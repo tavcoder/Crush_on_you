@@ -1,0 +1,20 @@
+.post-feed {
+    list-style: none;
+    padding: 0;
+    margin: auto;
+    width: 100%;
+    max-width: var(--max-width-feed);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+}
+
+.post-feed__sentinel {
+    height: 1px;
+    list-style: none;
+}
+
+.post-feed__loading {
+    list-style: none;
+    height: 48px;
+}

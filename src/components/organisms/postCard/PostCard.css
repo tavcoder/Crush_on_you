@@ -1,0 +1,6 @@
+
+.post-card__content {
+    text-align: start;
+    padding: var(--space-4);
+    margin-top: var(--space-4);
+}

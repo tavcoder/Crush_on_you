@@ -1,0 +1,52 @@
+/* SkeletonBase.css */
+.skeleton {
+    background-color: var(--color-skeleton-bg, #e2e8f0);
+    border-radius: var(--radius-sm, 4px);
+    display: inline-block;
+    width: 100%;
+}
+
+.skeleton--animated {
+    background: linear-gradient(90deg,
+            var(--color-skeleton-bg, #e2e8f0) 25%,
+            var(--color-skeleton-highlight, #f1f5f9) 50%,
+            var(--color-skeleton-bg, #e2e8f0) 75%);
+    background-size: 200% 100%;
+    animation: shimmer 1.5s ease-in-out infinite;
+}
+
+@keyframes shimmer {
+    0% {
+        background-position: -200% 0;
+    }
+
+    100% {
+        background-position: 200% 0;
+    }
+}
+
+/* Variantes */
+.skeleton--text {
+    height: 1em;
+}
+
+.skeleton--title {
+    height: 1.25em;
+    width: 60%;
+}
+
+.skeleton--avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+
+.skeleton--circle {
+    border-radius: 50%;
+}
+
+.skeleton--image {
+    aspect-ratio: 16/9;
+    border-radius: var(--radius-md, 8px);
+}

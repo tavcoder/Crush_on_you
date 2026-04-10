@@ -3,7 +3,7 @@ import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import { ErrorBoundary } from 'react-error-boundary'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
-import { ErrorFallback } from './components/feedback/ErrorFallback.jsx'
+import { ErrorFallback } from './components/ui/feedback/ErrorFallback.jsx'
 import './index.css'
 import App from './App.jsx'
 
