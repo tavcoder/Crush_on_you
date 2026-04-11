@@ -9,6 +9,7 @@ export function get() {
 
 export function getPosts({ page = 1, limit = 10 } = {}) {
     const allPosts = enrichPostsWithUserData(postsData, usersData);
+    console.log("author.userName:", allPosts)
 
     const start = (page - 1) * limit;
     const end = start + limit;

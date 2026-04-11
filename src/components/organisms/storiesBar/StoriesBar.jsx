@@ -6,6 +6,7 @@ import './StoriesBar.css'
 
 export function StoriesBar({ currentUser, users }) {
     if (!users?.length) return null;
+
     return (
         <div className='stories-bar'>
 

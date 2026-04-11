@@ -37,7 +37,7 @@ export function PostCard({ post, isCurrentUser }) {
 
     const primaryText = getUserFullName(author);
     const secondaryText = getDateFormat(createdAt);
-
+console.group(post)
     return (
         <article className='card post-card'>
             <UserInfo

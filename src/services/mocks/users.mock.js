@@ -8,14 +8,14 @@ export const usersData = [
     avatarUrl: null,
     isOnline: true,
     following: [
-      { userId: "fer_c" }
+      { userId: "ver_c" }
     ],
     followers: [
-      { userId: "fer_c" }
+      { userId: "ver_c" }
     ]
   },
   {
-    id: "fer_c",
+    id: "ver_c",
     userName: "Fernan",
     userSurName: "Herrs",
     userNick: "Fifa12",

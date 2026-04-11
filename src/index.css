@@ -123,6 +123,8 @@
   /* Background */
   --color-background: var(--cream);
   --color-background-alt: var(--blush);
+  --color-skeleton-bg: var(--rose-light);
+  --color-skeleton-highlight: var(--white);
 
   /* Surface */
   --color-surface: var(--white);
