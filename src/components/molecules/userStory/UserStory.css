@@ -1,0 +1,6 @@
+
+.user-story__user-name{
+    font-size: var(--fs-xs);
+    text-align: center;
+    margin-top: var(--space-1);
+}

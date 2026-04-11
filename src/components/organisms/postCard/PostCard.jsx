@@ -13,7 +13,7 @@ import './PostCard.css'
  * @param {Post} props.post
  */
 
-export function PostCard({ post }) {
+export function PostCard({ post, isCurrentUser }) {
     const [isLiked, setIsLiked] = useState(post.isLiked)
     const [isBookmarked, setIsBookmarked] = useState(post.isBookmarked)
     const [likesCount, setLikesCount] = useState(post.stats.likesCount)
@@ -42,6 +42,7 @@ export function PostCard({ post }) {
         <article className='card post-card'>
             <UserInfo
                 user={author}
+                isCurrentUser={isCurrentUser}
                 avatarSize="md"
                 primaryText={primaryText}
                 secondaryText={secondaryText}

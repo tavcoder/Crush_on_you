@@ -7,6 +7,12 @@ export const usersData = [
     userNick: "Cherry92",
     avatarUrl: null,
     isOnline: true,
+    following: [
+      { userId: "fer_c" }
+    ],
+    followers: [
+      { userId: "fer_c" }
+    ]
   },
   {
     id: "fer_c",
@@ -15,5 +21,11 @@ export const usersData = [
     userNick: "Fifa12",
     avatarUrl: null,
     isOnline: false,
+    following: [
+      { userId: "erch" }
+    ],
+    followers: [
+      { userId: "erch" }
+    ]
   }
 ];

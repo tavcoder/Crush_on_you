@@ -1,8 +1,8 @@
 
 /*avatarUtils.js*/
-export function getColorVariant(userId, currentUserId) {
+export function getColorVariant(userId, isCurrentUser) {
     const modifierList = ["blue", "yellow", "green"];
-    if (userId === currentUserId) {
+    if (isCurrentUser) {
         return "rose";
     } else {
         const modifierIndex = userId

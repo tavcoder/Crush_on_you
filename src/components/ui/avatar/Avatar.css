@@ -31,13 +31,15 @@
 }
 
 /* 56px — stories, profile */
-
-
 .avatar--no-story {
     border: 2px solid var(--border-avatar);
 }
 
-.avatar--story::before {
+.avatar--story-seen {
+    border: 2px solid var(--color-border);
+}
+
+.avatar--story-unseen::before {
     content: '';
     position: absolute;
     inset: -2px;
