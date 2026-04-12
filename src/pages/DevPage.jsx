@@ -9,13 +9,14 @@ import { useFollowingList } from "../hooks/useFollowingList.js"
 export function DevPage() {
     const { currentUser } = useCurrentUser();
     const { posts, isLoading, hasMore, loadMore } = usePosts();
-    const followingList = useFollowingList();
+    const { users, handleStorySeen } = useFollowingList();
 
     return (
         <div style={{ padding: '2rem', display: 'flex', flexDirection: 'column', gap: '2rem' }}>
             <StoriesBar
                 currentUser={currentUser}
-                users={followingList}
+                users={users}
+                onStorySeen={handleStorySeen}
             />
 
             <PostFeed

@@ -91,3 +91,9 @@
     width: var(--space-3);
     height: var(--space-3);
 }
+
+.avatar__badge{
+    position: absolute;
+    bottom: 0;
+    right: 0;
+}

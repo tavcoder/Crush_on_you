@@ -12,6 +12,10 @@
  * @property {string} userNick
  * @property {string|null} avatarUrl
  * @property {boolean} isOnline
+ * @property {boolean} hasStory
+ * @property {boolean} isUnseen
+ * @property {following} following
+ * @property {followers} followers
  */
 
 /**
@@ -48,6 +52,17 @@
 // ========================================
 // SUPPORTING TYPES
 // ========================================
+
+/**
+ * @typedef {Object} Following
+ * @property {string} userId
+ */
+
+
+/**
+ * @typedef {Object} Followers
+ * @property {string} userId
+ */
 
 /**
  * @typedef {Object} PostStats

@@ -29,6 +29,7 @@ export function Avatar({ user, isCurrentUser = false, avatarSize = "sm", hasStor
             ) : (
                 <span className="avatar__initials">{initials}</span>
             )}
+            {badge && <div className="avatar__badge">{badge}</div>}
             {!badge && isOnline && <div className={`avatar__online avatar__online--${avatarSize}`} aria-label="Usuario en línea" role="status" />}
         </div>
     )

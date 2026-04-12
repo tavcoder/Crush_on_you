@@ -10,6 +10,8 @@
     color: var(--color-text-on-secondary);
     border: 2px solid var(--color-border);
     transition: var(--transition-base);
+    cursor: pointer;
+
 }
 
 .btn--round:hover {

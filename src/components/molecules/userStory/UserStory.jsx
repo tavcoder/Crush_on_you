@@ -2,17 +2,16 @@
 import { Avatar } from '../../ui/avatar/Avatar.jsx'
 import './UserStory.css'
 
-export function UserStory({ user, hasStory, isUnseen, avatarSize }) {
+export function UserStory({ user, hasStory, isUnseen, avatarSize, onSeen }) {
     return (
-        <div className='user-story__item'>
+        <button className='btn-reset user-story__item' onClick={onSeen}>
             <Avatar
                 user={user}
                 hasStory={hasStory}
                 isUnseen={isUnseen}
                 avatarSize={avatarSize}
-                badge="null"
             />
             <p className='user-story__user-name'>{user.userNick}</p>
-        </div>
+        </button>
     )
 }
