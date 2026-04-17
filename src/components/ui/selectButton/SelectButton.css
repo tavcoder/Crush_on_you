@@ -1,14 +1,18 @@
 .select-button {
     position: relative;
-    gap: var(--space-2);
+    gap: var(--space-1);
+}
+
+.select-button__label {
+    display: none;
 }
 
 .select-button__icon {
     color: var(--color-primary);
     display: flex;
     align-items: center;
-    width: 14px;
-    height: 14px;
+    width: 24px;
+    height: 24px;
 }
 
 .select-button__select {
@@ -23,3 +27,7 @@
     cursor: pointer;
     width: 100%;
 }
+
+@media (min-width: 768px) {.select-button__label {
+        display: flex;
+    }}

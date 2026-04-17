@@ -2,12 +2,11 @@
 
 .btn-icon {
     position: relative;
+    gap: var(--space-2);
     padding: var(--space-2) var(--space-4);
     border-radius: var(--radius-md);
-    font-size: var(--fs-sm);
-    gap: var(--space-2);
+    font-size: var(--fs-xs);
     transition: var(--transition-base);
-
 }
 
 .btn-icon:hover {
@@ -15,7 +14,9 @@
     color: var(--color-text-on-secondary);
 }
 
-.btn-icon--noText {
+
+
+.btn-icon--no-text {
     width: var(--space-10);
     height: var(--space-10);
     padding: 0;
@@ -42,13 +43,28 @@
     color: var(--color-primary);
 }
 
+.btn-icon__text {
+    display: inline-flex;
+}
+
+.btn-icon__text--responsive-hidden {
+    display: inline-flex;
+}
+
+@media (max-width: 767px) {
+    .btn-icon__text--responsive-hidden {
+        display: none;
+    }
+}
+
+
 .btn-icon__badge {
     position: absolute;
     top: 0;
     right: 0;
-    background-color: var(--color-primary);
-    border: 2px solid var(--white);
-    border-radius: var(--radius-full);
     width: var(--space-2);
     height: var(--space-2);
+    border-radius: var(--radius-full);
+    background-color: var(--color-primary);
+    border: 2px solid var(--white);
 }

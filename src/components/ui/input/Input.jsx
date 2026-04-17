@@ -11,10 +11,11 @@ export function Input({
     placeholder,
     id,              // ← necesario para htmlFor
     name,            // ← necesario para forms
+    className,            // ← necesario para forms
     disabled = false
 }) {
     return (
-        <div className={`input ${disabled ? 'input--disabled' : ''}`}>
+        <div className={`input ${disabled ? 'input--disabled' : ''} ${className}`}>
             {variant === "icon" && <Search className="input__icon" aria-hidden="true" />}
             <label htmlFor={id} className="sr-only">{label}</label>
             <input

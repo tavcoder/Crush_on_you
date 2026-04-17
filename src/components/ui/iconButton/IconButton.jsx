@@ -1,39 +1,55 @@
-/*IconButton.jsx*/
-import './IconButton.css'
+import './IconButton.css';
 
-export function IconButton({ icon, children, ariaLabel, ariaPressed, onClick, variant = "icon-text", direction = "column", badge = false, active = false }) {
+export function IconButton({
+    icon,
+    children,
+    ariaLabel,
+    onClick,
+    variant = 'icon-text',
+    direction = 'column',
+    badge = false,
+    isPressed,
+    textVisibility = 'visible', // visible | responsive-hidden | sr-only
+    type = 'button',
+    className = '',
+}) {
+    const isIconOnly = !children;
+    const needsAriaLabel = isIconOnly && !ariaLabel;
 
-    const VARIANT_CLASSES = {
-        'icon': 'btn-icon--noText',
-        'ghost': 'btn-icon--noText btn-icon--ghost',
-        'outlined': 'btn-icon--noText btn-icon--outlined',
-        'icon-text': '',
-    };
+    if (needsAriaLabel) {
+        console.warn('IconButton: ariaLabel es obligatorio cuando no hay texto visible');
+    }
 
     const classes = [
         'btn-reset',
         'btn-icon',
-        VARIANT_CLASSES[variant] ?? '',
+        `btn-icon--${variant}`,
         direction === 'column' && 'btn-icon--column',
-        active && 'btn-icon--active',
+        className,
     ].filter(Boolean).join(' ');
 
-    const noVisibleText = variant === "icon" || variant === "ghost"
-    if (noVisibleText && !ariaLabel) {
-        console.warn(`IconButton: ariaLabel es obligatorio con variant="${variant}"`)
-    }
-
     return (
-        <button className={classes}
-            type='button'
-            aria-label={ariaLabel}
-            aria-pressed={ariaPressed ?? (active !== undefined ? active : undefined)}
-            onClick={onClick}>
-            <span className='btn-icon__icon'>{icon}</span>
-            {variant === "icon-text" && (<span className='btn-icon__text'>{children}</span>)}
-            {badge && <div className='btn-icon__badge'></div>}
+        <button
+            type={type}
+            className={classes}
+            onClick={onClick}
+            aria-label={isIconOnly ? ariaLabel : undefined}
+            aria-pressed={typeof isPressed === 'boolean' ? isPressed : undefined}
+        >
+            <span className="btn-icon__icon" aria-hidden="true">{icon}</span>
+
+            {children && (
+                <span
+                    className={`btn-icon__text ${textVisibility === "sr-only"
+                            ? "sr-only"
+                            : `btn-icon__text--${textVisibility}`
+                        }`}
+                >
+                    {children}
+                </span>
+            )}
+
+            {badge && <span className="btn-icon__badge" aria-hidden="true" />}
         </button>
-    )
-
-
+    );
 }

@@ -24,5 +24,9 @@ export function usePosts() {
         }
     }, [isLoading, hasMore]);
 
-    return { posts, isLoading, hasMore, loadMore };
+    const addPost = useCallback((newPost) => {
+        setPosts(prev => [newPost, ...prev]);
+    }, []);
+
+    return { posts, isLoading, hasMore, loadMore, addPost };
 }

@@ -10,7 +10,7 @@ export function StoriesBar({ currentUser, users, onStorySeen }) {
         <div className='stories-bar'>
 
             <ul className='stories-bar__list' role='list'>
-                <li key={currentUser.id}>
+                <li className='stories-bar__item'>
                     <Avatar
                         user={currentUser}
                         isCurrentUser={true}
@@ -18,10 +18,10 @@ export function StoriesBar({ currentUser, users, onStorySeen }) {
                         badge={
                             <RoundButton className='stories-bar__add-story' showStory={true} />}
                     />
-                    <p className='user-story__user-name'>My Story</p>
+                    <p className='stories-bar__label'>My Story</p>
                 </li>
                 {users.map((user) => (
-                    <li key={user.id}>
+                    <li className='stories-bar__item' key={user.id}>
                         <UserStory
                             user={user}
                             hasStory={user.hasStory}
