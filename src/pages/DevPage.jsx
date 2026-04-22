@@ -15,7 +15,7 @@ export function DevPage() {
     const { posts, isLoading, hasMore, loadMore, addPost } = usePosts();
     const { users, handleStorySeen } = useFollowingList();
 
-    return (
+    return (<>
         <div style={{ padding: '2rem', display: 'flex', flexDirection: 'column', gap: '2rem' }}>
             <StoriesBar
                 currentUser={currentUser}
@@ -32,7 +32,8 @@ export function DevPage() {
                 hasMore={hasMore}
                 onLoadMore={loadMore}
             />
-            <BottomNav/>
         </div>
+        <BottomNav />
+    </>
     )
 }
