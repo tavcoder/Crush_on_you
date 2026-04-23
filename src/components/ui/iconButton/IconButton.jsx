@@ -1,3 +1,4 @@
+/*IconButton.jsx*/
 import { Link } from 'react-router'
 import './IconButton.css';
 
@@ -6,7 +7,7 @@ export function IconButton({
     children,
     ariaLabel,
     onClick,
-    variant = 'ghost', // ghost | outlined | filled
+    variant = 'ghost', // ghost | outlined
     direction = 'row', // row | column
     badge = false,
     isPressed,
@@ -37,6 +38,7 @@ export function IconButton({
         <>
             <span className="btn-icon__icon" aria-hidden="true">
                 {icon}
+                {badge && <span className="btn-icon__badge" aria-hidden="true" />}
             </span>
 
             {children && (
@@ -49,8 +51,6 @@ export function IconButton({
                     {children}
                 </span>
             )}
-
-            {badge && <span className="btn-icon__badge" aria-hidden="true" />}
         </>
     );
 

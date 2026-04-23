@@ -7,7 +7,7 @@ export function Input({
     label,
     value,
     onChange,
-    variant = "icon",
+    variant = "",
     placeholder,
     id,              // ← necesario para htmlFor
     name,            // ← necesario para forms

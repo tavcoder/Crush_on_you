@@ -5,27 +5,28 @@ import { IconButton } from "../../ui/iconButton/IconButton.jsx";
 import { FloatButton } from "../../ui/floatButton/FloatButton.jsx";
 import './BottomNav.css'
 
-
+const messages = 3;
 const NAV_ITEMS = [
-    { to: '/', icon: Home, label: 'Home' },
-    { to: '/search', icon: Search, label: 'Search' },
-    { to: '/messages', icon: MessageCircle, label: 'Messages' },
-    { to: '/profile', icon: User, label: 'Profile' },
+    { to: '/', icon: Home, label: 'Home', badge: false },
+    { to: '/search', icon: Search, label: 'Search', badge: false },
+    { to: '/messages', icon: MessageCircle, label: 'Messages', badge: Boolean(messages) },
+    { to: '/profile', icon: User, label: 'Profile', badge: false },
 ];
 
 export function BottomNav() {
     const location = useLocation();
 
-    const navItems = NAV_ITEMS.map(({ to, icon: Icon, label }) => {
+
+    const navItems = NAV_ITEMS.map(({ to, icon: Icon, label, badge }) => {
         const isActive = location.pathname === to;
         return (
             <IconButton
                 key={to}
-                as={Link}
                 to={to}
                 icon={<Icon fill={isActive ? 'currentColor' : 'none'} />}
                 isPressed={isActive}
                 direction="column"
+                badge={badge}
             >
                 {label}
             </IconButton>

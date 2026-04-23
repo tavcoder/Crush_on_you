@@ -1,4 +1,6 @@
+/*PostCard.jsx*/
 import { useState } from "react"
+import { MoreHorizontal } from "lucide-react";
 import { UserInfo } from "../../molecules/userInfo/UserInfo.jsx"
 import { PostMedia } from "../../molecules/postMedia/PostMedia.jsx"
 import { PostStats } from "../../molecules/postStats/PostStats.jsx"
@@ -37,7 +39,6 @@ export function PostCard({ post, isCurrentUser }) {
 
     const primaryText = getUserFullName(author);
     const secondaryText = getDateFormat(createdAt);
-console.group(post)
     return (
         <article className='card post-card'>
             <UserInfo
@@ -48,7 +49,7 @@ console.group(post)
                 secondaryText={secondaryText}
                 direction="row"
                 action={<IconButton
-                    icon="..."
+                    icon={<MoreHorizontal />}
                     variant="ghost"
                     ariaLabel="Post options" />}
             />

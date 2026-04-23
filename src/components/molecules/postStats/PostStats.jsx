@@ -1,3 +1,4 @@
+/*PostStats.jsx*/
 import { IconButton } from '../../ui/iconButton/IconButton.jsx'
 import { getStatsFormat } from '../../../utils/formatUtils.js'
 import { Heart, MessageCircle, Share, Bookmark } from "lucide-react"
@@ -10,10 +11,9 @@ export function PostStats({ stats, isLiked = false, isBookmarked = false, onLike
             <div className='post-stats__counters'>
                 <IconButton
                     icon={<Heart fill={isLiked ? "currentColor" : "none"} />}
-                    active={isLiked}
+                    isPressed={isLiked}
                     ariaLabel={isLiked ? "Remove like" : "Like post"}
                     onClick={onLike}
-                    variant="icon-text"
                     direction="row">
                     {getStatsFormat(stats?.likesCount ?? 0)}
                 </IconButton>
@@ -21,7 +21,6 @@ export function PostStats({ stats, isLiked = false, isBookmarked = false, onLike
                 <IconButton
                     icon={<MessageCircle />}
                     ariaLabel="coments count"
-                    variant="icon-text"
                     direction="row">
                     {getStatsFormat(stats?.commentsCount ?? 0)}
                 </IconButton>
@@ -29,14 +28,13 @@ export function PostStats({ stats, isLiked = false, isBookmarked = false, onLike
                 <IconButton
                     icon={<Share />}
                     ariaLabel="shares count"
-                    variant="icon-text"
                     direction="row">
                     {getStatsFormat(stats?.sharesCount ?? 0)}
                 </IconButton>
             </div>
             <IconButton
                 icon={<Bookmark fill={isBookmarked ? "currentColor" : "none"} />}
-                active={isBookmarked}
+                isPressed={isBookmarked}
                 ariaLabel={isBookmarked ? "Remove bookmark" : "Save post"}
                 onClick={onBookmark}
                 variant="ghost"

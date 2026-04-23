@@ -106,8 +106,9 @@
   --transition-base: 250ms ease;
 
   /* Layout */
-  --max-width-feed: 680px;
+  --min-width-dropdown: 180px;
   --max-width-sidebar: 280px;
+  --max-width-feed: 680px;
   --max-width-app: 1200px;
 
   /* ========================================
@@ -182,6 +183,13 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
+.layout {
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
 img,
 video {
   max-width: 100%;
@@ -190,6 +198,12 @@ video {
 
 input,
 textarea {
+  font-family: inherit;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
   font-family: inherit;
 }
 
