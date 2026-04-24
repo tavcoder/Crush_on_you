@@ -22,9 +22,28 @@
 }
 
 .create-post__header-input {
-    grid-area: input;
+    all: unset;
     width: 100%;
+    min-height: 44px;
+    padding-left: var(--space-6);
+    padding-top: var(--space-1);
+    line-height: 1.5;
+    font-family: var(--font-body);
+    font-size: var(--fs-sm);
+    color: var(--color-text-muted);
+    background-color: var(--color-background);
+    border: 2px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    resize: none;
+    cursor: text;
+    field-sizing: content;
 }
+
+.create-post__header-input:focus-within {
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 3px var(--color-primary-soft);
+}
+
 
 .create-post__actions {
     grid-area: actions;

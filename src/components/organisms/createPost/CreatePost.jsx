@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { Image, Paperclip, Hash, Radio, AtSign, Globe, Users } from "lucide-react";
 import { Avatar } from '../../ui/avatar/Avatar.jsx'
-import { Input } from '../../ui/input/Input.jsx'
 import { Button } from '../../ui/button/Button.jsx'
 import { IconButton } from '../../ui/iconButton/IconButton.jsx'
 import { SelectButton } from '../../ui/selectButton/SelectButton.jsx'
@@ -26,13 +25,15 @@ export function CreatePost({ user, onPostCreated }) {
         <form className="card create-post" onSubmit={handleSubmit}>
             <section className="create-post__header">
                 <Avatar user={user} avatarSize="md" />
-                <Input
+                <textarea
+                    className="create-post__header-input"
                     value={content}
                     onChange={(e) => setContent(e.target.value)}
                     placeholder="What's on your mind?"
                     id="create-post"
                     name="create-post"
-                    className="create-post__header-input"
+                    rows={1}
+                    aria-label="Post content"
                 />
 
             </section>
