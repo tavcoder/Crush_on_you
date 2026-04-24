@@ -1,5 +1,5 @@
 /*NavBar.jsx*/
-import { Link, useLocation } from 'react-router'
+import { Link, useLocation, useNavigate, useSearchParams } from 'react-router'
 import { Heart, Bell, Search } from "lucide-react";
 import { Input } from '../../ui/input/Input.jsx'
 import { IconButton } from '../../ui/iconButton/IconButton.jsx'
@@ -12,10 +12,21 @@ const NAV_LINKS = [
     { to: '/people', label: 'People' },
 ];
 export function NavBar({ user }) {
-    const location = useLocation();
+    const navigate = useNavigate()
+    const { pathname } = useLocation()
+    const [searchParams] = useSearchParams()
+
+    const query = searchParams.get('q') ?? ''
+
+    const handleSearch = (e) => {
+        const value = e.target.value
+        const params = new URLSearchParams()
+        if (value) params.set('q', value)
+        navigate(`${pathname}?${params.toString()}`)
+    }
 
     const navItems = NAV_LINKS.map(({ to, label }) => {
-        const isActive = location.pathname === to;
+        const isActive = pathname.pathname === to;
         return (
             <Link
                 key={to}
@@ -35,12 +46,17 @@ export function NavBar({ user }) {
                 <span className="nav-bar__logo-text">Crush On You</span>
             </Link>
 
-            <Input
-                variant="icon"
-                placeholder="Search people, posts..."
-                id="navbar-search"
-                label="Search"
-                className="nav-bar__search" />
+            <form role="search" onSubmit={handleSearch} className="nav-bar__search">
+                <Input
+                    variant="icon"
+                    placeholder="Search people, posts..."
+                    id="navbar-search"
+                    label="Search"
+                    value={query}
+                    onChange={handleSearch}
+                    className="nav-bar__search"
+                />
+            </form>
 
             <div className='nav-bar__actions'>
                 <div className='nav-bar__links'>{navItems}</div>
