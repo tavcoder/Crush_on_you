@@ -8,19 +8,26 @@ export function Input({
     value,
     onChange,
     variant = "",
+    type = 'text',
     placeholder,
-    id,              // ← necesario para htmlFor
-    name,            // ← necesario para forms
-    className,            // ← necesario para forms
+    id,              // ← for htmlFor
+    name,            // ← for forms
+    className,            // ← for forms
     disabled = false
 }) {
+    const rootClass = [
+        'input',
+        disabled && 'input--disabled',
+        className,
+    ].filter(Boolean).join(' ');
+
     return (
-        <div className={`input ${disabled ? 'input--disabled' : ''} ${className}`}>
+        <div className={rootClass}>
             {variant === "icon" && <Search className="input__icon" aria-hidden="true" />}
             <label htmlFor={id} className="sr-only">{label}</label>
             <input
                 className="input__field"
-                type="text"
+                type={type}
                 id={id}
                 name={name}
                 value={value}

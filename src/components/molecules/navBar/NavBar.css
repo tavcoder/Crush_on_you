@@ -2,7 +2,7 @@
     position: sticky;
     top: 0;
     background: var(--color-surface);
-    z-index: var(--z-nav);
+    z-index: var(--z-sticky);
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -23,7 +23,7 @@
     align-items: center;
     justify-content: center;
     font-family: inherit;
-    font-size: var(--fs-ms);
+    font-size: var(--fs-base);
     font-weight: var(--fw-semibold);
     color: var(--color-primary-hover);
     white-space: nowrap;
