@@ -1,27 +1,17 @@
-import { useState } from 'react';
-import { useCurrentUser } from './useCurrentUser.js';
-import { usersData } from '../services/mocks/users.mock.js';
+// hooks/useFollowingList.js
+import { useMemo } from 'react';
+import { useCurrentUser, useUsers, } from '../hooks/useUsers.js'; // using useUser for precision
 
 export function useFollowingList() {
-    const { currentUser } = useCurrentUser();
+    const { data: currentUser } = useCurrentUser();
+    const { data: allUsers = [] } = useUsers();
+    console.log('users', currentUser)
+    const users = useMemo(() => {
+        const followingIds = currentUser?.following?.map(f => f.userId) || [];
+        return followingIds
+            .map(id => allUsers.find(u => u.id === id))
+            .filter(Boolean);
+    }, [currentUser, allUsers]);
 
-    // construyes la lista inicial igual que antes
-    const initialUsers = currentUser.following.map(f =>
-        usersData.find(user => user.id === f.userId)
-    );
-
-    const [users, setUsers] = useState(initialUsers);
-
-    function handleStorySeen(userId) {
-        setUsers(prev =>
-            prev.map(user =>
-                user.id === userId
-                    ? { ...user, isUnseen: false }
-                    : user
-            )
-        );
-        // aquí irá la llamada a la API cuando tengas el endpoint
-    }
-
-    return { users, handleStorySeen };
+    return { users };
 }

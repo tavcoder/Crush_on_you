@@ -1,32 +1,38 @@
 // hooks/usePosts.js
-import { useState, useEffect, useCallback } from 'react';
-import { getPosts } from '../services/apiHelper';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
+import { getPosts, createPost } from '../services/api/posts.api'
 
-export function usePosts() {
-    const [posts, setPosts] = useState([]);
-    const [page, setPage] = useState(1);
-    const [isLoading, setLoading] = useState(false);
-    const [hasMore, setHasMore] = useState(true);
+export function usePosts({ page = 1 } = {}) {
+    const queryClient = useQueryClient()
 
-    useEffect(() => {
-        setLoading(true);
-        getPosts({ page, limit: 10 })
-            .then(({ data, pagination }) => {
-                setPosts(prev => [...prev, ...data]);
-                setHasMore(pagination.currentPage < pagination.totalPages);
+    const query = useQuery({
+        queryKey: ['posts', page],
+        queryFn: () => getPosts({ page }),
+    })
+
+    const mutation = useMutation({
+        mutationFn: createPost,
+        onSuccess: (newPost) => {
+            queryClient.setQueryData(['posts', page], (old) => {
+                if (!old) {
+                    return { data: [newPost], pagination: null }
+                }
+
+                return {
+                    ...old,
+                    data: [newPost, ...(old.data ?? [])],
+                }
             })
-            .finally(() => setLoading(false));
-    }, [page]);
+        },
+    })
 
-    const loadMore = useCallback(() => {
-        if (!isLoading && hasMore) {
-            setPage(prev => prev + 1);
-        }
-    }, [isLoading, hasMore]);
-
-    const addPost = useCallback((newPost) => {
-        setPosts(prev => [newPost, ...prev]);
-    }, []);
-
-    return { posts, isLoading, hasMore, loadMore, addPost };
+    return {
+        posts: query.data?.data ?? [],
+        pagination: query.data?.pagination,
+        isLoading: query.isLoading,
+        isError: query.isError,
+        error: query.error,
+        addPost: mutation.mutate,
+        isAddingPost: mutation.isPending,
+    }
 }

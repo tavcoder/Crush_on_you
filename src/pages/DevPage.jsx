@@ -7,7 +7,7 @@ import { NavBar } from "../components/molecules/navBar/NavBar.jsx"
 import { BottomNav } from "../components/molecules/bottomNav/BottomNav.jsx"
 import { SelectButton } from "../components/ui/selectButton/SelectButton.jsx"
 import { useSearch } from '../hooks/useSearch.js'
-import { useCurrentUser } from '../hooks/useCurrentUser.js'
+import { useCurrentUser } from '../hooks/useUsers.js'
 import { usePosts } from "../hooks/usePosts.js"
 import { useFollowingList } from "../hooks/useFollowingList.js"
 
