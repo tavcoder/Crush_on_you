@@ -1,10 +1,11 @@
 // services/apiClient.js
-import { mockClient } from './mockClient.js'
+import { mockClient, MOCK_TOKEN } from './mockClient.js'
 
 const USE_MOCK = import.meta.env.VITE_USE_MOCK === 'true'
 const API_BASE_URL = import.meta.env.VITE_API_URL ?? 'http://localhost:3900/api'
 
-function getToken() {
+export function getToken() {
+    if (USE_MOCK) return MOCK_TOKEN
     return localStorage.getItem('token')
 }
 

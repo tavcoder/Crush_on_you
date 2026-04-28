@@ -14,9 +14,10 @@ import { useFollowingList } from "../hooks/useFollowingList.js"
 
 export function DevPage() {
     const { results, isSearching } = useSearch()
-    const { currentUser } = useCurrentUser();
+    const { data: currentUser } = useCurrentUser();
     const { posts, isLoading, hasMore, loadMore, addPost } = usePosts();
     const { users, handleStorySeen } = useFollowingList();
+    console.log(currentUser)
 
     return (<>
         <NavBar user={currentUser} />

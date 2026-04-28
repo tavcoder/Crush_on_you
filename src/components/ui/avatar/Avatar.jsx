@@ -16,6 +16,7 @@ import './Avatar.css'
 
 export function Avatar({ user, isCurrentUser = false, avatarSize = "sm", hasStory = true, isUnseen = false, badge }) {
     if (!user) return null;
+
     const { id: userId, userName, userSurName, avatarUrl, isOnline } = user;
     const modifier = getColorVariant(userId, isCurrentUser);
     const initials = getUsersInitials(userName, userSurName);

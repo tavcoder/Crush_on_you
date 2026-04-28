@@ -1,28 +1,51 @@
-// api/adapters/posts.adapter.js
+// services/api/adapters/posts.adapter.js
 
-
+/**
+ * @param {import('../../contracts/types.js').PostRaw} raw
+ * @returns {import('../../contracts/types.js').Post}
+ */
 export function adaptPost(raw) {
-    return raw
+    if (!raw || typeof raw !== 'object') {
+        console.warn('adaptPost: recibió valor inválido', raw);
+        return null;
+    }
 
-    // return {
-    //     id: raw._id,
-    //     content: raw.body,
-    //     authorId: raw.author_id,
-    //     stats: {
-    //         likesCount: raw.likes,
-    //         commentsCount: raw.comments_count,
-    //     }
-    // }
+    return {
+        id: raw.id ?? '',
+        authorId: raw.authorId ?? '',
+        content: raw.content ?? '',
+        images: Array.isArray(raw.images) ? raw.images : [],
+        stats: {
+            likesCount: raw.stats?.likesCount ?? 0,
+            commentsCount: raw.stats?.commentsCount ?? 0,
+            sharesCount: raw.stats?.sharesCount ?? 0,
+        },
+        profileDetails: raw.profileDetails ?? null,
+        isLiked: raw.isLiked ?? false,
+        isBookmarked: raw.isBookmarked ?? false,
+        createdAt: raw.createdAt ?? new Date().toISOString(),
+    };
 }
 
-export function adaptPostList(raw) {
-    return raw
+/**
+ * Adapta una respuesta paginada de la API
+ * @param {Object} response
+ * @param {import('../../contracts/types.js').PostRaw[]} response.data
+ * @param {Object} [response.pagination]
+ * @param {number} [response.pagination.currentPage]
+ * @param {number} [response.pagination.totalPages]
+ * @returns {import('../../contracts/types.js').PaginatedPosts}
+ */
+export function adaptPostList(response) {
+    const safeResponse = response ?? {};
 
-    // return {
-    //     data: raw.posts.map(adaptPost),
-    //     pagination: {
-    //         currentPage: raw.page,
-    //         totalPages: raw.pages,
-    //     }
-    // }
+    return {
+        data: Array.isArray(safeResponse.data)
+            ? safeResponse.data.map(adaptPost).filter(Boolean)
+            : [],
+        pagination: {
+            currentPage: safeResponse.pagination?.currentPage ?? 1,
+            totalPages: safeResponse.pagination?.totalPages ?? 1,
+        }
+    };
 }
