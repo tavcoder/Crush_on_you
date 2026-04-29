@@ -15,7 +15,6 @@ export function NavBar({ user }) {
     const navigate = useNavigate()
     const { pathname } = useLocation()
     const [searchParams] = useSearchParams()
-
     const query = searchParams.get('q') ?? ''
 
     const handleSearch = (e) => {

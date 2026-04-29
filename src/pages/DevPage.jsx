@@ -17,8 +17,7 @@ export function DevPage() {
     const { data: currentUser } = useCurrentUser();
     const { posts, isLoading, hasMore, loadMore, addPost } = usePosts();
     const { users, handleStorySeen } = useFollowingList();
-    console.log(currentUser)
-
+console.log('user',currentUser)
     return (<>
         <NavBar user={currentUser} />
         <div style={{ padding: '2rem', display: 'flex', flexDirection: 'column', gap: '2rem' }}>

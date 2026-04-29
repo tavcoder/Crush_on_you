@@ -19,7 +19,6 @@ export function PostCard({ post, isCurrentUser }) {
     const [isLiked, setIsLiked] = useState(post.isLiked)
     const [isBookmarked, setIsBookmarked] = useState(post.isBookmarked)
     const [likesCount, setLikesCount] = useState(post.stats.likesCount)
-
     const handleLike = () => {
         setIsLiked(prev => !prev)
         setLikesCount(prev => isLiked ? prev - 1 : prev + 1)

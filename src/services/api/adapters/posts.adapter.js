@@ -13,6 +13,7 @@ export function adaptPost(raw) {
     return {
         id: raw.id ?? '',
         authorId: raw.authorId ?? '',
+        author: raw.author ?? null,
         content: raw.content ?? '',
         images: Array.isArray(raw.images) ? raw.images : [],
         stats: {

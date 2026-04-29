@@ -41,40 +41,76 @@ function paginate(array, page, limit) {
     }
 }
 
+// services/mockClient.js
 export const mockClient = {
     get(endpoint) {
         const { path, params } = parseEndpoint(endpoint)
-        const [resource, id] = path.split('/')
+        const parts = path.split('/')
+        const resource = parts[0]
+        const id = parts[1]
 
         const page = Number(params.page || 1)
         const limit = Number(params.limit || 10)
 
-        // USERS
+        // ✅ FIX 1: 'me' ANTES que el lookup genérico por id
+        if (resource === 'users' && id === 'me') {
+            console.log("🟢 RETURN currentUser:", MOCK_DB.currentUser);
+            return resolve({ data: MOCK_DB.currentUser });
+        }
+
         if (resource === 'users' && !id) {
-            return resolve(paginate(MOCK_DB.users, page, limit))
+            const result = paginate(MOCK_DB.users, page, limit);
+            console.log("🟢 USERS LIST:", result);
+            return resolve(result);
         }
 
-        // POSTS
-        if (resource === 'posts' && !id) {
-            return resolve(paginate(MOCK_DB.posts, page, limit))
-        }
-
-        // USER BY ID
         if (resource === 'users' && id) {
             const user = MOCK_DB.users.find(u => u.id === id)
-            if (!user) throw new Error(`User ${id} not found`)
+            if (!user) return Promise.reject(new Error(`User ${id} not found`))
             return resolve({ data: user })
         }
 
-        // CURRENT USER
-        if (resource === 'users' && id === 'me') {
-            return resolve({ data: MOCK_DB.currentUser })
+        if (resource === 'posts' && !id) {
+            const result = paginate(MOCK_DB.posts, page, limit);
+            console.log("🟢 POSTS LIST:", result);
+            return resolve(result);
         }
 
-        throw new Error(`No mock for: ${endpoint}`)
+        // ✅ FIX 2: mock para post individual
+        if (resource === 'posts' && id) {
+            const post = MOCK_DB.posts.find(p => p.id === id)
+            if (!post) return Promise.reject(new Error(`Post ${id} not found`))
+            return resolve({ data: post })
+        }
+
+        return Promise.reject(new Error(`No mock GET for: ${endpoint}`))
     },
 
     call(method, endpoint, data) {
+        const [resource, id, action] = endpoint.split('/')
+
+        // ✅ FIX 3: like/unlike con estado local en MOCK_DB
+        if (method === 'PUT' && resource === 'posts' && action === 'like') {
+            const post = MOCK_DB.posts.find(p => p.id === id)
+            if (post) {
+                post.isLiked = !post.isLiked
+                post.stats.likesCount += post.isLiked ? 1 : -1
+            }
+            return resolve({ status: 'success', data: post })
+        }
+
+        // ✅ FIX 4: delete post
+        if (method === 'DELETE' && resource === 'posts' && !action) {
+            MOCK_DB.posts = MOCK_DB.posts.filter(p => p.id !== id)
+            return resolve({ status: 'success' })
+        }
+
+        // ✅ FIX 5: follow/unfollow
+        if (resource === 'users' && action === 'follow') {
+            console.info(`[MOCK] ${method} /${endpoint}`, data)
+            return resolve({ status: 'success' })
+        }
+
         console.info(`[MOCK] ${method} /${endpoint}`, data)
         return resolve({ status: 'success', data })
     },

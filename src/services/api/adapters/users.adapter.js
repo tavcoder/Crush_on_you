@@ -13,6 +13,7 @@ function normalizeFollowItem(item) {
  * @returns {import('../../contracts/types.js').User}
  */
 export function adaptUser(raw) {
+    console.log("3️⃣ adapter input:", raw);
     if (!raw || typeof raw !== 'object') {
         console.warn('adaptUser: recibió valor inválido', raw);
         return null;

@@ -1,4 +1,3 @@
-// hooks/useUsers.js
 import { useContext } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { UserAuthContext } from "../context/UserAuthContext.jsx";
@@ -19,11 +18,8 @@ export function useCurrentUser() {
 
     return useQuery({
         queryKey: ["currentUser"],
-        queryFn: getCurrentUser,
+        queryFn: getCurrentUser, // GET /users/me → devuelve el usuario completo
         enabled: isAuthenticated,
-        onSuccess: (data) => {
-            console.log("[useCurrentUser] data:", data);
-        },
     });
 }
 
@@ -32,9 +28,6 @@ export function useUser(userId) {
         queryKey: ["users", userId],
         queryFn: () => getUserById(userId),
         enabled: !!userId && typeof userId === 'string',
-        onSuccess: (data) => {
-            console.log("[useUser] data:", data);
-        },
     });
 }
 
@@ -42,9 +35,6 @@ export function useUsers(page = 1) {
     return useQuery({
         queryKey: ["users", "list", page],
         queryFn: () => getUsers({ page }),
-        onSuccess: (data) => {
-            console.log("[useUsers] data:", data);
-        },
     });
 }
 
@@ -54,10 +44,16 @@ export function useSearchUsers(query) {
         queryFn: () => searchUsers({ search: query }),
         enabled: query?.length >= 2,
         staleTime: 1000 * 30,
-        onSuccess: (data) => {
-            console.log("[useSearchUsers] data:", data);
-        },
     });
+}
+
+export function useUsersList(page = 1) {
+    const query = useUsers(page);
+    return {
+        ...query,
+        users: query.data?.data ?? [],
+        pagination: query.data?.pagination,
+    };
 }
 
 // ─── MUTATIONS ───

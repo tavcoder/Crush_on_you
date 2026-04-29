@@ -22,7 +22,7 @@ export const postsData = [
    },
      {
        id: "post_2",
-       authorId: "vdfswgfwe_ce",
+       authorId: "erch",
        content: "",
        images: [],
        stats: {

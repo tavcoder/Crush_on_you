@@ -4,14 +4,18 @@ import { useCurrentUser, useUsers } from './useUsers.js';
 
 export function useFollowingList() {
     const { data: currentUser, isLoading: isLoadingCurrent } = useCurrentUser();
-    const { data: allUsers = [], isLoading: isLoadingAll } = useUsers();
+    console.log('following current',currentUser)
+
+    const { data: usersResponse, isLoading: isLoadingAll } = useUsers();
+    console.log('following', usersResponse)
 
     const users = useMemo(() => {
-        const followingIds = currentUser?.following?.map(f => f.userId) || [];
+        const followingIds = currentUser?.following?.map(f => f.userId) ?? [];
         return followingIds
-            .map(id => allUsers.find(u => u.id === id))
+            .map(id => usersResponse.find(u => u.id === id))
             .filter(Boolean);
-    }, [currentUser, allUsers]);
+    }, [currentUser, usersResponse]);
+
     return {
         users,
         isLoading: isLoadingCurrent || isLoadingAll,

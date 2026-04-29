@@ -7,24 +7,24 @@ import { adaptUser, adaptUserList } from './adapters/users.adapter.js'
 export const getUsers = ({ page = 1, limit = 10 } = {}) =>
     apiClient
         .get(`users?page=${page}&limit=${limit}`)
-        .then(adaptUserList)
+        .then(res => adaptUserList(res.data));
 
 export const searchUsers = ({ page = 1, limit = 10, search = '' } = {}) =>
     apiClient
         .get(`users?page=${page}&limit=${limit}&search=${encodeURIComponent(search)}`)
-        .then(adaptUserList)
+        .then(res => adaptUserList(res.data));
 
 // ─── SINGLE USER ───
 
 export const getUserById = (id) =>
     apiClient
         .get(`users/${id}`)
-        .then(adaptUser)
+        .then(res => adaptUser(res.data));
 
 export const getCurrentUser = () =>
     apiClient
         .get('users/me')
-        .then(adaptUser)
+        .then(res => adaptUser(res.data));
 
 // ─── MUTATIONS ───
 

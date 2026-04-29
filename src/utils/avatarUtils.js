@@ -1,6 +1,7 @@
 
 /*avatarUtils.js*/
 export function getColorVariant(userId, isCurrentUser) {
+    if (!isCurrentUser) return null;
     const modifierList = ["blue", "yellow", "green"];
     if (isCurrentUser) {
         return "rose";
@@ -13,5 +14,6 @@ export function getColorVariant(userId, isCurrentUser) {
 }
 
 export function getUsersInitials(userName, userSurName) {
+    if (!userName) return null;
     return (userName[0] + userSurName[0]).toUpperCase();
 }
