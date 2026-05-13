@@ -41,7 +41,6 @@ function paginate(array, page, limit) {
     }
 }
 
-// services/mockClient.js
 export const mockClient = {
     get(endpoint) {
         const { path, params } = parseEndpoint(endpoint)
@@ -52,14 +51,24 @@ export const mockClient = {
         const page = Number(params.page || 1)
         const limit = Number(params.limit || 10)
 
-        // ✅ FIX 1: 'me' ANTES que el lookup genérico por id
         if (resource === 'users' && id === 'me') {
             return resolve({ data: MOCK_DB.currentUser });
         }
 
         if (resource === 'users' && !id) {
-            const result = paginate(MOCK_DB.users, page, limit);
-            return resolve(result);
+            let filtered = MOCK_DB.users
+
+            if (params.search) {
+                const q = params.search.toLowerCase()
+                filtered = filtered.filter(u =>
+                    u.userName.toLowerCase().includes(q) ||
+                    u.userSurName.toLowerCase().includes(q) ||
+                    u.userNick.toLowerCase().includes(q)
+                )
+            }
+
+            const result = paginate(filtered, page, limit)
+            return resolve(result)
         }
 
         if (resource === 'users' && id) {

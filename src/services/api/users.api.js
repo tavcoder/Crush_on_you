@@ -31,7 +31,7 @@ export const getCurrentUser = () =>
 export const updateProfile = (id, data) =>
     apiClient
         .call('PUT', `users/${id}`, data)
-        .then(adaptUser)
+        .then(res => adaptUser(res.data))
 
 export const followUser = (id) =>
     apiClient
