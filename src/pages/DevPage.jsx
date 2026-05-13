@@ -16,15 +16,19 @@ export function DevPage() {
     const { results, isSearching } = useSearch()
     const { data: currentUser } = useCurrentUser();
     const { posts, isLoading, hasMore, loadMore, addPost } = usePosts();
-    const { users, handleStorySeen } = useFollowingList();
-console.log('user',currentUser)
+    const { users, onStorySeen} = useFollowingList();
+    
+    function handleOpenStory(user) {
+        onStorySeen(user.id)
+    }
+
     return (<>
         <NavBar user={currentUser} />
         <div style={{ padding: '2rem', display: 'flex', flexDirection: 'column', gap: '2rem' }}>
             <StoriesBar
                 currentUser={currentUser}
                 users={users}
-                onStorySeen={handleStorySeen}
+                onStorySeen={handleOpenStory}
             />
             <CreatePost
                 user={currentUser}

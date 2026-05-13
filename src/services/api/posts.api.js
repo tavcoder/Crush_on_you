@@ -9,7 +9,7 @@ export const getPosts = ({ page = 1, limit = 10 } = {}) =>
 
 export const getPost = (id) =>
     apiClient.get(`posts/${id}`)
-        .then(adaptPost)
+        .then(res => adaptPost(res.data))
 
 export const createPost = (data) =>
     apiClient.call('POST', 'posts', data)

@@ -1,4 +1,5 @@
 /*Avatar.jsx*/
+import { useState } from "react";
 import { getColorVariant, getUsersInitials } from "../../../utils/avatarUtils.js";
 import './Avatar.css'
 
@@ -15,6 +16,9 @@ import './Avatar.css'
  */
 
 export function Avatar({ user, isCurrentUser = false, avatarSize = "sm", hasStory = true, isUnseen = false, badge }) {
+
+    console.log('user:', user, 'isCurrentUser:', isCurrentUser, 'avatarSize', avatarSize, 'hasStory', hasStory, 'isUnseen', isUnseen, 'badge', badge)
+    const [imgError, setImgError] = useState(false)
     if (!user) return null;
     const { id: userId, userName, userSurName, avatarUrl, isOnline } = user;
     const modifier = getColorVariant(userId, isCurrentUser);
@@ -24,11 +28,14 @@ export function Avatar({ user, isCurrentUser = false, avatarSize = "sm", hasStor
         : 'avatar--no-story';
     return (
         <div className={`avatar avatar--${avatarSize} avatar--${modifier} ${ringClass}`}>
-            {avatarUrl ? (
-                <img src={avatarUrl} alt={`${userName} ${userSurName}`} />
-            ) : (
-                <span className="avatar__initials">{initials}</span>
-            )}
+            {avatarUrl && !imgError
+                ? <img
+                    src={avatarUrl}
+                    alt={`${name} ${userSurName}`}
+                    onError={() => setImgError(true)}
+                /> : (
+                    <span className="avatar__initials">{initials}</span>
+                )}
             {badge && <div className="avatar__badge">{badge}</div>}
             {!badge && isOnline && <div className={`avatar__online avatar__online--${avatarSize}`} aria-label="Usuario en línea" role="status" />}
         </div>

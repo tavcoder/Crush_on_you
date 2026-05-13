@@ -1,23 +1,37 @@
-// hooks/useFollowingList.js
-import { useMemo } from 'react';
+import { useEffect, useState } from 'react';
 import { useCurrentUser, useUsers } from './useUsers.js';
 
 export function useFollowingList() {
     const { data: currentUser, isLoading: isLoadingCurrent } = useCurrentUser();
-    console.log('following current',currentUser)
-
     const { data: usersResponse, isLoading: isLoadingAll } = useUsers();
-    console.log('following', usersResponse)
 
-    const users = useMemo(() => {
+    const allUsersArray = usersResponse?.data ?? [];
+
+    const [users, setUsers] = useState([]);
+
+    useEffect(() => {
         const followingIds = currentUser?.following?.map(f => f.userId) ?? [];
-        return followingIds
-            .map(id => usersResponse.find(u => u.id === id))
+
+        const followingUsers = followingIds
+            .map(id => allUsersArray.find(u => u.id === id))
             .filter(Boolean);
-    }, [currentUser, usersResponse]);
+
+        setUsers(followingUsers);
+    }, [currentUser, allUsersArray]);
+
+    function onStorySeen(userId) {
+        setUsers(prevUsers =>
+            prevUsers.map(user =>
+                user.id === userId
+                    ? { ...user, isUnseen: false }
+                    : user
+            )
+        );
+    }
 
     return {
         users,
+        onStorySeen,
         isLoading: isLoadingCurrent || isLoadingAll,
         count: users.length
     };
