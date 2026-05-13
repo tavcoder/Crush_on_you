@@ -41,6 +41,7 @@ function paginate(array, page, limit) {
     }
 }
 
+// services/mockClient.js
 export const mockClient = {
     get(endpoint) {
         const { path, params } = parseEndpoint(endpoint)
@@ -93,6 +94,20 @@ export const mockClient = {
 
     call(method, endpoint, data) {
         const [resource, id, action] = endpoint.split('/')
+        if (method === 'POST' && resource === 'posts' && !action) {
+            const newPost = {
+                id: `post_${Date.now()}`,
+                authorId: MOCK_DB.currentUser.id,
+                author: MOCK_DB.currentUser,
+                ...data,                    // ← aquí usas data
+                stats: { likesCount: 0, commentsCount: 0, sharesCount: 0 },
+                isLiked: false,
+                isBookmarked: false,
+                createdAt: new Date().toISOString(),
+            }
+            MOCK_DB.posts.unshift(newPost)
+            return resolve({ status: 'success', data: newPost })
+        }
 
         if (method === 'PUT' && resource === 'posts' && action === 'like') {
             const post = MOCK_DB.posts.find(p => p.id === id)
@@ -109,19 +124,28 @@ export const mockClient = {
         }
 
         if (resource === 'users' && action === 'follow') {
-            console.info(`[MOCK] ${method} /${endpoint}`, data)
-            return resolve({ status: 'success' })
+            if (method === 'POST') {
+                return resolve({ status: 'success' })
+            }
+            if (method === 'DELETE') {
+                return resolve({ status: 'success' })
+            }
+            return Promise.reject(new Error(`[MOCK] Método no soportado: ${method} /users/${id}/follow`))
         }
 
-        console.info(`[MOCK] ${method} /${endpoint}`, data)
-        return resolve({ status: 'success', data })
+        return Promise.reject(
+            new Error(`[MOCK] There is no implementation for: ${method} /${endpoint}`)
+        )
     },
 
     upload(endpoint, file) {
-        console.info(`[MOCK] UPLOAD /${endpoint}`, file.name)
-        return resolve({
-            status: 'success',
-            data: { url: URL.createObjectURL(file) }
+        return new Promise((resolve) => {
+            const reader = new FileReader()
+            reader.onload = () => resolve({
+                status: 'success',
+                data: { url: reader.result }  // ← data:image/png;base64,...
+            })
+            reader.readAsDataURL(file)
         })
     }
 }
