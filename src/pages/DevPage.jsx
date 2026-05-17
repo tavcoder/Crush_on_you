@@ -7,16 +7,20 @@ import { NavBar } from "../components/molecules/navBar/NavBar.jsx"
 import { BottomNav } from "../components/molecules/bottomNav/BottomNav.jsx"
 import { SelectButton } from "../components/ui/selectButton/SelectButton.jsx"
 import { useSearch } from '../hooks/useSearch.js'
-import { useCurrentUser } from '../hooks/useCurrentUser.js'
+import { useCurrentUser } from '../hooks/useUsers.js'
 import { usePosts } from "../hooks/usePosts.js"
 import { useFollowingList } from "../hooks/useFollowingList.js"
 
 
 export function DevPage() {
     const { results, isSearching } = useSearch()
-    const { currentUser } = useCurrentUser();
+    const { data: currentUser } = useCurrentUser();
     const { posts, isLoading, hasMore, loadMore, addPost } = usePosts();
-    const { users, handleStorySeen } = useFollowingList();
+    const { users, onStorySeen} = useFollowingList();
+    
+    function handleOpenStory(user) {
+        onStorySeen(user.id)
+    }
 
     return (<>
         <NavBar user={currentUser} />
@@ -24,7 +28,7 @@ export function DevPage() {
             <StoriesBar
                 currentUser={currentUser}
                 users={users}
-                onStorySeen={handleStorySeen}
+                onStorySeen={handleOpenStory}
             />
             <CreatePost
                 user={currentUser}

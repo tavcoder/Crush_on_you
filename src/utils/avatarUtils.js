@@ -13,5 +13,10 @@ export function getColorVariant(userId, isCurrentUser) {
 }
 
 export function getUsersInitials(userName, userSurName) {
-    return (userName[0] + userSurName[0]).toUpperCase();
+
+    const first = userName?.[0]?.toUpperCase() ?? ''
+    const second = userSurName?.[0]?.toUpperCase() ?? ''
+    const initials = (first + second).trim()
+    return initials || 'U'
+
 }

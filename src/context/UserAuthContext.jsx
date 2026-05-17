@@ -1,17 +1,32 @@
-import { createContext, useState } from "react";
-import { mockCurrentUserId } from '../services/mocks/mockCurrentUserId.js'
-
+// context/UserAuthContext.jsx
+import { createContext, useState, useEffect, useCallback } from "react";
+import { getToken } from '../services/apiClient';
 
 export const UserAuthContext = createContext(null);
 
+// context/UserAuthContext.jsx — SIMPLIFICADO
 export function UserAuthProvider({ children }) {
-    const [currentUser, setCurrentUser] = useState({ id: mockCurrentUserId });
+    const [isAuthenticated, setIsAuthenticated] = useState(false);
+    const [isLoading, setIsLoading] = useState(true);
 
-    function login(userData) { setCurrentUser(userData); }
-    function logout() { setCurrentUser(null); }
+    useEffect(() => {
+        const token = getToken();
+        setIsAuthenticated(!!token);
+        setIsLoading(false);
+    }, []);
+
+    const login = useCallback((token) => {
+        localStorage.setItem('token', token);
+        setIsAuthenticated(true);
+    }, []);
+
+    const logout = useCallback(() => {
+        localStorage.removeItem('token');
+        setIsAuthenticated(false);
+    }, []);
 
     return (
-        <UserAuthContext value={{ currentUser, login, logout }}>
+        <UserAuthContext value={{ isAuthenticated, isLoading, login, logout }}>
             {children}
         </UserAuthContext>
     );
