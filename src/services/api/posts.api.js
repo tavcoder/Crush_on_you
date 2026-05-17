@@ -11,6 +11,11 @@ export const getPost = (id) =>
     apiClient.get(`posts/${id}`)
         .then(res => adaptPost(res.data))
 
+export const getPostsByUser = (userId, { page = 1, limit = 10 } = {}) =>
+    apiClient
+        .get(`posts?userId=${userId}&page=${page}&limit=${limit}`)
+        .then(adaptPostList)
+
 export const createPost = (data) =>
     apiClient.call('POST', 'posts', data)
 

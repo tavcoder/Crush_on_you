@@ -86,8 +86,14 @@ export const mockClient = {
         }
 
         if (resource === 'posts' && !id) {
-            const result = paginate(MOCK_DB.posts, page, limit);
-            return resolve(result);
+            let filtered = MOCK_DB.posts
+
+            if (params.userId) {
+                filtered = filtered.filter(p => p.authorId === params.userId)
+            }
+
+            const result = paginate(filtered, page, limit)
+            return resolve(result)
         }
 
         if (resource === 'posts' && id) {
