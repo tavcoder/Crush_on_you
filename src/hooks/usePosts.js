@@ -2,6 +2,7 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { getPosts, createPost } from '../services/api/posts.api'
 
+
 export function usePosts({ page = 1 } = {}) {
     const queryClient = useQueryClient()
 

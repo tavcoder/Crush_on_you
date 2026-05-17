@@ -1,5 +1,6 @@
 // services/apiClient.js
 import { mockClient, MOCK_TOKEN } from './mockClient.js'
+import { ApiError } from './ApiError.js'
 
 const USE_MOCK = import.meta.env.VITE_USE_MOCK === 'true'
 const API_BASE_URL = import.meta.env.VITE_API_URL ?? 'http://localhost:3900/api'
@@ -15,11 +16,16 @@ function authHeaders(endpoint) {
     return !isPublic && token ? { Authorization: token } : {}
 }
 
-function handleResponse(res, endpoint) {
+function handleResponse(res) {
     if (!res.ok) {
-        return res.json().catch(() => ({})).then(err => {
-            throw new Error(err.message || `Error ${res.status}: ${res.statusText}`)
-        })
+        return res.json()
+            .catch(() => ({}))
+            .then(err => {
+                throw new ApiError(
+                    err.message || res.statusText,
+                    res.status 
+                )
+            })
     }
     return res.json()
 }

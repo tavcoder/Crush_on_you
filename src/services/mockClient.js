@@ -1,13 +1,21 @@
 import { postsData } from './mocks/post.mock'
 import { usersData } from './mocks/users.mock'
 import { enrichPostsWithUserData } from '../utils/postsUtils'
+import { ApiError } from '../ApiError.js'
 
 const CURRENT_USER_ID = 'erch'
 
-const MOCK_DB = {
-    posts: enrichPostsWithUserData(postsData, usersData),
-    users: usersData,
-    currentUser: usersData.find(u => u.id === CURRENT_USER_ID),
+let MOCK_DB = createMockDB()
+
+function createMockDB() {
+    return {
+        posts: enrichPostsWithUserData(postsData, usersData),
+        currentUser: usersData.find(u => u.id === CURRENT_USER_ID),
+    }
+}
+
+export function resetMockDB() {
+    MOCK_DB = createMockDB()
 }
 
 export const MOCK_TOKEN = CURRENT_USER_ID
@@ -41,7 +49,6 @@ function paginate(array, page, limit) {
     }
 }
 
-// services/mockClient.js
 export const mockClient = {
     get(endpoint) {
         const { path, params } = parseEndpoint(endpoint)
@@ -74,7 +81,7 @@ export const mockClient = {
 
         if (resource === 'users' && id) {
             const user = MOCK_DB.users.find(u => u.id === id)
-            if (!user) return Promise.reject(new Error(`User ${id} not found`))
+            if (!user) return Promise.reject(new ApiError(`User ${id} not found`))
             return resolve({ data: user })
         }
 
@@ -85,11 +92,11 @@ export const mockClient = {
 
         if (resource === 'posts' && id) {
             const post = MOCK_DB.posts.find(p => p.id === id)
-            if (!post) return Promise.reject(new Error(`Post ${id} not found`))
+            if (!post) return Promise.reject(new ApiError(`Post ${id} not found`))
             return resolve({ data: post })
         }
 
-        return Promise.reject(new Error(`No mock GET for: ${endpoint}`))
+        return Promise.reject(new ApiError(`No mock GET for: ${endpoint}`))
     },
 
     call(method, endpoint, data) {
@@ -130,11 +137,11 @@ export const mockClient = {
             if (method === 'DELETE') {
                 return resolve({ status: 'success' })
             }
-            return Promise.reject(new Error(`[MOCK] Método no soportado: ${method} /users/${id}/follow`))
+            return Promise.reject(new ApiError(`[MOCK] Método no soportado: ${method} /users/${id}/follow`))
         }
 
         return Promise.reject(
-            new Error(`[MOCK] There is no implementation for: ${method} /${endpoint}`)
+            new ApiError(`[MOCK] There is no implementation for: ${method} /${endpoint}`)
         )
     },
 
