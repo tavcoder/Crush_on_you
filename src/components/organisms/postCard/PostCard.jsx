@@ -50,7 +50,9 @@ export function PostCard({ post, isCurrentUser }) {
                 action={<IconButton
                     icon={<MoreHorizontal />}
                     variant="ghost"
-                    ariaLabel="Post options" />}
+                    ariaLabel="Post options"
+                    disabled
+                    tooltip="More options coming soon" />}
             />
             <PostMedia
                 images={images}

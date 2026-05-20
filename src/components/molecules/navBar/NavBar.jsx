@@ -34,7 +34,7 @@ export function NavBar({ user }) {
         params.delete('q')
         navigate(`${pathname}?${params.toString()}`, { replace: true })
     }
-    
+
     const navItems = NAV_LINKS.map(({ to, label }) => {
         const isActive = pathname === to;
         return (
@@ -81,7 +81,9 @@ export function NavBar({ user }) {
                     icon={<Bell />}
                     badge={true}
                     variant="outlined"
-                    ariaLabel="Open notifications"
+                    ariaLabel="Notifications — coming soon"
+                    disabled
+                    tooltip ="Notifications coming soon"
                 />
 
                 <AvatarMenu user={user} />

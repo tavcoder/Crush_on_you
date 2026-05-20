@@ -45,10 +45,29 @@ export function CreatePost({ user, onPostCreated }) {
                 >
                     <div role="group" aria-label="Media uploads">
                         <IconButton icon={<Image />} textVisibility="responsive-hidden" direction="row" aria-label="Upload image" >Image/Video</IconButton>
-                        <IconButton icon={<Paperclip />} textVisibility="responsive-hidden" direction="row" aria-label="Upload attachment" >Atachment</IconButton>
-                        <IconButton icon={<Radio />} textVisibility="responsive-hidden" direction="row" aria-label="Start live" >Live</IconButton>
-                        <IconButton icon={<Hash />} textVisibility="responsive-hidden" direction="row" aria-label="Insert hashtag" >Hashtag</IconButton>
-                        <IconButton icon={<AtSign />} textVisibility="responsive-hidden" direction="row" aria-label="Insert mention" >Mention</IconButton>
+                        <IconButton icon={<Paperclip />}
+                            textVisibility="responsive-hidden"
+                            direction="row"
+                            aria-label="Upload attachment"
+                            disabled
+                            tooltip="Atachment coming soon" >Atachment</IconButton>
+                        <IconButton icon={<Radio />}
+                            textVisibility="responsive-hidden"
+                            direction="row"
+                            aria-label="Start live"
+                            disabled
+                            tooltip="Live coming soon" >Live</IconButton>
+                        <IconButton icon={<Hash />}
+                            textVisibility="responsive-hidden"
+                            direction="row"
+                            aria-label="Insert hashtag"
+                            disabled
+                            tooltip="Hashtag coming soon" >Hashtag</IconButton>
+                        <IconButton icon={<AtSign />}
+                            textVisibility="responsive-hidden"
+                            direction="row" aria-label="Insert mention"
+                            disabled
+                            tooltip="Mention coming soon" >Mention</IconButton>
                         <SelectButton label="public" options={selectOptions} onChange={setVisibility} />
                     </div>
                 </div>

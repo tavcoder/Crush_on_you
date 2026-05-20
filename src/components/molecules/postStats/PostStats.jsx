@@ -21,14 +21,18 @@ export function PostStats({ stats, isLiked = false, isBookmarked = false, onLike
                 <IconButton
                     icon={<MessageCircle />}
                     ariaLabel="coments count"
-                    direction="row">
+                    direction="row"
+                    disabled
+                    tooltip="Comments coming soon">
                     {getStatsFormat(stats?.commentsCount ?? 0)}
                 </IconButton>
 
                 <IconButton
                     icon={<Share />}
                     ariaLabel="shares count"
-                    direction="row">
+                    direction="row"
+                    disabled
+                    tooltip="Share coming soon">
                     {getStatsFormat(stats?.sharesCount ?? 0)}
                 </IconButton>
             </div>

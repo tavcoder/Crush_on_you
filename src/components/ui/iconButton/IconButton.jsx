@@ -9,6 +9,8 @@ export function IconButton({
     onClick,
     variant = 'ghost', // ghost | outlined
     direction = 'row', // row | column
+    disabled = false,
+    tooltip = undefined,
     badge = false,
     isPressed,
     textVisibility = 'visible', // visible | responsive-hidden | sr-only
@@ -73,8 +75,13 @@ export function IconButton({
     }
 
     return (
-        <button type={type} {...commonProps}>
-            {content}
-        </button>
+        <div
+            className={`btn-icon__wrapper${tooltip ? ' btn-icon__wrapper--has-tooltip' : ''}`}
+            data-tooltip={tooltip}
+        >
+            <button disabled={disabled} type={type} {...commonProps}>
+                {content}
+            </button>
+        </div>
     );
 }
