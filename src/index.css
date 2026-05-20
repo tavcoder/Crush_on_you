@@ -221,6 +221,7 @@ a {
   align-items: center;
   justify-content: center;
   min-height: 44px;
+  /*TODO: en versión desktop tiene que ser diferente?*/
   min-width: 44px;
   flex-shrink: 0;
 }
