@@ -16,6 +16,11 @@ export const getPostsByUser = (userId, { page = 1, limit = 10 } = {}) =>
         .get(`posts?userId=${userId}&page=${page}&limit=${limit}`)
         .then(adaptPostList)
 
+export const searchPosts = ({ page = 1, limit = 10, search = '' } = {}) =>
+    apiClient
+        .get(`posts?page=${page}&limit=${limit}&search=${encodeURIComponent(search)}`)
+        .then(adaptPostList)
+
 export const createPost = (data) =>
     apiClient.call('POST', 'posts', data)
 

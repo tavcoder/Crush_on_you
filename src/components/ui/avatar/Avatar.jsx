@@ -17,7 +17,6 @@ import './Avatar.css'
 
 export function Avatar({ user, isCurrentUser = false, avatarSize = "sm", hasStory = true, isUnseen = false, badge }) {
 
-    console.log('user:', user, 'isCurrentUser:', isCurrentUser, 'avatarSize', avatarSize, 'hasStory', hasStory, 'isUnseen', isUnseen, 'badge', badge)
     const [imgError, setImgError] = useState(false)
     if (!user) return null;
     const { id: userId, userName, userSurName, avatarUrl, isOnline } = user;

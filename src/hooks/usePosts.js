@@ -1,6 +1,6 @@
 // hooks/usePosts.js
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
-import { getPosts, createPost, getPostsByUser } from '../services/api/posts.api'
+import { getPosts, createPost, getPostsByUser, searchPosts } from '../services/api/posts.api'
 
 export function useUserPosts(userId) {
     return useQuery({
@@ -8,6 +8,16 @@ export function useUserPosts(userId) {
         queryFn: () => getPostsByUser(userId),
         enabled: !!userId && typeof userId === 'string',
     });
+}
+
+export function useSearchPosts(query, { enabled } = {}) {
+    return useQuery({
+        queryKey: ['posts', 'search', query],
+        queryFn: () => searchPosts({ search: query }),
+        enabled: enabled ?? query.trim().length >= 2,
+        staleTime: 1000 * 30,
+        placeholderData: (prev) => prev,
+    })
 }
 
 export function usePosts({ page = 1 } = {}) {

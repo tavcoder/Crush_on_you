@@ -21,11 +21,22 @@ export function NavBar({ user }) {
         const value = e.target.value
         const params = new URLSearchParams()
         if (value) params.set('q', value)
-        navigate(`${pathname}?${params.toString()}`)
+        navigate(`${pathname}?${params.toString()}`, { replace: true })// cada keystroke reemplaza la entrada anterior en lugar de añadir una nueva.
     }
 
+    const handleSubmit = (e) => {
+        e.preventDefault()
+        // El param ya está en la URL porque handleSearch lo actualiza en cada keystroke
+    }
+
+    const handleClear = () => {
+        const params = new URLSearchParams(searchParams)
+        params.delete('q')
+        navigate(`${pathname}?${params.toString()}`, { replace: true })
+    }
+    
     const navItems = NAV_LINKS.map(({ to, label }) => {
-        const isActive = pathname.pathname === to;
+        const isActive = pathname === to;
         return (
             <Link
                 key={to}
@@ -45,7 +56,7 @@ export function NavBar({ user }) {
                 <span className="nav-bar__logo-text">Crush On You</span>
             </Link>
 
-            <form role="search" onSubmit={handleSearch} className="nav-bar__search">
+            <form role="search" onSubmit={handleSubmit} className="nav-bar__search">
                 <Input
                     variant="icon"
                     placeholder="Search people, posts..."
@@ -53,7 +64,7 @@ export function NavBar({ user }) {
                     label="Search"
                     value={query}
                     onChange={handleSearch}
-                    className="nav-bar__search"
+                    onClear={handleClear}
                 />
             </form>
 

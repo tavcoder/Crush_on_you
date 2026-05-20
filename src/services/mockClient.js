@@ -1,7 +1,8 @@
+//mockClient
 import { postsData } from './mocks/post.mock'
 import { usersData } from './mocks/users.mock'
 import { enrichPostsWithUserData } from '../utils/postsUtils'
-import { ApiError } from '../ApiError.js'
+import { ApiError } from '../services/ApiError'
 
 const CURRENT_USER_ID = 'erch'
 
@@ -10,6 +11,7 @@ let MOCK_DB = createMockDB()
 function createMockDB() {
     return {
         posts: enrichPostsWithUserData(postsData, usersData),
+        users: [...usersData],
         currentUser: usersData.find(u => u.id === CURRENT_USER_ID),
     }
 }
@@ -90,6 +92,14 @@ export const mockClient = {
 
             if (params.userId) {
                 filtered = filtered.filter(p => p.authorId === params.userId)
+            }
+
+            if (params.search) {
+                const q = params.search.toLowerCase()
+                filtered = filtered.filter(p =>
+                    p.content?.toLowerCase().includes(q) ||
+                    p.author?.userName?.toLowerCase().includes(q)
+                )
             }
 
             const result = paginate(filtered, page, limit)

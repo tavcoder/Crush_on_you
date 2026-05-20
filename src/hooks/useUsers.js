@@ -38,13 +38,14 @@ export function useUsers(page = 1) {
     });
 }
 
-export function useSearchUsers(query) {
+export function useSearchUsers(query, { enabled } = {}) {
     return useQuery({
-        queryKey: ["users", "search", query],
+        queryKey: ['users', 'search', query],
         queryFn: () => searchUsers({ search: query }),
-        enabled: query?.length >= 2,
+        enabled: enabled ?? query.trim().length >= 2,
         staleTime: 1000 * 30,
-    });
+        placeholderData: (prev) => prev,
+    })
 }
 
 export function useUsersList(page = 1) {
