@@ -13,7 +13,8 @@ export const postsData = [
        isLiked: true,
        isBookmarked: true,
        createdAt: "2024-08-14T14:15:00Z",
-       profileDetails: {
+       profileDetails: { // TODO: [DEUDA TÉCNICA] profileDetails no pertenece al post.
+        // Mover al objeto user cuando se implemente el perfil completo.
            education: "Bachelor of Software Eng",
            drink: "Sometimes",
            languages: "Rusian",
@@ -22,7 +23,7 @@ export const postsData = [
    },
      {
        id: "post_2",
-       authorId: "vdfswgfwe_ce",
+       authorId: "erch",
        content: "",
        images: [],
        stats: {

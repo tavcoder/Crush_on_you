@@ -1,25 +1,25 @@
 /*Input.jsx*/
-import { Search } from "lucide-react";
+import { Search, X } from "lucide-react";
 import './Input.css'
-
 
 export function Input({
     label,
     value,
     onChange,
+    onClear,
     variant = "",
     type = 'text',
     placeholder,
-    id,              // ← for htmlFor
-    name,            // ← for forms
-    className,            // ← for forms
+    id,
+    name,
+    className,
     disabled = false
 }) {
     const rootClass = [
         'input',
         disabled && 'input--disabled',
         className,
-    ].filter(Boolean).join(' ');
+    ].filter(Boolean).join(' ')
 
     return (
         <div className={rootClass}>
@@ -35,6 +35,16 @@ export function Input({
                 placeholder={placeholder ?? label}
                 disabled={disabled}
             />
+            {value && onClear && (
+                <button
+                    type="button"          // ← evita submit del form
+                    onClick={onClear}
+                    className="btn-reset input__clear"
+                    aria-label="Clear search"
+                >
+                    <X aria-hidden="true" />
+                </button>
+            )}
         </div>
     )
 }

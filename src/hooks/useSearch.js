@@ -1,40 +1,40 @@
 // hooks/useSearch.js
-import { useMemo } from 'react'
-import { useLocation, useSearchParams } from 'react-router'
-import { postsData } from '../services/mocks/post.mock'
-import { usersData } from '../services/mocks/users.mock'
+import { useSearchParams } from 'react-router'
+import { useSearchUsers } from '../hooks/useUsers'
+import { useSearchPosts } from '../hooks/usePosts'
 
-const SEARCH_CONFIG = {
-    '/feed': {
-        data: postsData,
-        filter: (item, q) => item.content.toLowerCase().includes(q),
-    },
-    '/people': {
-        data: usersData,
-        filter: (item, q) =>
-            [item.userName, item.userSurName, item.userNick]
-                .some(field => field?.toLowerCase().includes(q)),
-    },
-}
 
-export function useSearch() {
-    const { pathname } = useLocation()
+/**
+ * Hook orquestador de búsqueda
+ * @param {'posts' | 'users'} type - Tipo de entidad a buscar
+ */
+// DECISIÓN DE DISEÑO: ambos hooks se inicializan siempre,
+// aunque solo uno esté habilitado en cada momento.
+// TanStack Query evita las peticiones con `enabled: false`,
+// pero los hooks ocupan slot en el árbol de React.
+// Aceptable con 2 tipos (posts/users). Si se añaden más tipos
+// (tags, locations, etc.), considerar lazy initialization o
+// un hook genérico parametrizado.
+
+export function useSearch(type = 'posts') {
     const [searchParams] = useSearchParams()
-
     const query = searchParams.get('q') ?? ''
-    const normalizedQuery = query.toLowerCase().trim()
+    const isActive = query.trim().length >= 2
 
-    const config = SEARCH_CONFIG[pathname]
+    const postsQuery = useSearchPosts(query, {
+        enabled: isActive && type === 'posts'
+    })
+    const usersQuery = useSearchUsers(query, {
+        enabled: isActive && type === 'users'
+    })
 
-    const results = useMemo(() => {
-        if (!config) return []
-        if (!normalizedQuery) return config.data
-        return config.data.filter(item => config.filter(item, normalizedQuery))
-    }, [config, normalizedQuery])
+    const activeQuery = type === 'users' ? usersQuery : postsQuery
 
     return {
-        results,
+        results: activeQuery.data?.data ?? [],
+        isLoading: activeQuery.isLoading,
+        isError: activeQuery.isError,
         query,
-        isSearching: normalizedQuery !== '',
+        isSearching: isActive,
     }
 }
