@@ -23,6 +23,7 @@ export const searchPosts = ({ page = 1, limit = 10, search = '' } = {}) =>
 
 export const createPost = (data) =>
     apiClient.call('POST', 'posts', data)
+        .then(res => ({ ...res, data: adaptPost(res.data) }))
 
 export const likePost = (id) =>
     apiClient.call('PUT', `posts/${id}/like`)

@@ -72,18 +72,12 @@ export function NavBar({ user }) {
                 <div className='nav-bar__links'>{navItems}</div>
 
                 <IconButton
-                    icon={<Search />}
-                    variant="outlined"
-                    ariaLabel="Open search mobile"
-                    className='nav-bar__search-mobile' />
-
-                <IconButton
                     icon={<Bell />}
                     badge={true}
                     variant="outlined"
                     ariaLabel="Notifications — coming soon"
                     disabled
-                    tooltip ="Notifications coming soon"
+                    tooltip="Notifications coming soon"
                 />
 
                 <AvatarMenu user={user} />

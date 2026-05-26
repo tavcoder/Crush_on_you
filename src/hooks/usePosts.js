@@ -30,18 +30,13 @@ export function usePosts({ page = 1 } = {}) {
 
     const mutation = useMutation({
         mutationFn: createPost,
-        onSuccess: (newPost) => {
+        onSuccess: (response) => {
+            const newPost = response.data
             queryClient.setQueryData(['posts', page], (old) => {
-                if (!old) {
-                    return { data: [newPost], pagination: null }
-                }
-
-                return {
-                    ...old,
-                    data: [newPost, ...(old.data ?? [])],
-                }
+                if (!old) return { data: [newPost], pagination: null }
+                return { ...old, data: [newPost, ...(old.data ?? [])] }
             })
-        },
+        }
     })
 
     return {
