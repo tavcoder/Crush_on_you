@@ -106,8 +106,9 @@
   --transition-base: 250ms ease;
 
   /* Layout */
-  --max-width-feed: 680px;
+  --min-width-dropdown: 180px;
   --max-width-sidebar: 280px;
+  --max-width-feed: 680px;
   --max-width-app: 1200px;
 
   /* ========================================
@@ -123,6 +124,8 @@
   /* Background */
   --color-background: var(--cream);
   --color-background-alt: var(--blush);
+  --color-skeleton-bg: var(--rose-light);
+  --color-skeleton-highlight: var(--white);
 
   /* Surface */
   --color-surface: var(--white);
@@ -180,6 +183,13 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
+.layout {
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
 img,
 video {
   max-width: 100%;
@@ -188,6 +198,12 @@ video {
 
 input,
 textarea {
+  font-family: inherit;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
   font-family: inherit;
 }
 
@@ -205,6 +221,7 @@ textarea {
   align-items: center;
   justify-content: center;
   min-height: 44px;
+  /*TODO: en versión desktop tiene que ser diferente?*/
   min-width: 44px;
   flex-shrink: 0;
 }

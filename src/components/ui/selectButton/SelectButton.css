@@ -1,0 +1,33 @@
+.select-button {
+    position: relative;
+    gap: var(--space-1);
+}
+
+.select-button__label {
+    display: none;
+}
+
+.select-button__icon {
+    color: var(--color-primary);
+    display: flex;
+    align-items: center;
+    width: 24px;
+    height: 24px;
+}
+
+.select-button__select {
+    border: none;
+    font-size: var(--fs-xs);
+    text-align: center;
+    color: var(--color-text-muted);
+
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    cursor: pointer;
+    width: 100%;
+}
+
+@media (min-width: 768px) {.select-button__label {
+        display: flex;
+    }}

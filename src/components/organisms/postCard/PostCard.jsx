@@ -1,4 +1,6 @@
+/*PostCard.jsx*/
 import { useState } from "react"
+import { MoreHorizontal } from "lucide-react";
 import { UserInfo } from "../../molecules/userInfo/UserInfo.jsx"
 import { PostMedia } from "../../molecules/postMedia/PostMedia.jsx"
 import { PostStats } from "../../molecules/postStats/PostStats.jsx"
@@ -13,11 +15,10 @@ import './PostCard.css'
  * @param {Post} props.post
  */
 
-export function PostCard({ post }) {
+export function PostCard({ post, isCurrentUser }) {
     const [isLiked, setIsLiked] = useState(post.isLiked)
     const [isBookmarked, setIsBookmarked] = useState(post.isBookmarked)
     const [likesCount, setLikesCount] = useState(post.stats.likesCount)
-
     const handleLike = () => {
         setIsLiked(prev => !prev)
         setLikesCount(prev => isLiked ? prev - 1 : prev + 1)
@@ -37,19 +38,21 @@ export function PostCard({ post }) {
 
     const primaryText = getUserFullName(author);
     const secondaryText = getDateFormat(createdAt);
-
     return (
         <article className='card post-card'>
             <UserInfo
                 user={author}
+                isCurrentUser={isCurrentUser}
                 avatarSize="md"
                 primaryText={primaryText}
                 secondaryText={secondaryText}
                 direction="row"
                 action={<IconButton
-                    icon="..."
+                    icon={<MoreHorizontal />}
                     variant="ghost"
-                    ariaLabel="Post options" />}
+                    ariaLabel="Post options"
+                    disabled
+                    tooltip="More options coming soon" />}
             />
             <PostMedia
                 images={images}

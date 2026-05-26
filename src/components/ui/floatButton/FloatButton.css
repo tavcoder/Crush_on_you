@@ -1,7 +1,7 @@
 /*FloatButton.jsx*/
 .btn-float {
-    width: var(--space-10);
-    height: var(--space-10);
+    position: absolute;
+    top: -20px;
     border: 4px solid var(--white);
     border-radius: var(--radius-full);
     background: var(--color-gradient-primary);

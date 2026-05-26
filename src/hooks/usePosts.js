@@ -1,28 +1,51 @@
 // hooks/usePosts.js
-import { useState, useEffect, useCallback } from 'react';
-import { getPosts } from '../services/apiHelper';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
+import { getPosts, createPost, getPostsByUser, searchPosts } from '../services/api/posts.api'
 
-export function usePosts() {
-    const [posts, setPosts] = useState([]);
-    const [page, setPage] = useState(1);
-    const [isLoading, setLoading] = useState(false);
-    const [hasMore, setHasMore] = useState(true);
+export function useUserPosts(userId) {
+    return useQuery({
+        queryKey: ["posts", "byUser", userId],
+        queryFn: () => getPostsByUser(userId),
+        enabled: !!userId && typeof userId === 'string',
+    });
+}
 
-    useEffect(() => {
-        setLoading(true);
-        getPosts({ page, limit: 10 })
-            .then(({ data, pagination }) => {
-                setPosts(prev => [...prev, ...data]);
-                setHasMore(pagination.currentPage < pagination.totalPages);
+export function useSearchPosts(query, { enabled } = {}) {
+    return useQuery({
+        queryKey: ['posts', 'search', query],
+        queryFn: () => searchPosts({ search: query }),
+        enabled: enabled ?? query.trim().length >= 2,
+        staleTime: 1000 * 30,
+        placeholderData: (prev) => prev,
+    })
+}
+
+export function usePosts({ page = 1 } = {}) {
+    const queryClient = useQueryClient()
+
+    const query = useQuery({
+        queryKey: ['posts', page],
+        queryFn: () => getPosts({ page }),
+    })
+
+    const mutation = useMutation({
+        mutationFn: createPost,
+        onSuccess: (response) => {
+            const newPost = response.data
+            queryClient.setQueryData(['posts', page], (old) => {
+                if (!old) return { data: [newPost], pagination: null }
+                return { ...old, data: [newPost, ...(old.data ?? [])] }
             })
-            .finally(() => setLoading(false));
-    }, [page]);
-
-    const loadMore = useCallback(() => {
-        if (!isLoading && hasMore) {
-            setPage(prev => prev + 1);
         }
-    }, [isLoading, hasMore]);
+    })
 
-    return { posts, isLoading, hasMore, loadMore };
+    return {
+        posts: query.data?.data ?? [],
+        pagination: query.data?.pagination,
+        isLoading: query.isLoading,
+        isError: query.isError,
+        error: query.error,
+        addPost: mutation.mutate,
+        isAddingPost: mutation.isPending,
+    }
 }

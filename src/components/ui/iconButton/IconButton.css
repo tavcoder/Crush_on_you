@@ -1,13 +1,63 @@
 /*IconButton.css*/
+.btn-icon__wrapper {
+    position: relative;
+    display: inline-flex;
+}
+
+.btn-icon__wrapper--has-tooltip::after {
+    content: attr(data-tooltip);
+    position: absolute;
+    top: calc(100% + 10px);
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--color-primary-soft);
+    box-shadow: var(--shadow-md);
+    border: 1px solid var(--color-border-secondary);
+    color: var(--color-text-secondary);
+    font-size: 12px;
+    white-space: nowrap;
+    padding: 4px 8px;
+    border-radius: var(--radius-md);
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.15s ease;
+}
+
+.btn-icon__wrapper--has-tooltip::before {
+    position: absolute;
+    content: "";
+    width: 10px;
+    height: 10px;
+    background: var(--color-primary-soft);
+    box-shadow: var(--shadow-md);
+    opacity: 0;
+    transform: rotate(45deg);
+    top: calc(100% + 4px);
+    left: 50%;
+    transition-duration: 0.3s;
+}
+
+
+/* Muestra el tooltip en hover del wrapper O cuando el botón tiene focus */
+.btn-icon__wrapper--has-tooltip:hover::after,
+.btn-icon__wrapper--has-tooltip:hover::before,
+.btn-icon__wrapper--has-tooltip:focus-within::after {
+    opacity: 1;
+}
+
+/* Botón deshabilitado — cursor para indicar que no es clickable */
+.btn-icon__wrapper--has-tooltip button:disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+}
 
 .btn-icon {
     position: relative;
+    gap: var(--space-2);
     padding: var(--space-2) var(--space-4);
     border-radius: var(--radius-md);
-    font-size: var(--fs-sm);
-    gap: var(--space-2);
+    font-size: var(--fs-xs);
     transition: var(--transition-base);
-
 }
 
 .btn-icon:hover {
@@ -15,9 +65,7 @@
     color: var(--color-text-on-secondary);
 }
 
-.btn-icon--noText {
-    width: var(--space-10);
-    height: var(--space-10);
+.btn-icon--no-text {
     padding: 0;
 }
 
@@ -28,6 +76,7 @@
 
 .btn-icon--outlined {
     border: 1.5px solid var(--color-border);
+    border-radius: var(--radius-full);
 }
 
 .btn-icon--ghost {
@@ -42,13 +91,27 @@
     color: var(--color-primary);
 }
 
+.btn-icon__text {
+    display: inline-flex;
+}
+
+.btn-icon__text--responsive-hidden {
+    display: inline-flex;
+}
+
+@media (max-width: 767px) {
+    .btn-icon__text--responsive-hidden {
+        display: none;
+    }
+}
+
 .btn-icon__badge {
     position: absolute;
-    top: 0;
-    right: 0;
-    background-color: var(--color-primary);
-    border: 2px solid var(--white);
-    border-radius: var(--radius-full);
+    top: var(--space-1);
+    right: var(--space-1);
     width: var(--space-2);
     height: var(--space-2);
+    border-radius: var(--radius-full);
+    background-color: var(--color-primary);
+    border: 2px solid var(--white);
 }

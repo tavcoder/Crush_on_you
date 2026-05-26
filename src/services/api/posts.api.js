@@ -1,0 +1,32 @@
+// posts.api.js
+import { apiClient } from '../apiClient'
+import { adaptPost, adaptPostList } from './adapters/posts.adapter'
+
+export const getPosts = ({ page = 1, limit = 10 } = {}) =>
+    apiClient
+        .get(`posts?page=${page}&limit=${limit}`)
+        .then(adaptPostList)
+
+export const getPost = (id) =>
+    apiClient.get(`posts/${id}`)
+        .then(res => adaptPost(res.data))
+
+export const getPostsByUser = (userId, { page = 1, limit = 10 } = {}) =>
+    apiClient
+        .get(`posts?userId=${userId}&page=${page}&limit=${limit}`)
+        .then(adaptPostList)
+
+export const searchPosts = ({ page = 1, limit = 10, search = '' } = {}) =>
+    apiClient
+        .get(`posts?page=${page}&limit=${limit}&search=${encodeURIComponent(search)}`)
+        .then(adaptPostList)
+
+export const createPost = (data) =>
+    apiClient.call('POST', 'posts', data)
+        .then(res => ({ ...res, data: adaptPost(res.data) }))
+
+export const likePost = (id) =>
+    apiClient.call('PUT', `posts/${id}/like`)
+
+export const deletePost = (id) =>
+    apiClient.call('DELETE', `posts/${id}`)

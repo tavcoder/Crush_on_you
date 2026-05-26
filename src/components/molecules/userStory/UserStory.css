@@ -1,0 +1,13 @@
+.user-story__item {
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.user-story__user-name {
+    font-size: var(--fs-xs);
+    text-align: center;
+    margin-top: var(--space-1);
+}

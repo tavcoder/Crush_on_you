@@ -8,7 +8,9 @@
  * @returns {Post[]}
  */
 
-export function enrichPostsWithUserData(posts, users) {
+export function enrichPostsWithUserData(posts, users) 
+    {
+
   return posts.map(post => {
     const author = users.find(user => user.id === post.authorId);
 

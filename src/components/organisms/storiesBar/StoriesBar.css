@@ -1,0 +1,19 @@
+/*StoriesBar.css*/
+
+.stories-bar__list {
+    list-style: none;
+    display: flex;
+    justify-content: start;
+    align-items: start;
+    gap: var(--space-2);
+}
+
+.stories-bar__label {
+    font-size: var(--fs-xs);
+    text-align: center;
+    margin-top: var(--space-1);
+}
+
+.stories-bar__userStory {
+    list-style: none;
+}
