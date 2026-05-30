@@ -5,7 +5,7 @@ import { UserInfo } from "../../molecules/userInfo/UserInfo.jsx"
 import { PostMedia } from "../../molecules/postMedia/PostMedia.jsx"
 import { PostStats } from "../../molecules/postStats/PostStats.jsx"
 import { IconButton } from "../../ui/iconButton/IconButton.jsx"
-import { getDateFormat, getUserFullName } from "../../../utils/formatUtils.js"
+import { getDateFormat, getUserFullNameFormat } from "../../../utils/formatUtils.js"
 import './PostCard.css'
 
 /** @typedef {import('../../../services/contracts/types.js').Post} Post */
@@ -36,7 +36,7 @@ export function PostCard({ post, isCurrentUser }) {
         stats,
     } = post || {};
 
-    const primaryText = getUserFullName(author);
+    const primaryText = getUserFullNameFormat(author);
     const secondaryText = getDateFormat(createdAt);
     return (
         <article className='card post-card'>

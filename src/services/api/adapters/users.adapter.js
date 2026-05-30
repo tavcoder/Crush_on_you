@@ -32,6 +32,8 @@ export function adaptUser(raw) {
         userSurName: raw.userSurName ?? '',
         userNick: raw.userNick ?? '',
         avatarUrl: raw.avatarUrl ?? null,
+        city: raw.city ?? null,
+        country: raw.country ?? null,
         isOnline: raw.isOnline ?? false,
         hasStory: raw.hasStory ?? false,
         isUnseen: raw.isUnseen ?? false,

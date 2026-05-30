@@ -43,6 +43,8 @@
  * @property {string} userSurName
  * @property {string} userNick
  * @property {string|null} avatarUrl
+ * @property {string|null} city
+ * @property {string|null} country
  * @property {boolean} isOnline
  * @property {boolean} hasStory
  * @property {boolean} isUnseen

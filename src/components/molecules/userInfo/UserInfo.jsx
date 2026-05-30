@@ -10,8 +10,8 @@ export function UserInfo({ user, isCurrentUser, avatarSize, primaryText, seconda
                     avatarSize={avatarSize}
                     isCurrentUser={isCurrentUser} />
                 <div className="user-info__text">
-                    <p className='user-info__primary-text'>{primaryText}</p>
-                    <p className='user-info__secondary-text'>{secondaryText}</p>
+                    {primaryText && <p className='user-info__primary-text'>{primaryText}</p>}
+                    {secondaryText && <p className='user-info__secondary-text'>{secondaryText}</p>}
                 </div>
             </div>
             {action && direction === "row" && action}

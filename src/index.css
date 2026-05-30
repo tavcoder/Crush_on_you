@@ -4,21 +4,21 @@
 
 @font-face {
   font-family: 'DM Sans';
-  src: url('fonts/DM_Sans,Playfair_Display/DM_Sans/DMSans-VariableFont_opsz,wght.ttf') format('truetype');
+  src: url('fonts/DM_Sans/DMSans-VariableFont_opsz,wght.ttf') format('truetype');
   font-weight: 100 900;
   font-style: normal;
 }
 
 @font-face {
   font-family: 'DM Sans';
-  src: url('fonts/DM_Sans,Playfair_Display/DM_Sans/DMSans-Italic-VariableFont_opsz,wght.ttf') format('truetype');
+  src: url('fonts/DM_Sans/DMSans-Italic-VariableFont_opsz,wght.ttf') format('truetype');
   font-weight: 100 900;
   font-style: italic;
 }
 
 @font-face {
   font-family: 'Playfair Display';
-  src: url('fonts/.../PlayfairDisplay-VariableFont_wght.ttf') format('truetype');
+  src: url('fonts/Playfair_Display/PlayfairDisplay-VariableFont_wght.ttf') format('truetype');
   font-weight: 100 900;
   font-style: normal;
 }
