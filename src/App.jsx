@@ -23,7 +23,7 @@ function App() {
             <Route path="/settings" element={<ComingSoonPage feature="Settings" />} />
             <Route path="/search" element={<ComingSoonPage feature="Search" />} />
             <Route path="/messages" element={<ComingSoonPage feature="Messages" />} />
-            <Route path="/profile" element={<ComingSoonPage feature="Profile" />} />
+            <Route path="/userSuggestions" element={<ComingSoonPage feature="Profile" />} />
             <Route path="*" element={<p>404-Page Not Found</p>} />
           </Routes>
         </Suspense>

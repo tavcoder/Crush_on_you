@@ -1,4 +1,3 @@
-/*users.mock.js*/
 export const usersData = [
   {
     id: "erch",
@@ -11,12 +10,8 @@ export const usersData = [
     isOnline: true,
     hasStory: true,
     isUnseen: false,
-    following: [
-      { userId: "ver_c" }
-    ],
-    followers: [
-      { userId: "ver_c" }
-    ]
+    following: [{ userId: "ver_c" }],
+    followers: [{ userId: "ver_c" }, { userId: "luna_m" }, { userId: "kai_d" }],
   },
   {
     id: "ver_c",
@@ -29,11 +24,63 @@ export const usersData = [
     isOnline: false,
     hasStory: true,
     isUnseen: true,
-    following: [
-      { userId: "erch" }
-    ],
-    followers: [
-      { userId: "erch" }
-    ]
-  }
+    following: [{ userId: "erch" }, { userId: "r_c" }, { userId: "luna_m" }],
+    followers: [{ userId: "erch" }, { userId: "r_c" }],
+  },
+  {
+    id: "r_c",
+    userName: "Ramón",
+    userSurName: "Costa",
+    userNick: "Jalapeño",
+    avatarUrl: null,
+    city: "Montpellier",
+    country: "France",
+    isOnline: false,
+    hasStory: true,
+    isUnseen: true,
+    following: [{ userId: "ver_c" }, { userId: "sofia_r" }],
+    followers: [{ userId: "ver_c" }, { userId: "sofia_r" }],
+  },
+  {
+    id: "luna_m",
+    userName: "Luna",
+    userSurName: "Martín",
+    userNick: "LunaM",
+    avatarUrl: null,
+    city: "Barcelona",
+    country: "Spain",
+    isOnline: true,
+    hasStory: false,
+    isUnseen: false,
+    following: [{ userId: "erch" }, { userId: "kai_d" }, { userId: "sofia_r" }],
+    followers: [{ userId: "ver_c" }, { userId: "kai_d" }, { userId: "sofia_r" }],
+  },
+  {
+    id: "kai_d",
+    userName: "Kai",
+    userSurName: "Dubois",
+    userNick: "KaiD",
+    avatarUrl: null,
+    city: "Lyon",
+    country: "France",
+    isOnline: true,
+    hasStory: true,
+    isUnseen: true,
+    following: [{ userId: "erch" }, { userId: "luna_m" }],
+    followers: [{ userId: "luna_m" }, { userId: "sofia_r" }],
+  },
+  {
+    id: "sofia_r",
+    userName: "Sofia",
+    userSurName: "Reyes",
+    userNick: "SofiaR",
+    avatarUrl: null,
+    city: "Ciudad de México",
+    country: "Mexico",
+    isOnline: false,
+    hasStory: false,
+    isUnseen: false,
+    following: [{ userId: "r_c" }, { userId: "luna_m" }],
+    followers: [{ userId: "r_c" }, { userId: "luna_m" }, { userId: "kai_d" }],
+  },
 ];

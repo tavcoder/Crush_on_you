@@ -243,6 +243,7 @@ a {
   box-shadow: var(--shadow-sm);
   border: 1px solid var(--color-border);
   border-radius: var(--radius-md);
+  max-width: 100%;
 }
 
 .alert {
