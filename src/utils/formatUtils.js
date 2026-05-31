@@ -49,3 +49,7 @@ export function getDateFormat(dateString) {
     return `${get("day")} ${get("month")}. at ${get("hour")}:${get("minute")} ${get("dayPeriod")}`;
 }
 
+export function getFollowedByFormat(followerMatch) {
+    if (!followerMatch) return "Suggested for you"
+    return `Followed by ${getUserFullNameFormat(followerMatch)}`
+}
