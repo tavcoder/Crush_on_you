@@ -1,7 +1,6 @@
 /*RoundButton.css*/
 .btn--round {
-    height: var(--space-6);
-    width: var(--space-6);
+
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -12,6 +11,16 @@
     transition: var(--transition-base);
     cursor: pointer;
 
+}
+
+.btn--round--sm {
+    height: var(--space-6);
+    width: var(--space-6);
+}
+
+.btn--round--md {
+    height: var(--space-8);
+    width: var(--space-8);
 }
 
 .btn--round:hover {

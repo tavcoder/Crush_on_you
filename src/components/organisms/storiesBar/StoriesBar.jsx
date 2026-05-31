@@ -16,7 +16,7 @@ export function StoriesBar({ currentUser, users, onStorySeen }) {
                         isCurrentUser={true}
                         avatarSize={"lg"}
                         badge={
-                            <RoundButton className='stories-bar__add-story' showStory={true} />}
+                            <RoundButton className='stories-bar__add-story' ariaLabel="Add story" />}
                     />
                     <p className='stories-bar__label'>My Story</p>
                 </li>

@@ -2,14 +2,14 @@
 
 import './RoundButton.css'
 
-export function RoundButton({ showStory = false, className, onClick }) {
+export function RoundButton({ buttonText = "+", ariaLabel, className, buttonSize = "sm", onClick }) {
     return (
         <button
-            aria-label={showStory ? "Add story" : "Follow user"}
-            className={`btn--round ${className}`}
+            aria-label={ariaLabel}
+            className={`btn--round btn--round--${buttonSize}${className ? ` ${className}` : ''}`}
             type='button'
             onClick={onClick}>
-            <span aria-hidden="true">+</span>
+            <span aria-hidden="true">{buttonText}</span>
         </button>
     )
 }
