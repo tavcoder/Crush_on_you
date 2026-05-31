@@ -148,12 +148,24 @@ export const mockClient = {
 
         if (resource === 'users' && action === 'follow') {
             if (method === 'POST') {
+                const currentUser = MOCK_DB.currentUser
+                const alreadyFollowing = currentUser.following.some(f => f.userId === id)
+                if (!alreadyFollowing) {
+                    currentUser.following.push({ userId: id })
+                    const targetUser = MOCK_DB.users.find(u => u.id === id)
+                    if (targetUser) targetUser.followers.push({ userId: currentUser.id })
+                }
                 return resolve({ status: 'success' })
             }
             if (method === 'DELETE') {
+                const currentUser = MOCK_DB.currentUser
+                currentUser.following = currentUser.following.filter(f => f.userId !== id)
+                const targetUser = MOCK_DB.users.find(u => u.id === id)
+                if (targetUser) {
+                    targetUser.followers = targetUser.followers.filter(f => f.userId !== currentUser.id)
+                }
                 return resolve({ status: 'success' })
             }
-            return Promise.reject(new ApiError(`[MOCK] Método no soportado: ${method} /users/${id}/follow`))
         }
 
         return Promise.reject(
