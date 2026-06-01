@@ -1,12 +1,18 @@
 /*ProfileCard.css*/
 .profile-card__user-info {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    width: 100%;
-    gap: var(--space-md);
-    padding: var(--space-2);
+    display: none;
+}
+
+@media (min-width : 768px) {
+    .profile-card__user-info {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+        gap: var(--space-md);
+        padding: var(--space-2);
+    }
 }
 
 .user-info--location-icon {

@@ -13,16 +13,15 @@ export function UserSuggestionsCard({ currentUser, userSuggestionsList, isLoadin
     if (isLoading) return <UserSuggestionsCardSkeleton />
     if (isError) return <ErrorFallback error={error} />
     if (noSuggestions) return (
-        <>
-            <div className='suggestions-card__header'>...</div>
+        <section className='card suggestions-card'>
             <EmptyState
                 content="You're already following all our users. Invite a user who doesn't yet know about CrushOnYou."
                 onClick={undefined} /* TODO: implementar share via WhatsApp/SMS cuando esté disponible */
                 buttonText={undefined} />
-        </>
+        </section>
     )
     return (
-        <section className="card suggestions-card__user-info">
+        <section className="card suggestions-card">
 
             <div className='suggestions-card__header'>
                 <h2 className='suggestions-card__title'>SUGGESTED FOR YOU</h2>
