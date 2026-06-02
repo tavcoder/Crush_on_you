@@ -1,4 +1,4 @@
-//ProfileCardSkeleton
+//UserSuggestionsCardSkeleton
 import { SkeletonBase } from "../../ui/skeletons/SkeletonBase";
 
 export function UserSuggestionsCardSkeleton() {
