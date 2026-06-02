@@ -1,12 +1,12 @@
-//SideBar.jsx
+//LeftSideBar.jsx
 import { useUserPosts } from "../../../hooks/usePosts.js"
 import { useCurrentUser } from '../../../hooks/useUsers.js';
 import { useUserSuggestionsList } from "../../../hooks/useUserSuggestionsList.js"
 import { ProfileCard } from "../profileCard/ProfileCard.jsx"
 import { UserSuggestionsCard } from "../userSuggestionsCard/UserSuggestionsCard.jsx"
-import './SideBar.css'
+import './LeftSideBar.css'
 
-export function SideBar({ user, isLoading }) {
+export function LeftSideBar({ user, isLoading }) {
 
     const userId = user?.id
     const { data: postsData } = useUserPosts(userId)
@@ -15,7 +15,7 @@ export function SideBar({ user, isLoading }) {
 
     const postsCount = postsData?.data?.length ?? 0
     return (
-        <aside className="sidebar">
+        <aside className="left-sidebar">
             <ProfileCard user={user} postsCount={postsCount} isLoading={isLoading} />
             <UserSuggestionsCard currentUser={currentUser} userSuggestionsList={suggestionsList} isLoading={suggestionsLoading} isError={isError} error={error} />
 
