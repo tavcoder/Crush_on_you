@@ -1,0 +1,74 @@
+/*LoginForm.css*/
+.login-form {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+}
+
+.login-form__password-wrapper {
+    position: relative;
+    width: 100%;
+    display: flex;
+    justify-content: end;
+    align-items: center;
+}
+
+.password-wrapper__icon {
+    position: absolute;
+    right: var(--space-3);
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--color-text-muted);
+    /* tamaño explícito para que el área de click sea predecible */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.login-form__password-wrapper .field__input {
+    padding-right: calc(var(--space-3) * 2 + 1.25rem);
+    /* espacio para el icono */
+}
+
+.login-form__options {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+}
+
+.login-form__remember {
+    font-size: var(--fs-xs);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.login-form__forgot {
+    color: var(--color-primary);
+}
+
+.login-form__submit,
+.login-form__google {
+    width: 100%;
+}
+
+.login-form__divider {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    width: 100%;
+    color: var(--color-text-muted);
+    font-size: var(--fs-xs);
+}
+
+.login-form__divider::before,
+.login-form__divider::after {
+    content: '';
+    flex: 1;
+    /* cada línea ocupa el espacio disponible */
+    border-top: 1px solid var(--color-border);
+}

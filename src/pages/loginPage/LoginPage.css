@@ -1,0 +1,53 @@
+.login-page {
+    min-height: 100dvh;
+    /*dvh, no vh, para móviles con barra de navegación */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: var(--space-2);
+    padding: var(--space-8) var(--space-4);
+}
+
+/* Mobile (base): el card se estira al ancho disponible */
+.login-card {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Desktop: el card tiene ancho máximo */
+@media (min-width: 768px) {
+    .login-card {
+        width: 400px;
+        /* o max-width: 400px */
+    }
+}
+
+.login-card__title {
+    font-size: var(--fs-xl);
+    font-family: var(--font-display);
+}
+
+.login-card__text {
+    color: var(--color-text-muted);
+}
+
+.login-card__register {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: var(--space-1);
+    font-size: var(--fs-xs);
+}
+
+.login-card__register-link {
+    color: var(--color-primary);
+    text-decoration: underline;
+}
+
+.login-card__register-link:hover {
+    color: var(--color-primary-hover);
+}
