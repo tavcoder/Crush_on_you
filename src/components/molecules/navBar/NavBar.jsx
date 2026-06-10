@@ -1,7 +1,8 @@
 /*NavBar.jsx*/
 import { Link, useLocation, useNavigate, useSearchParams } from 'react-router'
-import { Heart, Bell, Search } from "lucide-react";
+import { Bell, Search } from "lucide-react";
 import { Input } from '../../ui/input/Input.jsx'
+import { BrandLogo } from '../../ui/brandLogo/BrandLogo.jsx'
 import { IconButton } from '../../ui/iconButton/IconButton.jsx'
 import { AvatarMenu } from '../../molecules/avatarMenu/AvatarMenu.jsx'
 import './NavBar.css'
@@ -51,10 +52,7 @@ export function NavBar({ user }) {
     return (
         <nav className="nav-bar">
 
-            <Link to="/" className="nav-bar__logo" aria-label="Crush On You — go to home">
-                <div className="nav-bar__logo-icon"><Heart /></div>
-                <span className="nav-bar__logo-text">Crush On You</span>
-            </Link>
+            <BrandLogo />
 
             <form role="search" onSubmit={handleSubmit} className="nav-bar__search">
                 <Input

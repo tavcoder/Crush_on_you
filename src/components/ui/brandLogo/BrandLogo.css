@@ -1,0 +1,30 @@
+/*BrandLogo.css*/
+.brand-logo {
+    display: flex;
+    gap: var(--space-2);
+}
+
+.brand-logo__text {
+    font-family: var(--font-display);
+    font-size: var(--fs-base);
+    font-weight: var(--fw-semibold);
+    color: var(--color-primary-hover);
+    white-space: nowrap;
+}
+
+.brand-logo__text--xl {
+    font-size: var(--fs-xl);
+
+}
+
+.brand-logo__icon {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--color-gradient-primary);
+    color: var(--color-surface);
+    font-size: var(--fs-xs);
+    padding: var(--space-1);
+    border-radius: var(--radius-sm);
+}

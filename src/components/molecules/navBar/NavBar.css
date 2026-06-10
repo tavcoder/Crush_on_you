@@ -18,28 +18,7 @@
     gap: var(--space-2);
 }
 
-.nav-bar__logo {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-family: inherit;
-    font-size: var(--fs-base);
-    font-weight: var(--fw-semibold);
-    color: var(--color-primary-hover);
-    white-space: nowrap;
-}
 
-.nav-bar__logo-icon {
-    position: relative;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: var(--color-gradient-primary);
-    color: var(--color-surface);
-    font-size: var(--fs-xs);
-    padding: var(--space-1);
-    border-radius: var(--radius-sm);
-}
 
 .nav-bar__search {
     display: flex;
