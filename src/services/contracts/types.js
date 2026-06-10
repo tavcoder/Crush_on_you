@@ -42,6 +42,8 @@
  * @property {string} userName
  * @property {string} userSurName
  * @property {string} userNick
+ * @property {string} email
+ * @property {string} password
  * @property {string|null} avatarUrl
  * @property {string|null} city
  * @property {string|null} country

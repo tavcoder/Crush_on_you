@@ -13,7 +13,7 @@ export const getUserSuggestions = ({ page = 1, limit = 10 } = {}) =>
     apiClient
         .get(`users?page=${page}&limit=${limit}`)
         .then(adaptUserList)
-        
+
 export const searchUsers = ({ page = 1, limit = 10, search = '' } = {}) =>
     apiClient
         .get(`users?page=${page}&limit=${limit}&search=${encodeURIComponent(search)}`)
@@ -32,6 +32,9 @@ export const getCurrentUser = () =>
         .then(res => adaptUser(res.data));
 
 // ─── MUTATIONS ───
+export const loginUser = ({ email, password }) =>
+    apiClient.call('POST', 'auth/login', { email, password })
+        .then(res => res.data.token)
 
 export const updateProfile = (id, data) =>
     apiClient

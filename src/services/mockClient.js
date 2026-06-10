@@ -117,6 +117,13 @@ export const mockClient = {
 
     call(method, endpoint, data) {
         const [resource, id, action] = endpoint.split('/')
+        if (method === 'POST' && resource === 'auth' && id === 'login') {
+            const { email, password } = data
+            // Para el mock cualquier email/password válido funciona
+            const user = MOCK_DB.users.find(u => u.email === email)
+            if (!user) return Promise.reject(new ApiError('User not found', 404))
+            return resolve({ status: 'success', data: { token: user.id } })
+        }
         if (method === 'POST' && resource === 'posts' && !action) {
             const newPost = {
                 id: `post_${Date.now()}`,
@@ -128,6 +135,7 @@ export const mockClient = {
                 isBookmarked: false,
                 createdAt: new Date().toISOString(),
             }
+
             MOCK_DB.posts.unshift(newPost)
             return resolve({ status: 'success', data: newPost })
         }
