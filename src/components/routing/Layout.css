@@ -1,0 +1,25 @@
+/*Layout.css*/
+.layout {
+    display: flex;
+    flex-direction: column;
+    min-height: 100dvh;
+    max-width: var(--max-width-app);
+    width: 100%;
+    /* sin esto, max-width no tiene efecto útil */
+    margin-inline: auto;
+    /* centra el layout en pantallas anchas */
+}
+
+.layout__body {
+    display: flex;
+    gap: var(--space-5);
+    align-items: start;
+
+}
+
+.layout__main {
+    flex: 1;
+    /* ocupa todo el espacio disponible entre los sidebars */
+    min-width: 0;
+    /* evita overflow en contenido largo — flex gotcha clásico */
+}
