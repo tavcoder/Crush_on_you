@@ -1,0 +1,19 @@
+/*SortByCard.css*/
+.sort-by-card {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 var(--space-8);
+    width: 100%;
+}
+
+.sort-by-card__title {
+    font-size: var(--fs-xs);
+    color: var(--color-text-muted);
+    font-weight: var(--fw-medium);
+}
+
+.sort-by-card__select {
+    color: var(--color-primary);
+    font-size: var(--fs-xs);
+}
