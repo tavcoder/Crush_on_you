@@ -6,6 +6,7 @@
     .users-online-card {
         display: flex;
         flex-direction: column;
+        padding: var(--space-2);
     }
 }
 
@@ -21,4 +22,5 @@
     list-style: none;
     padding: 0;
     margin: 0;
+    display: flex;
 }

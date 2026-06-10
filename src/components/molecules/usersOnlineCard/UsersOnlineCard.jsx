@@ -28,13 +28,13 @@ export function UsersOnlineCard({ onlineUsers, isLoading, isError, error, onUser
                     <li key={user.id} >
                         <button
                             className="btn-reset"
-                            onClick={() => onUserClick(user.id)}>
+                            onClick={() => onUserClick(user)}>
                             <UserInfo
                                 user={user}
-                                avatarSize="sm"
+                                avatarSize="md"
                                 direction='column'
-                                primaryText={user.userName}
-                                secondaryText={undefined}
+                                primaryText={undefined}
+                                secondaryText={user.userName}
                             />
                         </button>
                     </li>
