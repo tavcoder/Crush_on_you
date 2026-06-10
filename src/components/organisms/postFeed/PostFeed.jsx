@@ -7,13 +7,15 @@ import { PostFeedSkeleton } from './PostFeedSkeleton.jsx';
 import { EmptyState } from '../../ui/feedback/EmptyState.jsx';
 import './PostFeed.css';
 
-export function PostFeed({ posts, isLoading, hasMore, onLoadMore }) {
+export function PostFeed({ posts, isLoading, hasMore, onLoadMore, error }) {
     const sentinelRef = useInfiniteScroll(onLoadMore, { enabled: hasMore });
     const { currentUser } = useCurrentUser();
     // Estados de carga y vacío
     const isInitialLoading = isLoading && !posts?.length;
     const isEmpty = !isLoading && !posts?.length;
     const hasPosts = posts?.length > 0;
+
+    if (error) return <ErrorFallback error={error} />
 
     return (
         <section
@@ -31,6 +33,7 @@ export function PostFeed({ posts, isLoading, hasMore, onLoadMore }) {
 
             {hasPosts && (
                 <ul className="post-feed" role="list">
+
                     {posts.map(post => (
                         <li key={post.id} className="post-feed__item">
                             <PostCard
