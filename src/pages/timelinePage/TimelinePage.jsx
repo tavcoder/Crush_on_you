@@ -10,8 +10,9 @@ export default function TimelinePage() {
     const effectiveUser = selectedUser ?? currentUser
     const { data: posts, isLoading } = useUserPosts(effectiveUser?.id)
     // Si hay búsqueda activa, muestra resultados — si no, muestra el feed normal
-    const displayPosts = isSearching ? results : posts
+    const displayPosts = isSearching ? results : posts?.data
     const displayLoading = isSearching ? isSearchLoading : isLoading
+
     return (<>
 
         <section className="page-content">

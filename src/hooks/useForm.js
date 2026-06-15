@@ -68,7 +68,6 @@ export function useForm({ initialValues, validators, onSubmit, requiredFields = 
 
     const isValid = Object.keys(errors).every(key => !errors[key])
         && requiredFields.every(key => formData[key])
-    console.log({ errors, keysWithError: Object.keys(errors).filter(key => errors[key]) })
     return {
         formData,
         errors,

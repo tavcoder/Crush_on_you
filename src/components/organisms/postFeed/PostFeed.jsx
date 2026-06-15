@@ -11,16 +11,16 @@ export function PostFeed({ posts, isLoading, hasMore, onLoadMore, error }) {
     const sentinelRef = useInfiniteScroll(onLoadMore, { enabled: hasMore });
     const { currentUser } = useCurrentUser();
     // Estados de carga y vacío
-    const isInitialLoading = isLoading && !posts?.length;
-    const isEmpty = !isLoading && !posts?.length;
-    const hasPosts = posts?.length > 0;
+    const postCount = posts?.length ?? 0;
 
+    const isInitialLoading = isLoading && postCount === 0;
+    const isEmpty = !isLoading && postCount === 0;
+    const hasPosts = postCount > 0;
     if (error) return <ErrorFallback error={error} />
-
     return (
         <section
             aria-live="polite"
-            aria-busy={isLoading}
+            aria-busy={posts?.length}
             aria-label="Post feed"
             className="post-feed-container"
         >

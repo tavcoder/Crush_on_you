@@ -9,7 +9,6 @@ export function useOnlineUsers() {
         following?.filter(user => user.isOnline),
         [following]
     )
-console.log(following)
     return {
         onlineUsers,
         isLoading,
