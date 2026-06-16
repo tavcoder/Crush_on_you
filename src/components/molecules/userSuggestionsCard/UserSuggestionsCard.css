@@ -1,13 +1,8 @@
 .suggestions-card {
-    display: none;
+    display: flex;
+    flex-direction: column;
 }
 
-@media (min-width : 768px) {
-    .suggestions-card {
-        display: flex;
-        flex-direction: column;
-    }
-}
 
 .suggestions-card__header {
     display: flex;

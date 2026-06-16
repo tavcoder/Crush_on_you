@@ -15,7 +15,7 @@ export function LeftSideBar({ user, isLoading }) {
 
     const postsCount = postsData?.data?.length ?? 0
     return (
-        <aside className="left-sidebar">
+        <aside className="sidebar left-sidebar">
             <ProfileCard user={user} postsCount={postsCount} isLoading={isLoading} />
             <UserSuggestionsCard currentUser={currentUser} userSuggestionsList={suggestionsList} isLoading={suggestionsLoading} isError={isError} error={error} />
 

@@ -8,7 +8,7 @@ export function RightSideBar({onUserClick}) {
     const { onlineUsers, isLoading, isError, error } = useOnlineUsers()
 
     return (
-        <aside className="right-sidebar">
+        <aside className="sidebar right-sidebar">
             <UsersOnlineCard
                 onlineUsers={onlineUsers}
                 isLoading={isLoading}
