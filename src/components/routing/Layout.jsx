@@ -15,7 +15,7 @@ import './Layout.css'
 export function Layout() {
     const [selectedUser, setSelectedUser] = useState(null)// TODO: mover selectedUserId a contexto cuando se implemente navegación a perfiles.
     const { results, isLoading: isSearchLoading, isSearching, query, error: searchingError } = useSearch('posts')
-    const { data: currentUser, loading: currentUserLoading, error: currentUserError } = useCurrentUser()
+    const { data: currentUser, isLoading: currentUserLoading, error: currentUserError } = useCurrentUser()
     const { stories, onStorySeen } = useStories()
     const { pathname } = useLocation()
     const navigate = useNavigate()
@@ -36,6 +36,7 @@ export function Layout() {
     //LeftSideBar no toma la decisión internamente basándose en la ruta porque
     // implica una llamada extra innecesaria cuando ya el objeto user está completo en memoria
     const displayUserProfile = pathname === '/feed' ? currentUser : selectedUser ?? currentUser
+    
     return (
         <div className="layout">
             <NavBar user={currentUser} />
@@ -45,7 +46,7 @@ export function Layout() {
                 onStorySeen={onStorySeen}
             />
             <div className="layout__body">
-                <LeftSideBar user={displayUserProfile} isLoading={currentUserLoading} />
+                <LeftSideBar user={displayUserProfile} isLoading={currentUserLoading} currentUser = {currentUser} />
                 <main className="layout__main">
                     <Outlet
                         context={{
