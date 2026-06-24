@@ -15,7 +15,7 @@ import './Avatar.css'
  * 
  */
 
-export function Avatar({ user, isCurrentUser = false, avatarSize = "sm", hasStory = true, isUnseen = false, badge }) {
+export function Avatar({ user, isCurrentUser = false, avatarSize = "sm", hasStory = true, isUnseen = false,className, badge }) {
 
     const [imgError, setImgError] = useState(false)
     if (!user) return null;
@@ -26,7 +26,7 @@ export function Avatar({ user, isCurrentUser = false, avatarSize = "sm", hasStor
         ? (isUnseen ? 'avatar--story-unseen' : 'avatar--story-seen')
         : 'avatar--no-story';
     return (
-        <div className={`avatar avatar--${avatarSize} avatar--${modifier} ${ringClass}`}>
+        <div className={`${className} avatar avatar--${avatarSize} avatar--${modifier} ${ringClass}`}>
             {avatarUrl && !imgError
                 ? <img
                     src={avatarUrl}
