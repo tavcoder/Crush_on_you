@@ -2,7 +2,7 @@
 import { useContext, useCallback } from 'react';
 import { useNavigate } from 'react-router';
 import { UserAuthContext } from '../context/UserAuthContext';
-import { loginUser } from '../services/api/users.api';
+import { loginUser, registerUser } from '../services/api/users.api';
 import { useForm } from './useForm';
 import { fieldValidators } from '../utils/validateUtils';
 
@@ -11,12 +11,16 @@ export function useAuthForm(mode = 'login') { // 'login' | 'register'
     const navigate = useNavigate();
 
     const handleSubmit = useCallback(async (formData) => {
-        const token = mode === 'login'
-            ? await loginUser(formData)
-            : await registerUser(formData);// TODO: importar registerUser cuando esté implementado en users.api.js
-
-        authLogin(token);
-        navigate('/feed');
+        if (mode === 'login') {
+            const token = await loginUser(formData);
+            await authLogin(token);
+            navigate('/feed');
+        } else {
+            // Register: crear usuario, login, ir a completar perfil
+            const token = await registerUser(formData);
+            await authLogin(token);
+            navigate('/profile/me');  // ← Completar perfil (avatar, bio, etc.)
+        }
     }, [mode, authLogin, navigate]);
 
     const validators = mode === 'login'

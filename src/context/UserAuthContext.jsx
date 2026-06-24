@@ -1,7 +1,7 @@
 // context/UserAuthContext.jsx
 import { createContext, useState, useCallback } from "react"
 import { useQuery, useQueryClient } from '@tanstack/react-query'
-import { getToken } from '../services/apiClient'
+import { getToken, saveToken } from '../services/apiClient'
 import { getCurrentUser } from '../services/api/users.api'
 
 export const UserAuthContext = createContext(null)
@@ -19,11 +19,10 @@ export function UserAuthProvider({ children }) {
     })
 
     const login = useCallback(async (token) => {
-        localStorage.setItem('token', token)
+        saveToken(token)
+        await queryClient.invalidateQueries({ queryKey: ['currentUser'] })
         setIsAuthenticated(true)
-        // TanStack Query relanzará getCurrentUser automáticamente
-        // porque isAuthenticated cambia a true
-    }, [])
+    }, [queryClient])
 
     const logout = useCallback(() => {
         localStorage.removeItem('token')

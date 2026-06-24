@@ -4,7 +4,33 @@ import { usersData } from './mocks/users.mock'
 import { enrichPostsWithUserData } from '../utils/postsUtils'
 import { ApiError } from '../services/ApiError'
 
-const CURRENT_USER_ID = 'erch'
+let currentToken = localStorage.getItem('token') ?? 'erch'
+
+export function setMockToken(token) {
+    currentToken = token
+    MOCK_DB.currentUser = MOCK_DB.users.find(u => u.id === token)
+
+    if (!MOCK_DB.currentUser) {
+        console.warn(`[MOCK] User ${token} not found, creating placeholder`)
+        MOCK_DB.currentUser = {
+            id: token,
+            userName: 'Unknown',
+            userSurName: '',
+            userNick: 'unknown',
+            email: '',
+            avatarUrl: null,
+            isOnline: false,
+            hasStory: false,
+            isUnseen: false,
+            following: [],
+            followers: [],
+        }
+    }
+}
+
+export function getMockToken() {
+    return currentToken
+}
 
 let MOCK_DB = createMockDB()
 
@@ -12,7 +38,7 @@ function createMockDB() {
     return {
         posts: enrichPostsWithUserData(postsData, usersData),
         users: [...usersData],
-        currentUser: usersData.find(u => u.id === CURRENT_USER_ID),
+        currentUser: usersData.find(u => u.id === currentToken),
     }
 }
 
@@ -20,8 +46,9 @@ export function resetMockDB() {
     MOCK_DB = createMockDB()
 }
 
-export const MOCK_TOKEN = CURRENT_USER_ID
-
+function createId() {
+    return Math.random().toString(36).substring(2, 10);
+}
 function resolve(data, delay = 200) {
     return new Promise(res => setTimeout(() => res(data), delay))
 }
@@ -62,7 +89,8 @@ export const mockClient = {
         const limit = Number(params.limit || 10)
 
         if (resource === 'users' && id === 'me') {
-            return resolve({ data: MOCK_DB.currentUser });
+            const user = MOCK_DB.users.find(u => u.id === currentToken)
+            return resolve({ data: user })
         }
 
         if (resource === 'users' && !id) {
@@ -118,18 +146,52 @@ export const mockClient = {
     call(method, endpoint, data) {
         const [resource, id, action] = endpoint.split('/')
         if (method === 'POST' && resource === 'auth' && id === 'login') {
-            const { email, password } = data
-            // Para el mock cualquier email/password válido funciona
+            const { email } = data
             const user = MOCK_DB.users.find(u => u.email === email)
             if (!user) return Promise.reject(new ApiError('User not found', 404))
+
+            //Sincronizar currentUser (saveToken lo hará también, pero el mock necesita estar listo)
+            MOCK_DB.currentUser = user
+            currentToken = user.id
+
             return resolve({ status: 'success', data: { token: user.id } })
         }
+
+        if (method === 'POST' && resource === 'auth' && id === 'register') {
+            const newUser = {
+                id: createId(),
+                userName: data.name,
+                userNick: data.nick,
+                email: data.email,
+                password: data.password,
+                avatarUrl: null,
+                isOnline: true,
+                hasStory: false,
+                isUnseen: false,
+                following: [],
+                followers: [],
+            }
+
+            MOCK_DB.users.unshift(newUser)
+
+            // Sincronizar currentUser inmediatamente
+            // (saveToken + setMockToken lo harán también, pero el mock necesita estar listo)
+            MOCK_DB.currentUser = newUser
+            currentToken = newUser.id
+
+            return resolve({ status: 'success', data: { token: newUser.id } })
+        }
         if (method === 'POST' && resource === 'posts' && !action) {
+            // Defensivo: si no hay currentUser, rechazar
+            if (!MOCK_DB.currentUser) {
+                return Promise.reject(new ApiError('Not authenticated', 401))
+            }
+
             const newPost = {
                 id: `post_${Date.now()}`,
                 authorId: MOCK_DB.currentUser.id,
                 author: MOCK_DB.currentUser,
-                ...data,                    // ← aquí usas data
+                ...data,
                 stats: { likesCount: 0, commentsCount: 0, sharesCount: 0 },
                 isLiked: false,
                 isBookmarked: false,

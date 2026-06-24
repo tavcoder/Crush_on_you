@@ -36,6 +36,10 @@ export const loginUser = ({ email, password }) =>
     apiClient.call('POST', 'auth/login', { email, password })
         .then(res => res.data.token)
 
+export const registerUser = ({ name, nick, email, password }) =>
+    apiClient.call('POST', 'auth/register', { name, nick, email, password })
+        .then(res => res.data.token)
+
 export const updateProfile = (id, data) =>
     apiClient
         .call('PUT', `users/${id}`, data)

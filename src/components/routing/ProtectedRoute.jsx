@@ -1,12 +1,9 @@
 // ProtectedRoute.jsx
 import { Navigate, Outlet } from 'react-router'
-import { useCurrentUser } from '../../hooks/useUsers'
+import { getToken } from '../../services/apiClient'
 
 export function ProtectedRoute() {
-    const { data: currentUser, loading } = useCurrentUser()
-
-    if (loading) return null // o un spinner
-    if (!currentUser) return <Navigate to="/" replace />
-
+    const token = getToken()
+    if (!token) return <Navigate to="/" replace />
     return <Outlet />
 }
