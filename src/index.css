@@ -118,7 +118,8 @@
   /* Primary */
   --color-primary: var(--rose);
   --color-primary-hover: var(--rose-dark);
-  --color-primary-soft: var(--rose-light);
+  --color-secondary: var(--rose-light);
+  --color-secondary-hover: var(--rose-soft);
   --color-gradient-primary: linear-gradient(135deg, var(--rose), var(--rose-dark));
 
   /* Background */
@@ -314,9 +315,10 @@ a {
 }
 
 .field__label {
-  color: var(--color-text-primary);
+  color: var(--color-text-secondary);
   font-size: var(--fs-sm);
   font-weight: var(--fw-medium);
+  font-family: var(--font-display);
 }
 
 .field__error {

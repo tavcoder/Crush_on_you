@@ -8,8 +8,24 @@
     transition: var(--transition-base);
 }
 
+
 .btn--primary:hover {
     background: var(--color-primary-hover);
+    box-shadow: var(--shadow-md);
+    transform: translateY(-1px);
+}
+
+.btn--secondary {
+    padding: var(--space-2) var(--space-5);
+    border-radius: var(--radius-full);
+    color: var(--color-text-on-secondary);
+    background: var(--color-secondary);
+    box-shadow: var(--shadow-sm);
+    transition: var(--transition-base);
+}
+
+.btn--secondary:hover {
+    background: var(--color-secondary-hover);
     box-shadow: var(--shadow-md);
     transform: translateY(-1px);
 }
