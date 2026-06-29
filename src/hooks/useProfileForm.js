@@ -1,5 +1,5 @@
 // hooks/useProfileForm.js
-import { useCallback } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router';
 import { updateProfile } from '../services/api/users.api';
 import { useForm } from './useForm';
@@ -7,25 +7,19 @@ import { fieldValidators } from '../utils/validateUtils';
 
 export function useProfileForm(user) {
     const navigate = useNavigate();
+    const [errorMessage, setErrorMessage] = useState('');
 
     const handleSubmit = useCallback(async (formData) => {
         if (!user?.id) return
-        await updateProfile(user.id, formData);
-        navigate('/feed');
-    }, [user?.id, navigate]);
+        try {
+            await updateProfile(user.id, formData)
+            navigate('/feed')
+        } catch (error) {
+            setErrorMessage(`An error occurred while updating the profile: ${error.message}`)
+        }
+    }, [user?.id, navigate])
 
-    const handleInterestToggle = (value) => {
-        setFormData((prev) => {
-            const alreadySelected = prev.interest.includes(value);
-
-            return {
-                ...prev,
-                interest: alreadySelected
-                    ? prev.interest.filter((item) => item !== value)
-                    : [...prev.interest, value]
-            };
-        });
-    };
+    const handleCancel = () => navigate(-1);
 
     const validators = {
         userName: fieldValidators.nameOrSurname,
@@ -33,23 +27,26 @@ export function useProfileForm(user) {
         bio: fieldValidators.bio,
     };
 
-    const initialValues = {
-        userName: user?.userName || '',
-        userSurName: user?.userSurName || '',
-        userNick: user?.userNick || '',
-        bio: user?.bio || '',
-        city: user?.city || '',
-        country: user?.country || '',
-        education: user?.education || '',
-        language: user?.language || '',
-        smoke: user?.smoke || '',
-        interest: user?.interest || [],
-    };
+    const initialValues = useMemo(() => (
+        {
+            userName: user?.userName || '',
+            userSurName: user?.userSurName || '',
+            userNick: user?.userNick || '',
+            bio: user?.profileDetails?.bio || '',
+            city: user?.city || '',
+            country: user?.country || '',
+            education: user?.profileDetails?.education || '',
+            languages: user?.profileDetails?.languages || '',
+            smoke: user?.profileDetails?.smoke || '',
+            interests: user?.interests || [],
+        }
+    ), [user]);
 
-    return useForm({
-        initialValues,
-        validators,
-        onSubmit: handleSubmit,
-        handleInterestToggle,
-    });
+    const form = useForm({ initialValues, validators, onSubmit: handleSubmit })
+
+    return {
+        ...form,
+        errorMessage,
+        handleCancel
+    }
 }

@@ -1,11 +1,9 @@
 // components/organisms/profileForm/ProfileForm.jsx
-import { useNavigate } from "react-router"
-import { Pencil, Coffee, Plane, Music, Book, Waves, Dumbbell } from "lucide-react";
 import { SelectButton } from '../../ui/selectButton/SelectButton'
-import { Avatar } from '../../ui/avatar/Avatar.jsx';
+import { InterestList } from '../../molecules/interestList/InterestList.jsx';
 import { Button } from '../../ui/button/Button.jsx';
-import { IconButton } from '../../ui/iconButton/IconButton.jsx';
 import { useProfileForm } from '../../../hooks/useProfileForm.js';
+import { interestOptions } from '../../../utils/insterestOptions.js';
 import './ProfileForm.css';
 
 const selectOptions = [
@@ -14,42 +12,38 @@ const selectOptions = [
     { value: "never", label: "Never", icon: undefined }
 ];
 
-const NAV_ITEMS = [
-    { icon: Coffee, label: 'Coffee' },
-    { icon: Plane, label: 'Plane' },
-    { icon: Music, label: 'Music' },
-    { icon: Book, label: 'Read' },
-    { icon: Waves, label: 'Ocean' },
-    { icon: Dumbbell, label: 'Worckout' },
-];
-
 export function ProfileForm({ user }) {
-    const navigate = useNavigate()
     const {
         formData,
         errors,
         isSubmitting,
         isValid,
+        handleCancel,
         handleChange,
         handleBlur,
         handleSubmit,
-        handleInterestToggle,
+        errorMessage,
+
+
     } = useProfileForm(user);
 
+    const handleInterestToggle = (value) => {
+        const currentInterests = formData.interests || [];
+        const alreadySelected = currentInterests.includes(value);
+
+        const newInterests = alreadySelected
+            ? currentInterests.filter(i => i !== value)
+            : [...currentInterests, value];
+
+        // Simular evento para handleChange del hook
+        handleChange({
+            target: { name: 'interests', value: newInterests }
+        });
+    };
+
     return (
-        <form className="card profile-form" onSubmit={handleSubmit} noValidate>
-            <Avatar
-                user={user}
-                avatarSize='xl'
-                isCurrentUser={true}
-                alt={user.userName}
-                badge={<IconButton
-                    key="pencil"
-                    icon={<Pencil />}
-                    variant='outlined'
-                    onClick={undefined}
-                    className="avatar__edit-btn" />}
-                className='profile-form__avatar' />
+        <form className="profile-form" onSubmit={handleSubmit} noValidate>
+
             <div className="field profile-form__field">
                 <label className="field__label" htmlFor="profile-name">Name</label>
                 <input
@@ -128,26 +122,26 @@ export function ProfileForm({ user }) {
                 )}
             </div>
             <div className="field profile-form__field">
-                <label className="field__label" htmlFor="profile-language">Language</label>
+                <label className="field__label" htmlFor="profile-language">Languages</label>
                 <input
                     className="field__input"
                     type="text"
                     id="profile-language"
-                    name="language"
-                    value={formData.language}
+                    name="languages"
+                    value={formData.languages}
                     onChange={handleChange}
                     onBlur={handleBlur}
-                    aria-invalid={!!errors.language}
-                    aria-describedby={errors.language ? 'language-error' : undefined}
+                    aria-invalid={!!errors.languages}
+                    aria-describedby={errors.languages ? 'languages-error' : undefined}
                 />
-                {errors.language && (
-                    <p id="language-error" className="field__error" role="alert">
-                        {errors.language}
+                {errors.languages && (
+                    <p id="languages-error" className="field__error" role="alert">
+                        {errors.languages}
                     </p>
                 )}
             </div>
 
-            <div className="field profile-form__field--tall">
+            <div className="field profile-form__field profile-form__field--tall">
                 <label className="field__label" htmlFor="profile-bio">Bio</label>
                 <textarea
                     className="field__input field__input--textarea "
@@ -236,30 +230,20 @@ export function ProfileForm({ user }) {
                 </fieldset>
             </div>
             <div className="profile-form__field--wide">
-                <span className="field__label"> Interest</span>
-                {NAV_ITEMS.map(({ icon: Icon, label }) => {
-                    const isActive = formData.interest.includes(label);
-
-                    return (
-                        <IconButton
-                            key={label}
-                            icon={<Icon />}
-                            ariaLabel={label}
-                            direction="row"
-                            isActive={isActive}
-                            onClick={() => handleInterestToggle(label)}
-                        >
-                            {label}
-                        </IconButton>
-                    );
-                })}
+                <span className="field__label">Interests (max. 8)</span>
+                <InterestList
+                    options={interestOptions}
+                    selectedValues={formData.interests || []}
+                    onToggle={handleInterestToggle}
+                    maxSelection={8}
+                />
             </div>
 
             <div className="profile-form__actions">
                 <Button
                     type="button"
                     variant="secondary"
-                    onClick={() => navigate(-1)}
+                    onClick={handleCancel}
                 >
                     Cancel
                 </Button>
@@ -269,6 +253,7 @@ export function ProfileForm({ user }) {
                 >
                     {isSubmitting ? 'Saving...' : 'Save Profile'}
                 </Button>
+                {errorMessage && <span role='alert' className='field__error'>{errorMessage}</span>}
             </div>
         </form>
     );

@@ -15,22 +15,6 @@
     }
 }
 
-/* Avatar: ocupa ambas columnas */
-.profile-form__avatar {
-    grid-column: 1 / -1;
-    justify-self: center;
-    text-align: center;
-}
-
-.avatar__edit-btn {
-    background-color: var(--color-surface);
-    box-shadow: var(--shadow-md);
-}
-
-.avatar__edit-btn:hover {
-    background-color: var(--color-surface);
-}
-
 /* Campo normal: 1 columna */
 .profile-form__field {
     display: flex;
