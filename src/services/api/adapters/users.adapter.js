@@ -26,6 +26,28 @@ export function adaptUser(raw) {
         ? raw.followers.map(normalizeFollowItem).filter(Boolean)
         : [];
 
+    const interests = Array.isArray(raw.interests)
+        ? raw.interests.filter(item => item && typeof item === 'object' && item.id && item.label)
+        : [];
+
+    const profileDetails = raw.profileDetails && typeof raw.profileDetails === 'object'
+        ? {
+            education: raw.profileDetails.education ?? null,
+            drink: raw.profileDetails.drink ?? null,
+            languages: raw.profileDetails.languages ?? null,
+            marijuana: raw.profileDetails.marijuana ?? null,
+            smoke: raw.profileDetails.smoke ?? null,
+            bio: raw.profileDetails.bio ?? null,
+        }
+        : {
+            education: null,
+            drink: null,
+            languages: null,
+            marijuana: null,
+            smoke: null,
+            bio: null,
+        };
+
     return {
         id: raw.id ?? '',
         userName: raw.userName ?? '',
@@ -39,6 +61,8 @@ export function adaptUser(raw) {
         isUnseen: raw.isUnseen ?? false,
         following,
         followers,
+        interests,
+        profileDetails,
     };
 }
 
