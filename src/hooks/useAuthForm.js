@@ -19,7 +19,7 @@ export function useAuthForm(mode = 'login') { // 'login' | 'register'
             // Register: crear usuario, login, ir a completar perfil
             const token = await registerUser(formData);
             await authLogin(token);
-            navigate('/profile/me');  // ← Completar perfil (avatar, bio, etc.)
+            navigate('/profile');  // ← Completar perfil (avatar, bio, etc.)
         }
     }, [mode, authLogin, navigate]);
 

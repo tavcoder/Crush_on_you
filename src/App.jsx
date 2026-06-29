@@ -30,7 +30,7 @@ function App() {
             {/* Rutas CON layout (privadas) */}
             <Route element={<ProtectedRoute />} >
               <Route element={<Layout />}>
-                <Route path="/profile/me" element={<MyProfilePage />} />
+                <Route path="/profile" element={<MyProfilePage />} />
                 <Route path="/feed" element={<FeedPage />} />
                 <Route path="/timeline" element={<TimelinePage />} />
                 <Route path="/people" element={<ComingSoonPage />} />

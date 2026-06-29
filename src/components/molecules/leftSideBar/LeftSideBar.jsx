@@ -16,7 +16,7 @@ export function LeftSideBar({ user, isLoading, currentUser }) {
 
     const handleClick = () => {
         if (isCurrentUser) {
-            navigate('/profile/me');  // ← Editar mi perfil
+            navigate('/profile');  // ← Editar mi perfil
         }
         // Si no es currentUser, no hace nada (ya está seleccionado)
     };

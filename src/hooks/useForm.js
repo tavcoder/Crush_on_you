@@ -75,6 +75,7 @@ export function useForm({ initialValues, validators, onSubmit, requiredFields = 
         isSubmitting,
         submitError,
         isValid,
+        setFormData,
         handleChange,
         handleBlur,
         handleSubmit
