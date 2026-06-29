@@ -90,6 +90,7 @@ export const mockClient = {
 
         if (resource === 'users' && id === 'me') {
             const user = MOCK_DB.users.find(u => u.id === currentToken)
+            if (!user) return Promise.reject(new ApiError('User not found', 404))
             return resolve({ data: user })
         }
 
@@ -202,6 +203,16 @@ export const mockClient = {
             return resolve({ status: 'success', data: newPost })
         }
 
+        if (method === 'PUT' && resource === 'users' && id && !action) {
+            const user = MOCK_DB.users.find(u => u.id === id)
+            if (!user) return Promise.reject(new ApiError(`User ${id} not found`, 404))
+
+            Object.assign(user, data)// ← actualiza solo los campos que llegan en data
+            MOCK_DB.currentUser = user  // siempre sincroniza — solo el currentUser puede editarse
+
+            return resolve({ status: 'success', data: user })
+        }
+
         if (method === 'PUT' && resource === 'posts' && action === 'like') {
             const post = MOCK_DB.posts.find(p => p.id === id)
             if (post) {
@@ -243,13 +254,21 @@ export const mockClient = {
         )
     },
 
-    upload(endpoint, file) {
-        return new Promise((resolve) => {
+    uupload(endpoint, file) {
+        const [resource, id] = endpoint.split('/')
+        const user = MOCK_DB.users.find(u => u.id === id)
+        if (!user) return Promise.reject(new ApiError(`User ${id} not found`, 404))
+
+        return new Promise((resolve, reject) => {
             const reader = new FileReader()
-            reader.onload = () => resolve({
-                status: 'success',
-                data: { url: reader.result }  // ← data:image/png;base64,...
-            })
+            reader.onload = () => {
+                user.avatarUrl = reader.result
+                resolve({
+                    status: 'success',
+                    data: { avatarUrl: reader.result }
+                })
+            }
+            reader.onerror = () => reject(new ApiError('Error al leer el archivo'))
             reader.readAsDataURL(file)
         })
     }

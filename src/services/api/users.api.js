@@ -53,3 +53,8 @@ export const followUser = (id) =>
 export const unfollowUser = (id) =>
     apiClient
         .call('DELETE', `users/${id}/follow`)
+
+export const uploadAvatar = (id, data) =>
+    apiClient
+        .upload(`users/${id}`, data)
+        .then(res => adaptUser(res.data))

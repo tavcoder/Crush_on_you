@@ -8,6 +8,7 @@ import {
     searchUsers,
     getUserById,
     updateProfile,
+    uploadAvatar,
     followUser,
     unfollowUser,
 } from "../services/api/users.api.js";
@@ -80,6 +81,19 @@ export function useUpdateProfile() {
         onSuccess: (updatedUser) => {
             queryClient.setQueryData(["currentUser"], updatedUser);
             queryClient.invalidateQueries({ queryKey: ["users"] });
+        },
+    });
+}
+
+export function useUpdateAvatar() {
+    const queryClient = useQueryClient();
+
+    return useMutation({
+        mutationFn: ({ id, file }) => uploadAvatar(id, file),
+        onSuccess: (data, variables) => {
+            // Invalida queries relacionadas para refrescar datos
+            queryClient.invalidateQueries({ queryKey: ['user', variables.id] })
+            queryClient.invalidateQueries({ queryKey: ['currentUser'] })
         },
     });
 }
