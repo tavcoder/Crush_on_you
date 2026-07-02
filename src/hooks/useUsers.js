@@ -4,9 +4,11 @@ import { UserAuthContext } from "../context/UserAuthContext.jsx";
 import {
     getCurrentUser,
     getUsers,
+    getUserSuggestions,
     searchUsers,
     getUserById,
     updateProfile,
+    uploadAvatar,
     followUser,
     unfollowUser,
 } from "../services/api/users.api.js";
@@ -57,6 +59,18 @@ export function useUsersList(page = 1) {
     };
 }
 
+export function useUserSuggestions(page = 1) {
+    const query = useQuery({                           // ← conecta con React Query
+        queryKey: ["users", "suggestions", page],
+        queryFn: () => getUserSuggestions({ page }),
+    })
+    return {
+        ...query,
+        users: query.data?.data ?? [],
+        pagination: query.data?.pagination,
+    }
+}
+
 // ─── MUTATIONS ───
 
 export function useUpdateProfile() {
@@ -71,16 +85,46 @@ export function useUpdateProfile() {
     });
 }
 
+export function useUpdateAvatar() {
+    const queryClient = useQueryClient();
+
+    return useMutation({
+        mutationFn: ({ id, file }) => uploadAvatar(id, file),
+        onSuccess: (data, variables) => {
+            // Invalida queries relacionadas para refrescar datos
+            queryClient.invalidateQueries({ queryKey: ['user', variables.id] })
+            queryClient.invalidateQueries({ queryKey: ['currentUser'] })
+        },
+    });
+}
+
 export function useFollowUser() {
     const queryClient = useQueryClient();
 
     return useMutation({
         mutationFn: followUser,
-        onSuccess: (_, userId) => {
-            queryClient.invalidateQueries({ queryKey: ["users", userId] });
-            queryClient.invalidateQueries({ queryKey: ["currentUser"] });
-            queryClient.invalidateQueries({ queryKey: ["users", "list"] });
+        onMutate: async (userId) => {
+            // 1. Cancela fetches en vuelo para evitar que sobreescriban el update
+            await queryClient.cancelQueries({ queryKey: ["currentUser"] })
+
+            // 2. Guarda el estado actual como snapshot para el rollback
+            const previousUser = queryClient.getQueryData(["currentUser"])
+
+            // 3. Actualiza la caché optimistamente
+            queryClient.setQueryData(["currentUser"], (old) => ({
+                ...old,
+                following: [...old.following, { userId }]  // añade el nuevo following
+            }))
+
+            // 4. Devuelve el snapshot — React Query lo pasa a onError como context
+            return { previousUser }
         },
+        onError: (err, userId, context) => {
+            queryClient.setQueryData(["currentUser"], context.previousUser)
+        },
+        onSettled: () => {
+            queryClient.invalidateQueries({ queryKey: ["currentUser"] })
+        }
     });
 }
 
@@ -89,10 +133,20 @@ export function useUnfollowUser() {
 
     return useMutation({
         mutationFn: unfollowUser,
-        onSuccess: (_, userId) => {
-            queryClient.invalidateQueries({ queryKey: ["users", userId] });
-            queryClient.invalidateQueries({ queryKey: ["currentUser"] });
-            queryClient.invalidateQueries({ queryKey: ["users", "list"] });
+        onMutate: async (userId) => {
+            await queryClient.cancelQueries({ queryKey: ["currentUser"] })
+            const previousUser = queryClient.getQueryData(["currentUser"])
+            queryClient.setQueryData(["currentUser"], (old) => ({
+                ...old,
+                following: old.following.filter(f => f.userId !== userId)
+            }))
+            return { previousUser }
         },
+        onError: (err, userId, context) => {
+            queryClient.setQueryData(["currentUser"], context.previousUser)
+        },
+        onSettled: () => {
+            queryClient.invalidateQueries({ queryKey: ["currentUser"] })
+        }
     });
 }

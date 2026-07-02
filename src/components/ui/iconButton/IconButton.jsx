@@ -6,6 +6,8 @@ export function IconButton({
     icon,
     children,
     ariaLabel,
+    role,
+    ariaChecked,
     onClick,
     variant = 'ghost', // ghost | outlined
     direction = 'row', // row | column
@@ -62,7 +64,7 @@ export function IconButton({
         'aria-label': isIconOnly ? ariaLabel : undefined,
         ...(to
             ? { 'aria-current': isPressed ? 'page' : undefined }
-            : { 'aria-pressed': typeof isPressed === 'boolean' ? isPressed : undefined }
+            : { 'aria-pressed': typeof isPressed === 'boolean' && role !== 'checkbox' ? isPressed : undefined }
         ),
     };
 
@@ -79,7 +81,7 @@ export function IconButton({
             className={`btn-icon__wrapper${tooltip ? ' btn-icon__wrapper--has-tooltip' : ''}`}
             data-tooltip={tooltip}
         >
-            <button disabled={disabled} type={type} {...commonProps}>
+            <button disabled={disabled} type={type} role={role} aria-checked={ariaChecked} {...commonProps}>
                 {content}
             </button>
         </div>

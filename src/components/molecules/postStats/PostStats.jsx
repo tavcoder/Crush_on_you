@@ -20,7 +20,7 @@ export function PostStats({ stats, isLiked = false, isBookmarked = false, onLike
 
                 <IconButton
                     icon={<MessageCircle />}
-                    ariaLabel="coments count"
+                    ariaLabel="comments count"
                     direction="row"
                     disabled
                     tooltip="Comments coming soon">

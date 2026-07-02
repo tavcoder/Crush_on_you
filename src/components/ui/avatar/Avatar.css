@@ -30,6 +30,12 @@
     font-size: var(--fs-base);
 }
 
+.avatar--xl {
+    width: 6rem;
+    height: 6rem;
+    font-size: var(--fs-base);
+}
+
 /* 56px — stories, profile */
 .avatar--no-story {
     border: 2px solid var(--border-avatar);

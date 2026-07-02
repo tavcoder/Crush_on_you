@@ -12,11 +12,19 @@
  */
 
 /**
+ * @typedef {Object} Interest
+ * @property {string} id
+ * @property {string} label
+ */
+
+/**
  * @typedef {Object} ProfileDetails
- * @property {string} education
- * @property {string} drink
- * @property {string} languages
- * @property {string} marijuana
+ * @property {string} [education]
+ * @property {string} [drink]
+ * @property {string} [languages]
+ * @property {string} [marijuana]
+ * @property {string} [smoke]
+ * @property {string} [bio]
  */
 
 /**
@@ -32,8 +40,6 @@
 
 // ========================================
 // DOMAIN — raw shapes from the data source
-// These match what mockClient / API returns
-// before any transformation
 // ========================================
 
 /**
@@ -42,31 +48,22 @@
  * @property {string} userName
  * @property {string} userSurName
  * @property {string} userNick
+ * @property {string} email
+ * @property {string} password
  * @property {string|null} avatarUrl
+ * @property {string|null} city
+ * @property {string|null} country
  * @property {boolean} isOnline
  * @property {boolean} hasStory
  * @property {boolean} isUnseen
  * @property {FollowRelation[]} following
  * @property {FollowRelation[]} followers
- */
-
-/**
- * @typedef {Object} PostRaw
- * @property {string} id
- * @property {string} authorId
- * @property {string} content
- * @property {string[]} images
- * @property {PostStats} stats
- * @property {ProfileDetails} [profileDetails]
- * @property {boolean} isLiked
- * @property {boolean} isBookmarked
- * @property {string} createdAt          - ISO 8601
+ * @property {ProfileDetails} profileDetails
+ * @property {Interest[]} interests
  */
 
 // ========================================
-// APP CONTRACTS — what the app works with
-// Produced by adapters, consumed by hooks/components
-// Never import PostRaw outside adapters
+// APP CONTRACTS
 // ========================================
 
 /**
@@ -81,6 +78,8 @@
  * @property {boolean} isUnseen
  * @property {FollowRelation[]} following
  * @property {FollowRelation[]} followers
+ * @property {ProfileDetails} profileDetails
+ * @property {Interest[]} interests
  */
 
 /**
@@ -88,18 +87,17 @@
  * @typedef {Object} Post
  * @property {string} id
  * @property {string} authorId
- * @property {User} author            - resuelto por enrichPostsWithUserData
+ * @property {User} author
  * @property {string} content
  * @property {string[]} images
  * @property {PostStats} stats
- * @property {ProfileDetails} [profileDetails]
  * @property {boolean} isLiked
  * @property {boolean} isBookmarked
  * @property {string} createdAt
  */
 
 // ========================================
-// RESPONSE ENVELOPES — shapes from api/*.api.js
+// RESPONSE ENVELOPES
 // ========================================
 
 /**

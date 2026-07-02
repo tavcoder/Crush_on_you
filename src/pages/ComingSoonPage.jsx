@@ -1,7 +1,7 @@
 // pages/ComingSoonPage.jsx
 import { useNavigate } from 'react-router'
 
-export function ComingSoonPage({ feature }) {
+export default function ComingSoonPage({ feature }) {
     const navigate = useNavigate()
 
     return (

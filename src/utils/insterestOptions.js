@@ -1,0 +1,20 @@
+export const INTEREST_OPTIONS = [
+    { id: 'photography', label: 'Photography' },
+    { id: 'travel', label: 'Travel' },
+    { id: 'cooking', label: 'Cooking' },
+    { id: 'gaming', label: 'Gaming' },
+    { id: 'football', label: 'Football' },
+    { id: 'music', label: 'Music' },
+    { id: 'hiking', label: 'Hiking' },
+    { id: 'wine', label: 'Wine' },
+    { id: 'cinema', label: 'Cinema' },
+    { id: 'yoga', label: 'Yoga' },
+    { id: 'beach', label: 'Beach' },
+    { id: 'vegan-food', label: 'Vegan Food' },
+    { id: 'climbing', label: 'Climbing' },
+    { id: 'techno', label: 'Techno' },
+    { id: 'skateboarding', label: 'Skateboarding' },
+    { id: 'dancing', label: 'Dancing' },
+    { id: 'salsa', label: 'Salsa' },
+    { id: 'street-food', label: 'Street Food' }
+];

@@ -7,7 +7,12 @@ import { adaptUser, adaptUserList } from './adapters/users.adapter.js'
 export const getUsers = ({ page = 1, limit = 10 } = {}) =>
     apiClient
         .get(`users?page=${page}&limit=${limit}`)
-        .then(adaptUserList) 
+        .then(adaptUserList)
+
+export const getUserSuggestions = ({ page = 1, limit = 10 } = {}) =>
+    apiClient
+        .get(`users?page=${page}&limit=${limit}`)
+        .then(adaptUserList)
 
 export const searchUsers = ({ page = 1, limit = 10, search = '' } = {}) =>
     apiClient
@@ -27,6 +32,13 @@ export const getCurrentUser = () =>
         .then(res => adaptUser(res.data));
 
 // ─── MUTATIONS ───
+export const loginUser = ({ email, password }) =>
+    apiClient.call('POST', 'auth/login', { email, password })
+        .then(res => res.data.token)
+
+export const registerUser = ({ name, nick, email, password }) =>
+    apiClient.call('POST', 'auth/register', { name, nick, email, password })
+        .then(res => res.data.token)
 
 export const updateProfile = (id, data) =>
     apiClient
@@ -41,3 +53,8 @@ export const followUser = (id) =>
 export const unfollowUser = (id) =>
     apiClient
         .call('DELETE', `users/${id}/follow`)
+
+export const uploadAvatar = (id, data) =>
+    apiClient
+        .upload(`users/${id}`, data)
+        .then(res => adaptUser(res.data))

@@ -1,13 +1,18 @@
 // services/apiClient.js
-import { mockClient, MOCK_TOKEN } from './mockClient.js'
+import { mockClient, getMockToken, setMockToken } from './mockClient.js'
 import { ApiError } from './ApiError.js'
 
 const USE_MOCK = import.meta.env.VITE_USE_MOCK === 'true'
 const API_BASE_URL = import.meta.env.VITE_API_URL ?? 'http://localhost:3900/api'
 
 export function getToken() {
-    if (USE_MOCK) return MOCK_TOKEN
+    if (USE_MOCK) return getMockToken()
     return localStorage.getItem('token')
+}
+
+export function saveToken(token) {
+    localStorage.setItem('token', token)
+    if (USE_MOCK) setMockToken(token)
 }
 
 function authHeaders(endpoint) {
@@ -23,7 +28,7 @@ function handleResponse(res) {
             .then(err => {
                 throw new ApiError(
                     err.message || res.statusText,
-                    res.status 
+                    res.status
                 )
             })
     }

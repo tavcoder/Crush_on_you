@@ -1,29 +1,45 @@
 /*app.jsx*/
-import { Suspense } from 'react'
+import { Suspense, lazy } from 'react'
 import { BrowserRouter, Routes, Route } from 'react-router'
 import { LoadingFallback } from './components/ui/feedback/LoadingFallback.jsx'
 import { UserAuthProvider } from './context/UserAuthContext.jsx'
-import { DevPage } from './pages/DevPage.jsx'
-import { ComingSoonPage } from './pages/ComingSoonPage.jsx'
+import { ProtectedRoute } from './components/routing/ProtectedRoute.jsx'
+import { LoginPage } from './pages/authPage/LoginPage.jsx'
+import { RegisterPage } from './pages/authPage/RegisterPage.jsx'
+import { Layout } from './components/routing/Layout.jsx'
 import './App.css'
 
+// Lazy load de páginas que usan Layout
+const FeedPage = lazy(() => import('./pages/feedPage/FeedPage.jsx'));
+const TimelinePage = lazy(() => import('./pages/timelinePage/TimelinePage.jsx'));
+const MyProfilePage = lazy(() => import('./pages/myProfilePage/MyProfilePage.jsx'));
+const ComingSoonPage = lazy(() => import('./pages/ComingSoonPage.jsx'));
+
+
 function App() {
+
 
   return (
     <BrowserRouter>
       <UserAuthProvider>
         <Suspense fallback={<LoadingFallback />}>
           <Routes>
-            <Route path="/" element={<DevPage />} />
-            <Route path="/feed" element={<ComingSoonPage feature="Feed" />} />
-            <Route path="/timeline" element={<ComingSoonPage feature="Timeline" />} />
-            <Route path="/people" element={<ComingSoonPage feature="People" />} />
-            <Route path="/notifications" element={<ComingSoonPage feature="Notifications" />} />
-            <Route path="/profile" element={<ComingSoonPage feature="Profile" />} />
-            <Route path="/settings" element={<ComingSoonPage feature="Settings" />} />
-            <Route path="/search" element={<ComingSoonPage feature="Search" />} />
-            <Route path="/messages" element={<ComingSoonPage feature="Messages" />} />
-            <Route path="/profile" element={<ComingSoonPage feature="Profile" />} />
+            {/* Rutas SIN layout (públicas) */}
+            <Route path="/register" element={<RegisterPage />} />
+            <Route path="/" element={<LoginPage />} />
+            {/* Rutas CON layout (privadas) */}
+            <Route element={<ProtectedRoute />} >
+              <Route element={<Layout />}>
+                <Route path="/profile" element={<MyProfilePage />} />
+                <Route path="/feed" element={<FeedPage />} />
+                <Route path="/timeline" element={<TimelinePage />} />
+                <Route path="/people" element={<ComingSoonPage />} />
+                <Route path="/search" element={<ComingSoonPage />} />
+                <Route path="/notifications" element={<ComingSoonPage />} />
+                <Route path="/messages" element={<ComingSoonPage />} />
+                <Route path="/settings" element={<ComingSoonPage />} />
+              </Route>
+            </Route>
             <Route path="*" element={<p>404-Page Not Found</p>} />
           </Routes>
         </Suspense>
