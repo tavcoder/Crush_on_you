@@ -23,8 +23,8 @@ export const searchUsers = ({ page = 1, limit = 10, search = '' } = {}) =>
 
 export const getUserById = (id) =>
     apiClient
-        .get(`users/${id}`)
-        .then(res => adaptUser(res.data));
+        .get(`users/profile/${id}`)
+        .then(res => adaptUser(res.user));
 
 export const getCurrentUser = () =>
     apiClient
@@ -33,12 +33,15 @@ export const getCurrentUser = () =>
 
 // ─── MUTATIONS ───
 export const loginUser = ({ email, password }) =>
-    apiClient.call('POST', 'auth/login', { email, password })
-        .then(res => res.data.token)
+    apiClient.call('POST', 'user/login', { email, password })
+        .then(res => ({
+            token: res.token,
+            userId: res.user._id
+        }))
 
-export const registerUser = ({ name, nick, email, password }) =>
-    apiClient.call('POST', 'auth/register', { name, nick, email, password })
-        .then(res => res.data.token)
+export const registerUser = ({ name, surname, nick, email, password }) =>
+    apiClient.call('POST', 'user/register', { name, surname, nick, email, password })
+        .then(res => adaptUser(res.user))
 
 export const updateProfile = (id, data) =>
     apiClient
