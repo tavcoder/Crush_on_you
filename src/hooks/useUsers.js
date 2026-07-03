@@ -1,4 +1,3 @@
-import { useContext } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { UserAuthContext } from "../context/UserAuthContext.jsx";
 import {
@@ -66,7 +65,7 @@ export function useUpdateProfile() {
     const queryClient = useQueryClient();
 
     return useMutation({
-        mutationFn: ({ id, data }) => updateProfile(id, data),
+        mutationFn: ({ data }) => updateProfile(data),
         onSuccess: (updatedUser) => {
             queryClient.setQueryData(["currentUser"], updatedUser);
             queryClient.invalidateQueries({ queryKey: ["users"] });
@@ -109,7 +108,9 @@ export function useFollowUser() {
             return { previousUser }
         },
         onError: (err, userId, context) => {
-            queryClient.setQueryData(["currentUser"], context.previousUser)
+            if (context?.previousUser) {
+                queryClient.setQueryData(["currentUser"], context.previousUser)
+            }
         },
         onSettled: () => {
             queryClient.invalidateQueries({ queryKey: ["currentUser"] })
@@ -132,7 +133,9 @@ export function useUnfollowUser() {
             return { previousUser }
         },
         onError: (err, userId, context) => {
-            queryClient.setQueryData(["currentUser"], context.previousUser)
+            if (context?.previousUser) {
+                queryClient.setQueryData(["currentUser"], context.previousUser)
+            }
         },
         onSettled: () => {
             queryClient.invalidateQueries({ queryKey: ["currentUser"] })
