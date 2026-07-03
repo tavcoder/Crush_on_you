@@ -11,17 +11,19 @@ export function useAuthForm(mode = 'login') { // 'login' | 'register'
     const navigate = useNavigate();
 
     const handleSubmit = useCallback(async (formData) => {
+
         if (mode === 'login') {
-            const token = await loginUser(formData);
-            await authLogin(token);
-            navigate('/feed');
+            const { token, userId } = await loginUser(formData)
+            await authLogin(token, userId)
+            navigate('/feed')
         } else {
-            // Register: crear usuario, login, ir a completar perfil
-            const token = await registerUser(formData);
-            await authLogin(token);
-            navigate('/profile');  // ← Completar perfil (avatar, bio, etc.)
+            await registerUser(formData)
+            const { token, userId } = await loginUser(formData)
+            await authLogin(token, userId)
+            navigate('/feed')
         }
-    }, [mode, authLogin, navigate]);
+
+    }, [mode, authLogin, navigate])
 
     const validators = mode === 'login'
         ? { email: fieldValidators.email, password: fieldValidators.password }
@@ -29,16 +31,17 @@ export function useAuthForm(mode = 'login') { // 'login' | 'register'
             email: fieldValidators.email,
             password: fieldValidators.password,
             name: fieldValidators.nameOrSurname,
+            surname: fieldValidators.nameOrSurname,
             nick: fieldValidators.nick
         };
 
     const initialValues = mode === 'login'
         ? { email: '', password: '' }
-        : { email: '', password: '', name: '', nick: '' };
+        : { email: '', password: '', name: '', surname: '', nick: '' };
 
-    return useForm({
-        initialValues,
-        validators,
-        onSubmit: handleSubmit
-    });
+    const form = useForm({ initialValues, validators, onSubmit: handleSubmit })
+
+    return {
+        ...form,
+    }
 }

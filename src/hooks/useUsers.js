@@ -20,7 +20,7 @@ export function useCurrentUser() {
 
     return useQuery({
         queryKey: ["currentUser"],
-        queryFn: getCurrentUser, // GET /users/me → devuelve el usuario completo
+        queryFn: getUserById, 
         enabled: isAuthenticated,
     });
 }

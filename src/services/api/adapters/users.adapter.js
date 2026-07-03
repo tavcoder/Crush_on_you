@@ -51,7 +51,7 @@ export function adaptUser(raw) {
     return {
         id: raw.id ?? '',
         userName: raw.userName ?? '',
-        userSurName: raw.userSurName ?? '',
+        userSurName: raw.userSurname ?? '',
         userNick: raw.userNick ?? '',
         avatarUrl: raw.avatarUrl ?? null,
         city: raw.city ?? null,

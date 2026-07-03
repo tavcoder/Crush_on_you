@@ -2,32 +2,36 @@
 import { createContext, useState, useCallback } from "react"
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { getToken, saveToken } from '../services/apiClient'
-import { getCurrentUser } from '../services/api/users.api'
+import { getUserById } from '../services/api/users.api'
 
 export const UserAuthContext = createContext(null)
 
 export function UserAuthProvider({ children }) {
     const [isAuthenticated, setIsAuthenticated] = useState(!!getToken())
     const queryClient = useQueryClient()
+    const [userId, setUserId] = useState(() => localStorage.getItem('userId'))
 
-    // TanStack Query maneja la petición a users/me
     const { data: currentUser, isLoading } = useQuery({
-        queryKey: ['currentUser'],
-        queryFn: getCurrentUser,
-        enabled: isAuthenticated,  // ← solo lanza la petición si hay sesión
-        staleTime: 1000 * 60 * 5,  // 5 minutos — el perfil no cambia cada segundo
+        queryKey: ['currentUser', userId],
+        queryFn: () => getUserById(userId),
+        enabled: isAuthenticated && !!userId,
+        staleTime: 1000 * 60 * 5,
     })
 
-    const login = useCallback(async (token) => {
+    const login = useCallback(async (token, userId) => {
         saveToken(token)
+        localStorage.setItem('userId', userId)
+        setUserId(userId)
         await queryClient.invalidateQueries({ queryKey: ['currentUser'] })
         setIsAuthenticated(true)
     }, [queryClient])
 
     const logout = useCallback(() => {
         localStorage.removeItem('token')
+        localStorage.removeItem('userId')
         setIsAuthenticated(false)
-        queryClient.clear()  // ← limpia toda la caché al cerrar sesión
+        setUserId(null)
+        queryClient.clear()
     }, [queryClient])
 
     return (
