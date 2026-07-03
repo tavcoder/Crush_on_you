@@ -40,8 +40,18 @@ export const registerUser = ({ name, surname, nick, email, password }) =>
         .then(res => adaptUser(res.user))
 
 export const updateProfile = (data) =>
-    apiClient
-        .call('PUT', 'user/update', data)
+    apiClient.call('PUT', 'user/update', {
+        name: data.userName,
+        surname: data.userSurName,
+        nick: data.userNick,
+        email: data.email,
+        bio: data.bio,
+        city: data.city,
+        country: data.country,
+        education: data.education,
+        languages: data.languages,
+        smoke: data.smoke,
+    })
         .then(res => adaptUser(res.user))
 
 export const followUser = (id) =>
