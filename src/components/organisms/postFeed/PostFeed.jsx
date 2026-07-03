@@ -5,6 +5,7 @@ import { PostCard } from '../postCard/PostCard.jsx';
 import { PostCardSkeleton } from '../postCard/PostCardSkeleton.jsx';
 import { PostFeedSkeleton } from './PostFeedSkeleton.jsx';
 import { EmptyState } from '../../ui/feedback/EmptyState.jsx';
+import { ErrorFallback } from '../../ui/feedback/ErrorFallback.jsx';
 import './PostFeed.css';
 
 export function PostFeed({ posts, isLoading, hasMore, onLoadMore, error }) {
