@@ -4,32 +4,28 @@ import { adaptUser, adaptUserList } from './adapters/users.adapter.js'
 
 // ─── LISTS ───
 
-export const getUsers = ({ page = 1, limit = 10 } = {}) =>
+export const getUsers = ({ page = 1 } = {}) =>
     apiClient
-        .get(`users?page=${page}&limit=${limit}`)
-        .then(adaptUserList)
-
-export const getUserSuggestions = ({ page = 1, limit = 10 } = {}) =>
-    apiClient
-        .get(`users?page=${page}&limit=${limit}`)
-        .then(adaptUserList)
-
-export const searchUsers = ({ page = 1, limit = 10, search = '' } = {}) =>
-    apiClient
-        .get(`users?page=${page}&limit=${limit}&search=${encodeURIComponent(search)}`)
+        .get(`user/list/${page}`)
         .then(adaptUserList)
 
 // ─── SINGLE USER ───
 
 export const getUserById = (id) =>
     apiClient
-        .get(`users/profile/${id}`)
+        .get(`user/profile/${id}`)
         .then(res => adaptUser(res.user));
 
-export const getCurrentUser = () =>
+// TODO: [DEUDA TÉCNICA] El backend no tiene endpoint de búsqueda de usuarios.
+// Implementar GET user/search?q= en el backend.
+export const searchUsers = () =>
+    Promise.resolve({ data: [], pagination: { currentPage: 1, totalPages: 1 } })
+
+// TODO: [DEUDA TÉCNICA] No hay endpoint de sugerencias. Usa getUsers como fallback.
+export const getUserSuggestions = ({ page = 1 } = {}) =>
     apiClient
-        .get('users/me')
-        .then(res => adaptUser(res.data));
+        .get(`user/list/${page}`)
+        .then(adaptUserList)
 
 // ─── MUTATIONS ───
 export const loginUser = ({ email, password }) =>
@@ -43,21 +39,18 @@ export const registerUser = ({ name, surname, nick, email, password }) =>
     apiClient.call('POST', 'user/register', { name, surname, nick, email, password })
         .then(res => adaptUser(res.user))
 
-export const updateProfile = (id, data) =>
+export const updateProfile = (data) =>
     apiClient
-        .call('PUT', `users/${id}`, data)
-        .then(res => adaptUser(res.data))
+        .call('PUT', 'user/update', data)
+        .then(res => adaptUser(res.user))
 
 export const followUser = (id) =>
-    apiClient
-        .call('POST', `users/${id}/follow`)
-
+    apiClient.call('POST', 'follow/follow', { followed: id })
 
 export const unfollowUser = (id) =>
-    apiClient
-        .call('DELETE', `users/${id}/follow`)
+    apiClient.call('DELETE', `follow/unfollow/${id}`)
 
-export const uploadAvatar = (id, data) =>
+export const uploadAvatar = (data) =>
     apiClient
-        .upload(`users/${id}`, data)
-        .then(res => adaptUser(res.data))
+        .upload(`user/upload`, data)
+        .then(res => adaptUser(res.user))
