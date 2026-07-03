@@ -2,7 +2,6 @@ import { useContext } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { UserAuthContext } from "../context/UserAuthContext.jsx";
 import {
-    getCurrentUser,
     getUsers,
     getUserSuggestions,
     searchUsers,
@@ -14,16 +13,6 @@ import {
 } from "../services/api/users.api.js";
 
 // ─── QUERIES ───
-
-export function useCurrentUser() {
-    const { isAuthenticated } = useContext(UserAuthContext);
-
-    return useQuery({
-        queryKey: ["currentUser"],
-        queryFn: getUserById, 
-        enabled: isAuthenticated,
-    });
-}
 
 export function useUser(userId) {
     return useQuery({

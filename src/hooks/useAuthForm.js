@@ -15,12 +15,12 @@ export function useAuthForm(mode = 'login') { // 'login' | 'register'
         if (mode === 'login') {
             const { token, userId } = await loginUser(formData)
             await authLogin(token, userId)
-            navigate('/feed')
+            navigate('/profile')
         } else {
             await registerUser(formData)
             const { token, userId } = await loginUser(formData)
             await authLogin(token, userId)
-            navigate('/feed')
+            navigate('/profile')
         }
 
     }, [mode, authLogin, navigate])

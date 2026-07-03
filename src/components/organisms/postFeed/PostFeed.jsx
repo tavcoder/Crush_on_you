@@ -1,16 +1,17 @@
 // PostFeed.jsx
-import { useInfiniteScroll } from '../../../hooks/useInfiniteScroll.js';
-import { useCurrentUser } from '../../../hooks/useUsers.js';
+import { useContext } from 'react';
 import { PostCard } from '../postCard/PostCard.jsx';
 import { PostCardSkeleton } from '../postCard/PostCardSkeleton.jsx';
 import { PostFeedSkeleton } from './PostFeedSkeleton.jsx';
 import { EmptyState } from '../../ui/feedback/EmptyState.jsx';
 import { ErrorFallback } from '../../ui/feedback/ErrorFallback.jsx';
+import { UserAuthContext } from "../../../context/UserAuthContext.jsx"
+import { useInfiniteScroll } from '../../../hooks/useInfiniteScroll.js';
 import './PostFeed.css';
 
 export function PostFeed({ posts, isLoading, hasMore, onLoadMore, error }) {
     const sentinelRef = useInfiniteScroll(onLoadMore, { enabled: hasMore });
-    const { currentUser } = useCurrentUser();
+    const { currentUser } = useContext(UserAuthContext);
     // Estados de carga y vacío
     const postCount = posts?.length ?? 0;
 

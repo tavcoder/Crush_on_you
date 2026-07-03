@@ -32,7 +32,7 @@ export const loginUser = ({ email, password }) =>
     apiClient.call('POST', 'user/login', { email, password })
         .then(res => ({
             token: res.token,
-            userId: res.user._id
+            userId: res.user.id
         }))
 
 export const registerUser = ({ name, surname, nick, email, password }) =>

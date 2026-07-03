@@ -9,8 +9,10 @@ export const UserAuthContext = createContext(null)
 export function UserAuthProvider({ children }) {
     const [isAuthenticated, setIsAuthenticated] = useState(!!getToken())
     const queryClient = useQueryClient()
-    const [userId, setUserId] = useState(() => localStorage.getItem('userId'))
-
+    const [userId, setUserId] = useState(() => {
+        const stored = localStorage.getItem('userId')
+        return stored && stored !== 'undefined' ? stored : null
+    })
     const { data: currentUser, isLoading } = useQuery({
         queryKey: ['currentUser', userId],
         queryFn: () => getUserById(userId),
@@ -20,7 +22,7 @@ export function UserAuthProvider({ children }) {
 
     const login = useCallback(async (token, userId) => {
         saveToken(token)
-        localStorage.setItem('userId', userId)
+        if (userId) localStorage.setItem('userId', userId)  // ← guard
         setUserId(userId)
         await queryClient.invalidateQueries({ queryKey: ['currentUser'] })
         setIsAuthenticated(true)

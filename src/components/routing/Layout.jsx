@@ -1,12 +1,12 @@
 //Layout.jsx
-import { useState, useEffect } from "react"
+import { useState, useEffect, useContext } from "react"
 import { Outlet, useLocation, useNavigate } from "react-router"
 import { NavBar } from "../molecules/navBar/NavBar"
 import { StoriesBar } from "../organisms/storiesBar/StoriesBar"
 import { LeftSideBar } from "../molecules/leftSideBar/LeftSideBar"
 import { RightSideBar } from "../molecules/rightSideBar/RightSideBar"
 import { BottomNav } from "../molecules/bottomNav/BottomNav"
-import { useCurrentUser } from "../../hooks/useUsers"
+import { UserAuthContext } from "../../context/UserAuthContext"
 import { useSearch } from "../../hooks/useSearch"
 import { useStories } from "../../hooks/useStories"
 import './Layout.css'
@@ -15,7 +15,7 @@ import './Layout.css'
 export function Layout() {
     const [selectedUser, setSelectedUser] = useState(null)// TODO: mover selectedUserId a contexto cuando se implemente navegación a perfiles.
     const { results, isLoading: isSearchLoading, isSearching, query, error: searchingError } = useSearch('posts')
-    const { data: currentUser, isLoading: currentUserLoading, error: currentUserError } = useCurrentUser()
+    const { currentUser, isLoading: currentUserLoading, error: currentUserError } = useContext(UserAuthContext)
     const { stories, onStorySeen } = useStories()
     const { pathname } = useLocation()
     const navigate = useNavigate()
@@ -36,7 +36,7 @@ export function Layout() {
     //LeftSideBar no toma la decisión internamente basándose en la ruta porque
     // implica una llamada extra innecesaria cuando ya el objeto user está completo en memoria
     const displayUserProfile = pathname === '/feed' ? currentUser : selectedUser ?? currentUser
-    
+
     return (
         <div className="layout">
             <NavBar user={currentUser} />
@@ -46,7 +46,7 @@ export function Layout() {
                 onStorySeen={onStorySeen}
             />
             <div className="layout__body">
-                <LeftSideBar user={displayUserProfile} isLoading={currentUserLoading} currentUser = {currentUser} />
+                <LeftSideBar user={displayUserProfile} isLoading={currentUserLoading} currentUser={currentUser} />
                 <main className="layout__main">
                     <Outlet
                         context={{
