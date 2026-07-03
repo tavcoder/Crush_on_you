@@ -49,11 +49,11 @@ export function adaptUser(raw) {
         };
 
     return {
-        id: raw.id ?? '',
-        userName: raw.userName ?? '',
-        userSurName: raw.userSurname ?? '',
-        userNick: raw.userNick ?? '',
-        avatarUrl: raw.avatarUrl ?? null,
+        id: raw._id ?? '',
+        userName: raw.name ?? '',
+        userSurName: raw.surname ?? '',
+        userNick: raw.nick ?? '',
+        avatarUrl: raw.image ?? null,
         city: raw.city ?? null,
         country: raw.country ?? null,
         isOnline: raw.isOnline ?? false,
@@ -79,12 +79,12 @@ export function adaptUserList(response) {
     const safeResponse = response ?? {};
 
     return {
-        data: Array.isArray(safeResponse.data)
-            ? safeResponse.data.map(adaptUser).filter(Boolean)
+        data: Array.isArray(safeResponse.users)
+            ? safeResponse.users.map(adaptUser).filter(Boolean)
             : [],
         pagination: {
-            currentPage: safeResponse.pagination?.currentPage ?? 1,
-            totalPages: safeResponse.pagination?.totalPages ?? 1,
+            currentPage: safeResponse.page ?? 1,
+            totalPages: safeResponse.pages ?? 1,
         }
     };
 }
