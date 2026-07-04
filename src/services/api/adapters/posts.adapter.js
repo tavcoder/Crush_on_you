@@ -5,6 +5,9 @@
  * @returns {import('../../contracts/types.js').Post}
  */
 export function adaptPost(raw, currentUserId) {
+    const API_BASE = import.meta.env.VITE_API_URL?.replace('/api', '') ?? 'http://localhost:3900'
+
+
     if (!raw || typeof raw !== 'object') {
         console.warn('adaptPost: recibió valor inválido', raw);
         return null;
@@ -15,7 +18,9 @@ export function adaptPost(raw, currentUserId) {
         authorId: raw.user?._id ?? raw.user ?? '',
         author: raw.user ?? null,
         content: raw.text ?? '',
-        images: raw.file ? [raw.file] : [],
+        images: raw.file
+            ? [`${API_BASE}/uploads/publications/${raw.file}`]
+            : [],
         stats: {
             likesCount: Array.isArray(raw.likes) ? raw.likes.length : 0,
             commentsCount: Array.isArray(raw.comments) ? raw.comments.length : 0,
