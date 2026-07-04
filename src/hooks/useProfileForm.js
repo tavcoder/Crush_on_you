@@ -12,7 +12,7 @@ export function useProfileForm(user) {
     const handleSubmit = useCallback(async (formData) => {
         if (!user?.id) return
         try {
-            await updateProfile(user.id, formData)
+            await updateProfile(formData)
             navigate('/feed')
         } catch (error) {
             setErrorMessage(`An error occurred while updating the profile: ${error.message}`)
@@ -32,6 +32,7 @@ export function useProfileForm(user) {
             userName: user?.userName || '',
             userSurName: user?.userSurName || '',
             userNick: user?.userNick || '',
+            email: user?.email || '',
             bio: user?.profileDetails?.bio || '',
             city: user?.city || '',
             country: user?.country || '',
