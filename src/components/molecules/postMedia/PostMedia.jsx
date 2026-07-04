@@ -14,7 +14,7 @@ export function PostMedia({ images, metadata }) {
     return (
         <div className='post-media'>
 
-            {images && (
+            {images && images.length > 0 && (
                 <div className='post-media__images'>
 
                     {images.length > 1 ? (
