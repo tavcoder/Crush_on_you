@@ -67,14 +67,10 @@ export function adaptUser(raw) {
 }
 
 /**
- * Adapta una respuesta paginada de la API
- * @param {Object} response
- * @param {import('../../contracts/types.js').UserRaw[]} response.data
- * @param {Object} [response.pagination]
- * @param {number} [response.pagination.currentPage]
- * @param {number} [response.pagination.totalPages]
- * @returns {import('../../contracts/types.js').PaginatedUsers}
+ * @param {import('../contracts/types.js').UsersListResponseRaw} response
+ * @returns {import('../contracts/types.js').PaginatedUsers}
  */
+
 export function adaptUserList(response) {
     const safeResponse = response ?? {};
 

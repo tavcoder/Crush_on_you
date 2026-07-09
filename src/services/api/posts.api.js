@@ -2,22 +2,47 @@
 import { apiClient } from '../apiClient'
 import { adaptPost, adaptPostList } from './adapters/posts.adapter'
 
+/**
+ * @param {{ page?: number }} [params]
+ * @param {string} [currentUserId]
+ * @returns {Promise<import('../contracts/types.js').PaginatedPosts>}
+ */
 export const getPosts = ({ page = 1 } = {}, currentUserId) =>
     apiClient
         .get(`publication/feed/${page}`)
         .then(res => adaptPostList(res, currentUserId))
 
+/**
+* @param {string} id
+* @param {string} [currentUserId]
+* @returns {Promise<import('../contracts/types.js').Post>}
+*/
 export const getPost = (id, currentUserId) =>
     apiClient.get(`publication/detail/${id}`)
         .then(res => adaptPost(res.publication, currentUserId))
 
+/**
+* @param {string} userId
+* @param {{ page?: number }} [params]
+* @param {string} [currentUserId]
+* @returns {Promise<import('../contracts/types.js').PaginatedPosts>}
+*/
 export const getPostsByUser = (userId, { page = 1 } = {}, currentUserId) =>
     apiClient
         .get(`publication/user/${userId}/${page}`)
         .then(res => adaptPostList(res, currentUserId))
+        .catch(err => {
+            console.log('tipo:', typeof err.status, 'valor:', err.status)
+            if (Number(err.status) === 404) return { data: [], pagination: { currentPage: 1, totalPages: 1 } }
+            throw err
+        })
 
 // TODO: [DEUDA TÉCNICA] El backend no tiene endpoint de búsqueda de publicaciones.
 // Implementar GET publication/search?q= en el backend.
+/**
+ * Placeholder mientras no haya endpoint de búsqueda.
+ * @returns {Promise<import('../contracts/types.js').PaginatedPosts>}
+ */
 export const searchPosts = () => Promise.resolve({ data: [], pagination: { currentPage: 1, totalPages: 1 } })
 
 const sanitizeFile = (file) => {
@@ -26,13 +51,20 @@ const sanitizeFile = (file) => {
     return new File([file], `${baseName}.${ext}`, { type: file.type })
 }
 
+/**
+ * Crea una publicación de texto y opcionalmente sube una imagen.
+ * Devuelve la respuesta cruda del backend pero con `publicationStored`
+ * ya adaptada a `Post`.
+ *
+ * @param {{ content:string, files?:File[] }} data
+ * @returns {Promise<import('../contracts/types.js').CreatePostResponseRaw & { publicationStored: import('../contracts/types.js').Post }>}
+ */
 export const createPost = async (data) => {
     const res = await apiClient.call('POST', 'publication/save', {
         text: data.content,
     })
 
     const publication = adaptPost(res.publicationStored)
-
 
     if (data.files && data.files.length > 0) {
         // TODO: [DEUDA TÉCNICA] El backend no actualiza la imagen en la publicación.
@@ -41,16 +73,20 @@ export const createPost = async (data) => {
         const cleanFile = sanitizeFile(data.files[0])
         await apiClient.upload(`publication/upload/${publication.id}`, cleanFile)
     }
-    const cleanFile = sanitizeFile(data.files[0])
-    await apiClient.upload(`publication/upload/${publication.id}`, cleanFile)
-    console.log(publication.id)
+
+    return { ...res, publicationStored: publication }
 }
 
-return { ...res, publicationStored: publication }
-}
-
+/**
+ * @param {string} id
+ * @returns {Promise<import('../contracts/types.js').ToggleLikeResponseRaw>}
+ */
 export const likePost = (id) =>
     apiClient.call('POST', `publication/${id}/like`)
 
+/**
+ * @param {string} id
+ * @returns {Promise<import('../contracts/types.js').DeletePostResponseRaw>}
+ */
 export const deletePost = (id) =>
     apiClient.call('DELETE', `publication/remove/${id}`)

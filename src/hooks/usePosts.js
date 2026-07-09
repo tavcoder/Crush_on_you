@@ -7,6 +7,7 @@ export function useUserPosts(userId) {
         queryKey: ["posts", "byUser", userId],
         queryFn: () => getPostsByUser(userId),
         enabled: !!userId && typeof userId === 'string',
+        throwOnError: false,
     });
 }
 

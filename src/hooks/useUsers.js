@@ -12,7 +12,10 @@ import {
 } from "../services/api/users.api.js";
 
 // ─── QUERIES ───
-
+/**
+ * @param {string} userId
+ * @returns {import('@tanstack/react-query').UseQueryResult<import('../services/contracts/types.js').User>}
+ */
 export function useUser(userId) {
     return useQuery({
         queryKey: ["users", userId],
@@ -21,6 +24,10 @@ export function useUser(userId) {
     });
 }
 
+/**
+ * @param {number} page
+ * @returns {import('@tanstack/react-query').UseQueryResult<import('../services/contracts/types.js').PaginatedUsers>}
+ */
 export function useUsers(page = 1) {
     return useQuery({
         queryKey: ["users", "list", page],
@@ -60,7 +67,15 @@ export function useUserSuggestions(page = 1) {
 }
 
 // ─── MUTATIONS ───
-
+/**
+ * Actualiza el perfil del usuario autenticado y refresca currentUser + listas.
+ *
+ * @returns {import('@tanstack/react-query').UseMutationResult<
+ *   import('../services/contracts/types.js').User,
+ *   unknown,
+ *   { data: import('../services/contracts/types.js').User }
+ * >}
+ */
 export function useUpdateProfile() {
     const queryClient = useQueryClient();
 
@@ -77,11 +92,13 @@ export function useUpdateAvatar() {
     const queryClient = useQueryClient();
 
     return useMutation({
-        mutationFn: ({ id, file }) => uploadAvatar(id, file),
-        onSuccess: (data, variables) => {
-            // Invalida queries relacionadas para refrescar datos
-            queryClient.invalidateQueries({ queryKey: ['user', variables.id] })
-            queryClient.invalidateQueries({ queryKey: ['currentUser'] })
+        mutationFn: (file) => uploadAvatar(file),
+        onSuccess: (updatedUser) => {
+            // actualiza currentUser directamente
+            queryClient.setQueryData(["currentUser"], updatedUser);
+
+            // invalida perfiles de usuarios si los tiene
+            queryClient.invalidateQueries({ queryKey: ["users"] });
         },
     });
 }
@@ -99,11 +116,13 @@ export function useFollowUser() {
             const previousUser = queryClient.getQueryData(["currentUser"])
 
             // 3. Actualiza la caché optimistamente
-            queryClient.setQueryData(["currentUser"], (old) => ({
-                ...old,
-                following: [...old.following, { userId }]  // añade el nuevo following
-            }))
-
+            queryClient.setQueryData(["currentUser"], (old) => {
+                if (!old) return old
+                return {
+                    ...old,
+                    following: [...(old.following ?? []), { userId }]
+                }
+            })
             // 4. Devuelve el snapshot — React Query lo pasa a onError como context
             return { previousUser }
         },
@@ -126,10 +145,13 @@ export function useUnfollowUser() {
         onMutate: async (userId) => {
             await queryClient.cancelQueries({ queryKey: ["currentUser"] })
             const previousUser = queryClient.getQueryData(["currentUser"])
-            queryClient.setQueryData(["currentUser"], (old) => ({
-                ...old,
-                following: old.following.filter(f => f.userId !== userId)
-            }))
+            queryClient.setQueryData(["currentUser"], (old) => {
+                if (!old) return old
+                return {
+                    ...old,
+                    following: old.following.filter(f => f.userId !== userId)
+                }
+            })
             return { previousUser }
         },
         onError: (err, userId, context) => {

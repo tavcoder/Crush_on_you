@@ -1,22 +1,26 @@
 // services/api/adapters/posts.adapter.js
+import { adaptUser } from './users.adapter.js';  // ← importa el adapter de usuario
 
 /**
  * @param {import('../../contracts/types.js').PostRaw} raw
+ * @param {string} [currentUserId]
  * @returns {import('../../contracts/types.js').Post}
  */
 export function adaptPost(raw, currentUserId) {
-    const API_BASE = import.meta.env.VITE_API_URL?.replace('/api', '') ?? 'http://localhost:3900'
-
+    const API_BASE = import.meta.env.VITE_API_URL?.replace('/api', '') ?? 'http://localhost:3900';
 
     if (!raw || typeof raw !== 'object') {
         console.warn('adaptPost: recibió valor inválido', raw);
         return null;
     }
 
+    // ✅ ADAPTA EL AUTOR — ahora siempre tendrá formato { id, userName, avatarUrl, ... }
+    const author = raw.user ? adaptUser(raw.user) : null;
+
     return {
         id: raw._id ?? '',
-        authorId: raw.user?._id ?? raw.user ?? '',
-        author: raw.user ?? null,
+        authorId: author?.id ?? raw.user?._id ?? '',
+        author,  // ← adaptado, no crudo
         content: raw.text ?? '',
         images: raw.file
             ? [`${API_BASE}/uploads/publications/${raw.file}`]
