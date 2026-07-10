@@ -68,12 +68,15 @@ export const updateProfile = (data) =>
         surname: data.userSurName,
         nick: data.userNick,
         email: data.email,
-        bio: data.bio,
         city: data.city,
         country: data.country,
-        education: data.education,
-        languages: data.languages,
-        smoke: data.smoke,
+        interest: data.interest,
+        profileDetails: {
+            bio: data.bio,
+            education: data.education,
+            languages: data.languages,
+            smoke: data.smoke,
+        }
     })
         .then(res => adaptUser(res.user))
 
