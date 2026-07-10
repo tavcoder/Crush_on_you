@@ -8,9 +8,9 @@ import { useUserPosts } from "../../hooks/usePosts.js"
 export default function TimelinePage() {
     const { currentUser, selectedUser, isSearching, isSearchLoading, results, query } = useOutletContext();
     const effectiveUser = selectedUser ?? currentUser
-    const { data: posts, isLoading } = useUserPosts(effectiveUser?.id)
+    const { posts, isLoading } = useUserPosts(effectiveUser?.id)
     // Si hay búsqueda activa, muestra resultados — si no, muestra el feed normal
-    const displayPosts = isSearching ? results : posts?.data
+    const displayPosts = isSearching ? results : posts
     const displayLoading = isSearching ? isSearchLoading : isLoading
 
     return (<>

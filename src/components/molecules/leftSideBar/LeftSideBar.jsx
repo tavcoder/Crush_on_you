@@ -9,10 +9,10 @@ import './LeftSideBar.css'
 export function LeftSideBar({ user, isLoading, currentUser }) {
     const isCurrentUser = user?.id === currentUser?.id;
     const userId = user?.id
-    const { data: postsData } = useUserPosts(userId)
+    const { posts } = useUserPosts(userId)
     const { suggestionsList, isLoading: suggestionsLoading, isError, error } = useUserSuggestionsList()
     const navigate = useNavigate();
-    const postsCount = postsData?.data?.length ?? 0
+    const postsCount = posts?.length ?? 0
 
     const handleClick = () => {
         if (isCurrentUser) {
