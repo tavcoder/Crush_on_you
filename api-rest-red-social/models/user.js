@@ -1,4 +1,4 @@
-const {Schema, model} = require("mongoose");
+const { Schema, model } = require("mongoose");
 
 const UserSchema = Schema({
     name: {
@@ -6,7 +6,6 @@ const UserSchema = Schema({
         required: true
     },
     surname: String,
-    bio: String,
     nick: {
         type: String,
         required: true
@@ -18,6 +17,19 @@ const UserSchema = Schema({
     password: {
         type: String,
         required: true
+    },
+    city: String,
+    country: String,
+    interests: [String],
+
+    profileDetails: {
+        education: String,
+        drink: String,
+        languages: String,
+        marijuana: String,
+        smoke: String,
+        bio: String,
+
     },
     role: {
         type: String,
@@ -34,4 +46,4 @@ const UserSchema = Schema({
 });
 
 module.exports = model("User", UserSchema, "users");
-                      // Coleccion: users
+// Coleccion: users
