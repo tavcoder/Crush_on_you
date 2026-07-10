@@ -8,8 +8,10 @@ export function useForm({ initialValues, validators, onSubmit, requiredFields = 
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [submitError, setSubmitError] = useState(null);
 
-    const handleChange = useCallback((event) => {
-        const { name, value } = event.target;
+    const handleChange = useCallback((eventOrName, maybeValue) => {
+        const { name, value } = eventOrName?.target
+            ? eventOrName.target
+            : { name: eventOrName, value: maybeValue };
         setFormData(prev => ({ ...prev, [name]: value }));
 
         // Limpiar error al escribir
