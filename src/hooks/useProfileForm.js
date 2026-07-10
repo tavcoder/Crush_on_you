@@ -39,10 +39,11 @@ export function useProfileForm(user) {
             education: user?.profileDetails?.education || '',
             languages: user?.profileDetails?.languages || '',
             smoke: user?.profileDetails?.smoke || '',
+            drink: user?.profileDetails?.drink || '',
+            marijuana: user?.profileDetails?.marijuana || '',
             interests: user?.interests || [],
         }
     ), [user]);
-
     const form = useForm({ initialValues, validators, onSubmit: handleSubmit })
 
     return {
