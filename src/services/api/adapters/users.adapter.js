@@ -27,7 +27,7 @@ export function adaptUser(raw) {
         : [];
 
     const interests = Array.isArray(raw.interests)
-        ? raw.interests.filter(item => item && typeof item === 'object' && item.id && item.label)
+        ? raw.interests.filter(id => typeof id === 'string')
         : [];
 
     const profileDetails = raw.profileDetails && typeof raw.profileDetails === 'object'
@@ -56,7 +56,12 @@ export function adaptUser(raw) {
         avatarUrl: raw.image ?? null,
         city: raw.city ?? null,
         country: raw.country ?? null,
+        // TODO: [DEUDA TÉCNICA] isOnline requiere sistema de presencia en tiempo real
+        // (WebSockets o lastActiveAt). Backend actual no lo soporta; siempre false.
         isOnline: raw.isOnline ?? false,
+
+        // TODO: [DEUDA TÉCNICA] hasStory requiere modelo Story en backend
+        // (crear/consultar stories no expiradas). No implementado; siempre false.
         hasStory: raw.hasStory ?? false,
         isUnseen: raw.isUnseen ?? false,
         following,
