@@ -2,13 +2,13 @@ import { useState } from 'react'
 import { ChevronDown } from "lucide-react";
 import './SelectButton.css'
 
-export function SelectButton({ label, options = [], onChange, disabled = false, className = "" }) {
+export function SelectButton({ label, name, options = [], onChange, disabled = false, className = "" }) {
     const [value, setValue] = useState(options[0]?.value ?? "");
 
     const handleChange = (e) => {
         const newValue = e.target.value;
         setValue(newValue);
-        onChange?.(newValue);
+        onChange?.(name, newValue);
     };
 
     const activeIcon = options.find(o => o.value === value)?.icon;
