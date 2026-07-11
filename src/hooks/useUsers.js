@@ -79,13 +79,16 @@ export function useUserSuggestions(page = 1) {
 export function useUpdateProfile() {
     const queryClient = useQueryClient();
 
-    return useMutation({
-        mutationFn: ({ data }) => updateProfile(data),
+    const mutation = useMutation({
+        mutationFn: (data) => updateProfile(data),
         onSuccess: (updatedUser) => {
-            queryClient.setQueryData(["currentUser"], updatedUser);
+            queryClient.setQueryData(["users", updatedUser.id], updatedUser);
             queryClient.invalidateQueries({ queryKey: ["users"] });
         },
     });
+    return {
+        updateProfile: mutation.mutateAsync,
+    }
 }
 
 export function useUpdateAvatar() {
