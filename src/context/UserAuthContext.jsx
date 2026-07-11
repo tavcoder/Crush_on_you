@@ -2,7 +2,7 @@
 import { createContext, useState, useCallback } from "react"
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { getToken, saveToken } from '../services/apiClient'
-import { getUserById } from '../services/api/users.api'
+import { useUser } from '../hooks/useUsers.js'
 
 export const UserAuthContext = createContext(null)
 
@@ -13,18 +13,13 @@ export function UserAuthProvider({ children }) {
         const stored = localStorage.getItem('userId')
         return stored && stored !== 'undefined' ? stored : null
     })
-    const { data: currentUser, isLoading } = useQuery({
-        queryKey: ['currentUser', userId],
-        queryFn: () => getUserById(userId),
-        enabled: isAuthenticated && !!userId,
-        staleTime: 1000 * 60 * 5,
-    })
+    const { data: currentUser, isLoading } = useUser(userId)
 
     const login = useCallback(async (token, userId) => {
         saveToken(token)
         if (userId) localStorage.setItem('userId', userId)  // ← guard
         setUserId(userId)
-        await queryClient.invalidateQueries({ queryKey: ['currentUser'] })
+        await queryClient.invalidateQueries({ queryKey: ['users', userId] })
         setIsAuthenticated(true)
     }, [queryClient])
 
