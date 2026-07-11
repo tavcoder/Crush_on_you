@@ -1,3 +1,4 @@
+import { useContext } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { UserAuthContext } from "../context/UserAuthContext.jsx";
 import {
@@ -16,12 +17,16 @@ import {
  * @param {string} userId
  * @returns {import('@tanstack/react-query').UseQueryResult<import('../services/contracts/types.js').User>}
  */
-export function useUser(userId) {
-    return useQuery({
+export function userQueryOptions(userId) {
+    return {
         queryKey: ["users", userId],
         queryFn: () => getUserById(userId),
         enabled: !!userId && typeof userId === 'string',
-    });
+    };
+}
+
+export function useUser(userId) {
+    return useQuery(userQueryOptions(userId));
 }
 
 /**
@@ -97,9 +102,7 @@ export function useUpdateAvatar() {
     return useMutation({
         mutationFn: (file) => uploadAvatar(file),
         onSuccess: (updatedUser) => {
-            // actualiza currentUser directamente
-            queryClient.setQueryData(["currentUser"], updatedUser);
-
+            queryClient.setQueryData(["users", updatedUser.id], updatedUser);
             // invalida perfiles de usuarios si los tiene
             queryClient.invalidateQueries({ queryKey: ["users"] });
         },
@@ -108,47 +111,53 @@ export function useUpdateAvatar() {
 
 export function useFollowUser() {
     const queryClient = useQueryClient();
+    const { currentUser } = useContext(UserAuthContext);
 
     return useMutation({
-        mutationFn: followUser,
+        mutationFn: (userId) => {
+            if (!currentUser?.id) {
+                throw new Error('No hay usuario autenticado')
+            }
+            return followUser(userId)
+        },
         onMutate: async (userId) => {
-            // 1. Cancela fetches en vuelo para evitar que sobreescriban el update
-            await queryClient.cancelQueries({ queryKey: ["currentUser"] })
-
-            // 2. Guarda el estado actual como snapshot para el rollback
-            const previousUser = queryClient.getQueryData(["currentUser"])
-
-            // 3. Actualiza la caché optimistamente
-            queryClient.setQueryData(["currentUser"], (old) => {
+            await queryClient.cancelQueries({ queryKey: ["users", currentUser.id] })
+            const previousUser = queryClient.getQueryData(["users", currentUser.id])
+            queryClient.setQueryData(["users", currentUser.id], (old) => {
                 if (!old) return old
                 return {
                     ...old,
                     following: [...(old.following ?? []), { userId }]
                 }
             })
-            // 4. Devuelve el snapshot — React Query lo pasa a onError como context
             return { previousUser }
         },
         onError: (err, userId, context) => {
             if (context?.previousUser) {
-                queryClient.setQueryData(["currentUser"], context.previousUser)
+                queryClient.setQueryData(["users", currentUser.id], context.previousUser)
             }
         },
         onSettled: () => {
-            queryClient.invalidateQueries({ queryKey: ["currentUser"] })
+            queryClient.invalidateQueries({ queryKey: ["users", currentUser.id] })
         }
     });
 }
 
 export function useUnfollowUser() {
     const queryClient = useQueryClient();
+    const { currentUser } = useContext(UserAuthContext);
 
     return useMutation({
-        mutationFn: unfollowUser,
+        mutationFn: (userId) => {
+            if (!currentUser?.id) {
+                throw new Error('No hay usuario autenticado')
+            }
+            return unfollowUser(userId)
+        },
         onMutate: async (userId) => {
-            await queryClient.cancelQueries({ queryKey: ["currentUser"] })
-            const previousUser = queryClient.getQueryData(["currentUser"])
-            queryClient.setQueryData(["currentUser"], (old) => {
+            await queryClient.cancelQueries({ queryKey: ["users", currentUser.id] })
+            const previousUser = queryClient.getQueryData(["users", currentUser.id])
+            queryClient.setQueryData(["users", currentUser.id], (old) => {
                 if (!old) return old
                 return {
                     ...old,
@@ -159,11 +168,11 @@ export function useUnfollowUser() {
         },
         onError: (err, userId, context) => {
             if (context?.previousUser) {
-                queryClient.setQueryData(["currentUser"], context.previousUser)
+                queryClient.setQueryData(["users", currentUser.id], context.previousUser)
             }
         },
         onSettled: () => {
-            queryClient.invalidateQueries({ queryKey: ["currentUser"] })
+            queryClient.invalidateQueries({ queryKey: ["users", currentUser.id] })
         }
     });
 }
