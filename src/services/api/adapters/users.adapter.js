@@ -32,20 +32,18 @@ export function adaptUser(raw) {
 
     const profileDetails = raw.profileDetails && typeof raw.profileDetails === 'object'
         ? {
-            education: raw.profileDetails.education ?? null,
-            drink: raw.profileDetails.drink ?? null,
-            languages: raw.profileDetails.languages ?? null,
-            marijuana: raw.profileDetails.marijuana ?? null,
-            smoke: raw.profileDetails.smoke ?? null,
             bio: raw.profileDetails.bio ?? null,
+            education: raw.profileDetails.education ?? null,
+            languages: raw.profileDetails.languages ?? null,
+            smoke: raw.profileDetails.smoke ?? null,
+            drink: raw.profileDetails.drink ?? null,
         }
         : {
-            education: null,
-            drink: null,
-            languages: null,
-            marijuana: null,
-            smoke: null,
             bio: null,
+            education: null,
+            languages: null,
+            smoke: null,
+            drink: null,
         };
 
     return {
@@ -53,6 +51,7 @@ export function adaptUser(raw) {
         userName: raw.name ?? '',
         userSurName: raw.surname ?? '',
         userNick: raw.nick ?? '',
+        email: raw.email ?? '',
         avatarUrl: raw.image ?? null,
         city: raw.city ?? null,
         country: raw.country ?? null,
