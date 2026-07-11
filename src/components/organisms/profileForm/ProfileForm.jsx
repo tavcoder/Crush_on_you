@@ -228,6 +228,7 @@ export function ProfileForm({ user }) {
                         No
                     </label>
                 </fieldset>
+
             </div>
             <div className="profile-form__field--wide">
                 <span className="field__label">Interests (max. 8)</span>
