@@ -70,12 +70,13 @@ export const updateProfile = (data) =>
         email: data.email,
         city: data.city,
         country: data.country,
-        interest: data.interest,
+        interests: data.interests,
         profileDetails: {
             bio: data.bio,
             education: data.education,
             languages: data.languages,
             smoke: data.smoke,
+            drink: data.drink,
         }
     })
         .then(res => adaptUser(res.user))
