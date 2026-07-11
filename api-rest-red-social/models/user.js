@@ -23,13 +23,11 @@ const UserSchema = Schema({
     interests: [String],
 
     profileDetails: {
-        education: String,
-        drink: String,
-        languages: String,
-        marijuana: String,
-        smoke: String,
         bio: String,
-
+        education: String,
+        languages: String,
+        smoke: String,
+        drink: String,
     },
     role: {
         type: String,
