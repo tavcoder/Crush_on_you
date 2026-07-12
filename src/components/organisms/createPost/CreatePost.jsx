@@ -1,11 +1,12 @@
-import { useState, useRef, useEffect, useCallback, useMemo } from "react";
+import { useState, useRef } from "react";
 import { X, Image, Paperclip, Hash, Radio, AtSign, Globe, Users } from "lucide-react";
 import { Avatar } from '../../ui/avatar/Avatar.jsx'
 import { Button } from '../../ui/button/Button.jsx'
 import { IconButton } from '../../ui/iconButton/IconButton.jsx'
 import { SelectButton } from '../../ui/selectButton/SelectButton.jsx'
 import { PostMedia } from '../../molecules/postMedia/PostMedia.jsx'
-import { ALLOWED_FILE_TYPES, validateFile } from '../../../utils/validateUtils.js'
+import { ALLOWED_FILE_TYPES } from '../../../utils/validateUtils.js'
+import { usePostMedia } from '../../../hooks/usePostMedia.jsx'
 import './CreatePost.css'
 
 // TODO: cuando la API soporte upload real, cambiar createPost a usar FormData
@@ -16,42 +17,9 @@ import './CreatePost.css'
 export function CreatePost({ user, onPostCreated, isSubmitting = false }) {
     const [content, setContent] = useState('');
     const [visibility, setVisibility] = useState('public');
-    const [selectedFiles, setSelectedFiles] = useState([]);
-    const [error, setError] = useState(null);
     const inputRef = useRef(null);
-    const previewUrls = useMemo(() => {
-        return selectedFiles.map(file => URL.createObjectURL(file))
-    }, [selectedFiles]);
+    const { error, handleFileChange, handleRemoveFile, canAddMore, selectedFiles, setError, setSelectedFiles, previewUrls } = usePostMedia();
 
-    useEffect(() => {
-        return () => {
-            previewUrls.forEach(url => URL.revokeObjectURL(url))
-        };
-    }, [previewUrls]);
-
-    const handleFileChange = useCallback((e) => {
-        setError(null);
-        const files = Array.from(e.target.files || []);
-
-        // Validar cada archivo
-        for (const file of files) {
-            const err = validateFile(file);
-            if (err) {
-                setError(err);
-                e.target.value = "";
-                return;
-            }
-        }
-
-        setSelectedFiles(prev => [...prev, ...files]);
-
-        // Reset input para permitir re-seleccionar mismo archivo
-        e.target.value = '';
-    }, []);
-
-    const handleRemoveFile = useCallback((index) => {
-        setSelectedFiles(prev => prev.filter((_, i) => i !== index));
-    }, []);
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -77,6 +45,9 @@ export function CreatePost({ user, onPostCreated, isSubmitting = false }) {
         { value: "friends", label: "Best friends", icon: <Users /> }
     ];
 
+    const handleChange = (_name, value) => {
+        setVisibility(value);
+    };
     const isDisabled = isSubmitting;
 
     return (
@@ -130,7 +101,6 @@ export function CreatePost({ user, onPostCreated, isSubmitting = false }) {
                             ref={inputRef}
                             type="file"
                             accept={ALLOWED_FILE_TYPES.join(',')}
-                            multiple
                             className="sr-only"
                             tabIndex="-1"
                             onChange={handleFileChange}
@@ -141,8 +111,10 @@ export function CreatePost({ user, onPostCreated, isSubmitting = false }) {
                             icon={<Image />}
                             textVisibility="responsive-hidden"
                             direction="row"
+                            disabled={!canAddMore}
+                            tooltip={canAddMore ? "" : "For now, only one image can be uploaded per post."}
                             aria-label="Upload image" >
-                            Image/Video
+                            Image
                         </IconButton>
 
                         <IconButton icon={<Paperclip />}
@@ -169,9 +141,10 @@ export function CreatePost({ user, onPostCreated, isSubmitting = false }) {
                             disabled
                             tooltip="Mention coming soon" >Mention</IconButton>
                         <SelectButton
+                            name="visibility"
                             label="public"
                             options={selectOptions}
-                            onChange={setVisibility} />
+                            onChange={handleChange} />
                     </div>
                 </div>
             </section>
