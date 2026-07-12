@@ -28,10 +28,10 @@ export const getUserById = (id) =>
             return adaptUser(raw);
         });
 
-// TODO: [DEUDA TÉCNICA] El backend no tiene endpoint de búsqueda de usuarios.
-// Implementar GET user/search?q= en el backend.
-export const searchUsers = () =>
-    Promise.resolve({ data: [], pagination: { currentPage: 1, totalPages: 1 } })
+export const searchUsers = ({ search, page = 1 }) =>
+    apiClient
+        .get(`user/search/${encodeURIComponent(search)}/${page}`)
+        .then(adaptUserList)
 
 // TODO: [DEUDA TÉCNICA] No hay endpoint de sugerencias. Usa getUsers como fallback.
 export const getUserSuggestions = ({ page = 1 } = {}) =>

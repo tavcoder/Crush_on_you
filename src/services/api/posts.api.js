@@ -37,19 +37,11 @@ export const getPostsByUser = (userId, { page = 1 } = {}, currentUserId) =>
             throw err
         })
 
-// TODO: [DEUDA TÉCNICA] El backend no tiene endpoint de búsqueda de publicaciones.
-// Implementar GET publication/search?q= en el backend.
-/**
- * Placeholder mientras no haya endpoint de búsqueda.
- * @returns {Promise<import('../contracts/types.js').PaginatedPosts>}
- */
-export const searchPosts = () => Promise.resolve({ data: [], pagination: { currentPage: 1, totalPages: 1 } })
 
-const sanitizeFile = (file) => {
-    const ext = file.name.split('.').pop()
-    const baseName = file.name.replace(/\./g, '-').replace(new RegExp(`-${ext}$`), '')
-    return new File([file], `${baseName}.${ext}`, { type: file.type })
-}
+export const searchPosts = ({ search, page = 1 }) =>
+    apiClient
+        .get(`publication/search/${encodeURIComponent(search)}/${page}`)
+        .then(res => adaptPostList(res))
 
 /**
  * Crea una publicación de texto y opcionalmente sube una imagen.
