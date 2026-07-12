@@ -41,13 +41,18 @@ export function useUsers(page = 1) {
 }
 
 export function useSearchUsers(query, { enabled } = {}) {
-    return useQuery({
+    const userSearch = useQuery({
         queryKey: ['users', 'search', query],
         queryFn: () => searchUsers({ search: query }),
         enabled: enabled ?? query.trim().length >= 2,
         staleTime: 1000 * 30,
         placeholderData: (prev) => prev,
     })
+    return {
+        ...userSearch,
+        users: userSearch.data?.data ?? [],
+        pagination: userSearch.data?.pagination,
+    }
 }
 
 export function useUsersList(page = 1) {

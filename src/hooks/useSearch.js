@@ -31,7 +31,7 @@ export function useSearch(type = 'posts') {
     const activeQuery = type === 'users' ? usersQuery : postsQuery
 
     return {
-        results: activeQuery.data?.data ?? [],
+        results: activeQuery[type] ?? [],
         isLoading: activeQuery.isLoading,
         isError: activeQuery.isError,
         query,
