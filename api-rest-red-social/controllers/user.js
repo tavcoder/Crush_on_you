@@ -416,7 +416,54 @@ const getUsers = async (req, res) => {
         });
     }
 };
+// Buscar usuarios por nombre o nick
+const search = async (req, res) => {
+    const query = req.params.query;
+    let page = req.params.page ? req.params.page : 1;
+    const itemsPerPage = 5;
 
+    if (!query || query.trim().length < 2) {
+        return res.status(400).send({
+            status: "error",
+            message: "La búsqueda debe tener al menos 2 caracteres"
+        });
+    }
+
+    try {
+        const total = await User.countDocuments({
+            $or: [
+                { name: { $regex: query, $options: 'i' } },
+                { nick: { $regex: query, $options: 'i' } }
+            ]
+        });
+
+        const users = await User.find({
+            $or: [
+                { name: { $regex: query, $options: 'i' } },
+                { nick: { $regex: query, $options: 'i' } }
+            ]
+        })
+            .select('-password -role -__v')
+            .sort('_id')
+            .skip((page - 1) * itemsPerPage)
+            .limit(itemsPerPage);
+
+        return res.status(200).send({
+            status: "success",
+            message: "Resultados de búsqueda",
+            users,
+            page,
+            total,
+            pages: Math.ceil(total / itemsPerPage),
+        });
+    } catch (error) {
+        return res.status(500).send({
+            status: "error",
+            message: "Error al buscar usuarios",
+            error
+        });
+    }
+}
 
 
 // Exportar acciones
@@ -427,6 +474,7 @@ module.exports = {
     profile,
     list,
     update,
+    search,
     upload,
     avatar,
     counters,

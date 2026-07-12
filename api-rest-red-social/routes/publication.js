@@ -1,4 +1,4 @@
-const { auth} = require('../middlewares/auth'); 
+const { auth } = require('../middlewares/auth');
 const express = require("express");
 const router = express.Router();
 const multer = require("multer");
@@ -22,6 +22,7 @@ const uploads = multer({ storage });
 router.get("/prueba-publication", PublicationContoller.pruebaPublication);
 router.post("/save", check.auth, PublicationContoller.save);
 router.get("/detail/:id", check.auth, PublicationContoller.detail);
+router.get("/search/:query/:page?", check.auth, PublicationContoller.search);
 router.delete("/remove/:id", check.auth, PublicationContoller.remove);
 router.get("/user/:id/:page?", check.auth, PublicationContoller.user);
 router.post("/upload/:id", [check.auth, uploads.single("file0")], PublicationContoller.upload);

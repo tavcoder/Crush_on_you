@@ -326,10 +326,68 @@ const listComments = async (req, res) => {
     }
 }
 
+// Buscar publicaciones por texto o autor
+const search = async (req, res) => {
+    const query = req.params.query;
+    let page = req.params.page ? req.params.page : 1;
+    const itemsPerPage = 5;
+
+    if (!query || query.trim().length < 2) {
+        return res.status(400).send({
+            status: "error",
+            message: "La búsqueda debe tener al menos 2 caracteres"
+        });
+    }
+
+    try {
+        // 1. Encontrar ids de usuarios cuyo name o nick coincidan
+        const matchingUserIds = (await User.find({
+            $or: [
+                { name: { $regex: query, $options: 'i' } },
+                { nick: { $regex: query, $options: 'i' } }
+            ]
+        }).select('_id')).map(user => user._id);
+
+        // 2. Buscar publicaciones cuyo texto coincida, o cuyo autor esté en la lista
+        Publication.find({
+            $or: [
+                { text: { $regex: query, $options: 'i' } },
+                { user: { $in: matchingUserIds } }
+            ]
+        })
+            .sort("-created_at")
+            .populate('user', '-password -__v -role -email')
+            .paginate(page, itemsPerPage, (error, publications, total) => {
+                if (error) {
+                    return res.status(500).send({
+                        status: "error",
+                        message: "Error al buscar publicaciones"
+                    });
+                }
+
+                return res.status(200).send({
+                    status: "success",
+                    message: "Resultados de búsqueda",
+                    page,
+                    total,
+                    pages: Math.ceil(total / itemsPerPage),
+                    publications: publications ?? []
+                });
+            });
+    } catch (error) {
+        return res.status(500).send({
+            status: "error",
+            message: "Error al buscar publicaciones",
+            error
+        });
+    }
+}
+
 module.exports = {
     pruebaPublication,
     save,
     detail,
+    search,
     remove,
     user,
     upload,
