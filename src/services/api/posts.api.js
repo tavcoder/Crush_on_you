@@ -43,6 +43,12 @@ export const searchPosts = ({ search, page = 1 }) =>
         .get(`publication/search/${encodeURIComponent(search)}/${page}`)
         .then(res => adaptPostList(res))
 
+        
+const sanitizeFile = (file) => {
+    const ext = file.name.split('.').pop()
+    const baseName = file.name.replace(/\./g, '-').replace(new RegExp(`-${ext}$`), '')
+    return new File([file], `${baseName}.${ext}`, { type: file.type })
+}
 /**
  * Crea una publicación de texto y opcionalmente sube una imagen.
  * Devuelve la respuesta cruda del backend pero con `publicationStored`
