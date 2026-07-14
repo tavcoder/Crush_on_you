@@ -1,7 +1,7 @@
 // hooks/useSearch.js
-import { useSearchParams } from 'react-router'
 import { useSearchUsers } from '../hooks/useUsers'
 import { useSearchPosts } from '../hooks/usePosts'
+import { useSearchQuery } from '../hooks/useSearchQuery'
 
 
 /**
@@ -17,8 +17,7 @@ import { useSearchPosts } from '../hooks/usePosts'
 // un hook genérico parametrizado.
 
 export function useSearch(type = 'posts') {
-    const [searchParams] = useSearchParams()
-    const query = searchParams.get('q') ?? ''
+    const { query, setQuery, clearQuery } = useSearchQuery()
     const isActive = query.trim().length >= 2
 
     const postsQuery = useSearchPosts(query, {
