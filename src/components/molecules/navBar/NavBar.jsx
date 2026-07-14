@@ -1,10 +1,11 @@
 /*NavBar.jsx*/
-import { Link, useLocation, useNavigate, useSearchParams } from 'react-router'
+import { Link, useLocation } from 'react-router'
 import { Bell, Search } from "lucide-react";
 import { Input } from '../../ui/input/Input.jsx'
 import { BrandLogo } from '../../ui/brandLogo/BrandLogo.jsx'
 import { IconButton } from '../../ui/iconButton/IconButton.jsx'
 import { AvatarMenu } from '../../molecules/avatarMenu/AvatarMenu.jsx'
+import { useSearchQuery } from '../../../hooks/useSearchQuery.jsx'
 import './NavBar.css'
 
 const NAV_LINKS = [
@@ -13,16 +14,12 @@ const NAV_LINKS = [
     { to: '/people', label: 'People' },
 ];
 export function NavBar({ user }) {
-    const navigate = useNavigate()
+    const { query, setQuery, clearQuery } = useSearchQuery()
     const { pathname } = useLocation()
-    const [searchParams] = useSearchParams()
-    const query = searchParams.get('q') ?? ''
-
+    
     const handleSearch = (e) => {
         const value = e.target.value
-        const params = new URLSearchParams()
-        if (value) params.set('q', value)
-        navigate(`${pathname}?${params.toString()}`, { replace: true })// cada keystroke reemplaza la entrada anterior en lugar de añadir una nueva.
+        setQuery(value)
     }
 
     const handleSubmit = (e) => {
@@ -31,9 +28,7 @@ export function NavBar({ user }) {
     }
 
     const handleClear = () => {
-        const params = new URLSearchParams(searchParams)
-        params.delete('q')
-        navigate(`${pathname}?${params.toString()}`, { replace: true })
+        clearQuery()
     }
 
     const navItems = NAV_LINKS.map(({ to, label }) => {
