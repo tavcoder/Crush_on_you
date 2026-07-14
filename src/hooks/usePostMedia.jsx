@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback, useMemo } from "react";
-import { validateFile } from '../../../utils/validateUtils.js'
+import { validateFile } from '../utils/validateUtils.js'
 
 
 export function usePostMedia({ maxFiles = 1 } = {}) {
