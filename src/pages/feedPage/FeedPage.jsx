@@ -21,7 +21,7 @@ export default function FeedPage() {
             <SortByCard
                 onChange={undefined} //TODO: consumirá un hook useSortPosts que decide la estrategia de fetching.
                 disabled={undefined} />
-                
+
             {isSearching && results.length === 0 && !isSearchLoading && (
                 <p className="feed__empty">No posts match "{query}"</p>
             )}
@@ -30,6 +30,7 @@ export default function FeedPage() {
                 posts={displayPosts}
                 isLoading={displayLoading}
                 error={displayError}
+                query={query}
             />
 
         </section>

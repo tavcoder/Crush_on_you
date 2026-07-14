@@ -9,7 +9,7 @@ import { UserAuthContext } from "../../../context/UserAuthContext.jsx"
 import { useInfiniteScroll } from '../../../hooks/useInfiniteScroll.js';
 import './PostFeed.css';
 
-export function PostFeed({ posts, isLoading, hasMore, onLoadMore, error }) {
+export function PostFeed({ posts, query, isLoading, hasMore, onLoadMore, error }) {
     const sentinelRef = useInfiniteScroll(onLoadMore, { enabled: hasMore });
     const { currentUser } = useContext(UserAuthContext);
     // Estados de carga y vacío
@@ -41,6 +41,7 @@ export function PostFeed({ posts, isLoading, hasMore, onLoadMore, error }) {
                             <PostCard
                                 post={post}
                                 isCurrentUser={post.authorId === currentUser?.id}
+                                query={query}
                             />
                         </li>
                     ))}

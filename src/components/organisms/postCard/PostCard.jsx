@@ -5,6 +5,7 @@ import { UserInfo } from "../../molecules/userInfo/UserInfo.jsx"
 import { PostMedia } from "../../molecules/postMedia/PostMedia.jsx"
 import { PostStats } from "../../molecules/postStats/PostStats.jsx"
 import { IconButton } from "../../ui/iconButton/IconButton.jsx"
+import { HighlightedText } from "../../ui/highlightedText/HighlightedText.jsx"
 import { getDateFormat, getUserFullNameFormat } from "../../../utils/formatUtils.js"
 import './PostCard.css'
 
@@ -15,7 +16,7 @@ import './PostCard.css'
  * @param {Post} props.post
  */
 
-export function PostCard({ post, isCurrentUser }) {
+export function PostCard({ post, query, isCurrentUser }) {
     const [isLiked, setIsLiked] = useState(post.isLiked)
     const [isBookmarked, setIsBookmarked] = useState(post.isBookmarked)
     const [likesCount, setLikesCount] = useState(post.stats.likesCount)
@@ -42,6 +43,7 @@ export function PostCard({ post, isCurrentUser }) {
         <article className='card post-card'>
             <UserInfo
                 user={author}
+                query={query}
                 isCurrentUser={isCurrentUser}
                 avatarSize="md"
                 primaryText={primaryText}
@@ -58,7 +60,7 @@ export function PostCard({ post, isCurrentUser }) {
                 images={images}
                 metadata={profileDetails}
             />
-            {content && <p className='post-card__content'>{content}</p>}
+            {content && <p className='post-card__content'><HighlightedText text={content} query={query} /></p>}
 
             <PostStats
                 stats={{ ...stats, likesCount }}

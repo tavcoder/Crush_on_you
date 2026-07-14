@@ -1,0 +1,4 @@
+.highlighted-text {
+    background-color: var(--color-highlight);
+    color: var(--color-text-highlight);
+}
