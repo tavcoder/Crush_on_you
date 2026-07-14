@@ -1,6 +1,7 @@
 // Importar modulos
 const fs = require("fs");
 const path = require("path");
+const User = require("../models/user");
 
 // Importar modelos
 const Publication = require("../models/publication");
@@ -375,10 +376,11 @@ const search = async (req, res) => {
                 });
             });
     } catch (error) {
+        console.error('Error en búsqueda de publicaciones:', error);
         return res.status(500).send({
             status: "error",
             message: "Error al buscar publicaciones",
-            error
+            error: error.message
         });
     }
 }
