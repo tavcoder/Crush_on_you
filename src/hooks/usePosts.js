@@ -1,48 +1,80 @@
 // hooks/usePosts.js
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
+import { useContext } from "react";
+import { useMutation, useQueryClient, useInfiniteQuery } from '@tanstack/react-query'
 import { getPosts, createPost, getPostsByUser, searchPosts } from '../services/api/posts.api.js'
+import { UserAuthContext } from "../context/UserAuthContext.jsx";
 
 /**
- * @typedef {Object} UsePostsResult
- * @property {import('../services/contracts/types.js').Post[]} posts
- * @property {import('../services/contracts/types.js').Pagination | undefined} pagination
- * @property {boolean} isLoading
+ * Forma base compartida por los hooks de posts paginados con scroll infinito.
+ *
+ * @typedef {Object} UseInfinitePostsBase
+ * @property {() => void} fetchNextPage
+ * @property {boolean} hasNextPage
+ * @property {boolean} isLoading           - true solo durante la carga inicial
+ * @property {boolean} isFetchingNextPage  - true mientras se carga una página adicional
  * @property {boolean} isError
  * @property {unknown} error
- * @property {(data: { content: string, files?: File[] }) => void} addPost
- * @property {boolean} isAddingPost
  */
+
+function getNextPageParam(lastPage) {
+    const current = lastPage.pagination?.currentPage ?? 1
+    const total = lastPage.pagination?.totalPages ?? 1
+    return current < total ? current + 1 : undefined
+}
 
 /**
- * Devuelve publicaciones del feed general.
+ * Resultado de `usePosts` — feed general, con capacidad de crear posts.
  *
- * @param {{ page?: number, currentUserId?: string }} [params]
- * @returns {UsePostsResult}
+ * @typedef {UseInfinitePostsBase & {
+ *   posts: import('../services/contracts/types.js').Post[],
+ *   addPost: (data: { content: string, files?: File[] }) => void,
+ *   isAddingPost: boolean
+ * }} UsePostsResult
  */
-export function usePosts({ page = 1, currentUserId } = {}) {
+
+export function usePosts() {
+    const { currentUser } = useContext(UserAuthContext)
     const queryClient = useQueryClient()
 
-    const query = useQuery({
-        queryKey: ['posts', 'feed', page],
-        queryFn: () => getPosts({ page }, currentUserId),
+    const {
+        data,
+        fetchNextPage,
+        hasNextPage,
+        isLoading,
+        isFetchingNextPage,
+        isError,
+        error,
+    } = useInfiniteQuery({
+        queryKey: ['posts', 'feed'],
+        queryFn: ({ pageParam }) => getPosts({ page: pageParam }, currentUser?.id),
+        getNextPageParam,
+        initialPageParam: 1,
     })
+
+    const posts = data?.pages.flatMap((page) => page.data) ?? []
 
     const mutation = useMutation({
         mutationFn: createPost,
         onSuccess: (response) => {
             const newPost = response.publicationStored
 
-            queryClient.setQueryData(['posts', 'feed', page], (old) => {
+            queryClient.setQueryData(['posts', 'feed'], (old) => {
+                // Caso A: todavía no hay cache para este feed (nadie lo ha cargado nunca)
                 if (!old) {
                     return {
-                        data: [newPost],
-                        pagination: { currentPage: page, totalPages: 1 },
+                        pages: [{ data: [newPost], pagination: { currentPage: 1, totalPages: 1 } }],
+                        pageParams: [1],
                     }
                 }
 
+                // Caso B: ya hay páginas cargadas -> solo prepend en pages[0]
                 return {
                     ...old,
-                    data: [newPost, ...(old.data ?? [])],
+                    pages: old.pages.map((pageData, index) =>
+                        index === 0
+                            ? { ...pageData, data: [newPost, ...pageData.data] }
+                            : pageData
+                    ),
                 }
             })
 
@@ -52,65 +84,90 @@ export function usePosts({ page = 1, currentUserId } = {}) {
     })
 
     return {
-        posts: query.data?.data ?? [],
-        pagination: query.data?.pagination,
-        isLoading: query.isLoading,
-        isError: query.isError,
-        error: query.error,
+        posts,
+        fetchNextPage,
+        hasNextPage,
+        isLoading,
+        isFetchingNextPage,
+        isError,
+        error,
         addPost: mutation.mutate,
         isAddingPost: mutation.isPending,
     }
 }
 
 /**
- * Devuelve publicaciones de un usuario concreto.
+ * Resultado de `useUserPosts` — posts de un usuario concreto, solo lectura.
  *
- * @param {string} userId
- * @param {{ page?: number, currentUserId?: string }} [params]
- * @returns {UsePostsResult}
+ * @typedef {UseInfinitePostsBase & {
+ *   posts: import('../services/contracts/types.js').Post[]
+ * }} UseUserPostsResult
  */
-export function useUserPosts(userId, { page = 1, currentUserId } = {}) {
-    const query = useQuery({
-        queryKey: ['posts', 'byUser', userId, page],
-        queryFn: () => getPostsByUser(userId, { page }, currentUserId),
+
+export function useUserPosts(userId) {
+    const {
+        data,
+        fetchNextPage,
+        hasNextPage,
+        isLoading,
+        isFetchingNextPage,
+        isError,
+        error,
+    } = useInfiniteQuery({
+        queryKey: ['posts', 'byUser', userId],
+        queryFn: ({ pageParam }) => getPostsByUser(userId, { page: pageParam }),
+        getNextPageParam,
+        initialPageParam: 1,
         enabled: !!userId && typeof userId === 'string',
-        throwOnError: false,
     })
 
+    const posts = data?.pages.flatMap((page) => page.data) ?? []
+
     return {
-        posts: query.data?.data ?? [],
-        pagination: query.data?.pagination,
-        isLoading: query.isLoading,
-        isError: query.isError,
-        error: query.error,
-        addPost: () => { },
-        isAddingPost: false,
+        posts,
+        fetchNextPage,
+        hasNextPage,
+        isLoading,
+        isFetchingNextPage,
+        isError,
+        error,
     }
 }
 
 /**
- * Busca publicaciones por texto.
+ * Resultado de `useSearchPosts` — resultados de búsqueda por texto.
  *
- * @param {string} queryText
- * @param {{ enabled?: boolean }} [options]
- * @returns {UsePostsResult}
+ * @typedef {UseInfinitePostsBase & {
+ *   results: import('../services/contracts/types.js').Post[]
+ * }} UseSearchPostsResult
  */
 export function useSearchPosts(queryText, { enabled } = {}) {
-    const query = useQuery({
+    const {
+        data,
+        fetchNextPage,
+        hasNextPage,
+        isLoading,
+        isFetchingNextPage,
+        isError,
+        error,
+    } = useInfiniteQuery({
         queryKey: ['posts', 'search', queryText],
-        queryFn: () => searchPosts({ search: queryText }),
+        queryFn: ({ pageParam }) => searchPosts({ search: queryText, page: pageParam }),
+        getNextPageParam,
+        initialPageParam: 1,
         enabled: enabled ?? queryText.trim().length >= 2,
         staleTime: 1000 * 30,
-        placeholderData: (prev) => prev,
     })
 
+    const posts = data?.pages.flatMap((page) => page.data) ?? []
+
     return {
-        posts: query.data?.data ?? [],
-        pagination: query.data?.pagination,
-        isLoading: query.isLoading,
-        isError: query.isError,
-        error: query.error,
-        addPost: () => { },
-        isAddingPost: false,
+        posts,
+        fetchNextPage,
+        hasNextPage,
+        isLoading,
+        isFetchingNextPage,
+        isError,
+        error,
     }
 }
