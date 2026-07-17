@@ -21,20 +21,58 @@ function getNextPageParam(lastPage) {
     const total = lastPage.pagination?.totalPages ?? 1
     return current < total ? current + 1 : undefined
 }
+/**
+ * Crea publicaciones nuevas y actualiza la cache del feed general.
+ * Independiente de si el feed está montado — escribe directamente
+ * en la cache de React Query, así que funciona desde cualquier pantalla
+ * (feed, perfil, etc.) sin disparar una petición del feed innecesaria.
+ *
+ * @returns {{ addPost: (data: { content: string, files?: File[] }) => void, isAddingPost: boolean }}
+ */
+export function useCreatePost() {
+    const queryClient = useQueryClient()
+
+    const mutation = useMutation({
+        mutationFn: createPost,
+        onSuccess: (response) => {
+            const newPost = response.publicationStored
+
+            queryClient.setQueryData(['posts', 'feed'], (old) => {
+                if (!old) {
+                    return {
+                        pages: [{ data: [newPost], pagination: { currentPage: 1, totalPages: 1 } }],
+                        pageParams: [1],
+                    }
+                }
+                return {
+                    ...old,
+                    pages: old.pages.map((pageData, index) =>
+                        index === 0
+                            ? { ...pageData, data: [newPost, ...pageData.data] }
+                            : pageData
+                    ),
+                }
+            })
+
+            queryClient.invalidateQueries({ queryKey: ['posts', 'byUser'] })
+            queryClient.invalidateQueries({ queryKey: ['posts', 'detail'] })
+        },
+    })
+
+    return {
+        addPost: mutation.mutate,
+        isAddingPost: mutation.isPending,
+    }
+}
 
 /**
- * Resultado de `usePosts` — feed general, con capacidad de crear posts.
+ * Devuelve publicaciones del feed general del usuario autenticado,
+ * paginadas con scroll infinito. Solo lectura — para crear posts, usar `useCreatePost`.
  *
- * @typedef {UseInfinitePostsBase & {
- *   posts: import('../services/contracts/types.js').Post[],
- *   addPost: (data: { content: string, files?: File[] }) => void,
- *   isAddingPost: boolean
- * }} UsePostsResult
+ * @returns {UseInfinitePostsBase & { posts: import('../services/contracts/types.js').Post[] }}
  */
-
 export function usePosts() {
     const { currentUser } = useContext(UserAuthContext)
-    const queryClient = useQueryClient()
 
     const {
         data,
@@ -53,36 +91,6 @@ export function usePosts() {
 
     const posts = data?.pages.flatMap((page) => page.data) ?? []
 
-    const mutation = useMutation({
-        mutationFn: createPost,
-        onSuccess: (response) => {
-            const newPost = response.publicationStored
-
-            queryClient.setQueryData(['posts', 'feed'], (old) => {
-                // Caso A: todavía no hay cache para este feed (nadie lo ha cargado nunca)
-                if (!old) {
-                    return {
-                        pages: [{ data: [newPost], pagination: { currentPage: 1, totalPages: 1 } }],
-                        pageParams: [1],
-                    }
-                }
-
-                // Caso B: ya hay páginas cargadas -> solo prepend en pages[0]
-                return {
-                    ...old,
-                    pages: old.pages.map((pageData, index) =>
-                        index === 0
-                            ? { ...pageData, data: [newPost, ...pageData.data] }
-                            : pageData
-                    ),
-                }
-            })
-
-            queryClient.invalidateQueries({ queryKey: ['posts', 'byUser'] })
-            queryClient.invalidateQueries({ queryKey: ['posts', 'detail'] })
-        },
-    })
-
     return {
         posts,
         fetchNextPage,
@@ -91,11 +99,8 @@ export function usePosts() {
         isFetchingNextPage,
         isError,
         error,
-        addPost: mutation.mutate,
-        isAddingPost: mutation.isPending,
     }
 }
-
 /**
  * Resultado de `useUserPosts` — posts de un usuario concreto, solo lectura.
  *
