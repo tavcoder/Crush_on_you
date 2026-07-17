@@ -9,20 +9,19 @@ import { UserAuthContext } from "../../../context/UserAuthContext.jsx"
 import { useInfiniteScroll } from '../../../hooks/useInfiniteScroll.js';
 import './PostFeed.css';
 
-export function PostFeed({ posts, query, isLoading, hasMore, onLoadMore, error }) {
-    const sentinelRef = useInfiniteScroll(onLoadMore, { enabled: hasMore });
+export function PostFeed({ posts, query, isInitialLoading, isLoadingNextPage, emptyMessage, canLoadMore, onLoadMore, error }) {
+    const sentinelRef = useInfiniteScroll(onLoadMore, { enabled: canLoadMore });
     const { currentUser } = useContext(UserAuthContext);
     // Estados de carga y vacío
     const postCount = posts?.length ?? 0;
 
-    const isInitialLoading = isLoading && postCount === 0;
-    const isEmpty = !isLoading && postCount === 0;
+    const isEmpty = !isInitialLoading && postCount === 0;
     const hasPosts = postCount > 0;
     if (error) return <ErrorFallback error={error} />
     return (
         <section
             aria-live="polite"
-            aria-busy={posts?.length}
+            aria-busy={isInitialLoading || isLoadingNextPage}
             aria-label="Post feed"
             className="post-feed-container"
         >
@@ -30,7 +29,7 @@ export function PostFeed({ posts, query, isLoading, hasMore, onLoadMore, error }
 
             {/* Estado vacío */}
             {isEmpty && (
-                <EmptyState content="No posts yet. Be the first to share something!" />
+                <EmptyState content={emptyMessage} />
             )}
 
             {hasPosts && (
@@ -52,7 +51,7 @@ export function PostFeed({ posts, query, isLoading, hasMore, onLoadMore, error }
                         aria-hidden="true"
                     />
 
-                    {isLoading && (
+                    {isLoadingNextPage && (
                         <li className="post-feed__loading">
                             <PostCardSkeleton />
                             <span className="sr-only">Loading more posts</span>

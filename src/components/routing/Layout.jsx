@@ -14,7 +14,7 @@ import './Layout.css'
 
 export function Layout() {
     const [selectedUser, setSelectedUser] = useState(null)// TODO: mover selectedUserId a contexto cuando se implemente navegación a perfiles.
-    const { results, isLoading: isSearchLoading, isSearching, query, error: searchingError } = useSearch('posts')
+    const { results, isLoading: isSearchLoading, isSearching, query, error: searchingError, hasNextPage: canLoadMoreSearch, fetchNextPage: loadMoreSearch, isFetchingNextPage: isFetchingNextPageSearch } = useSearch('posts')
     const { currentUser, isLoading: currentUserLoading, error: currentUserError } = useContext(UserAuthContext)
     const { stories, onStorySeen } = useStories()
     const { pathname } = useLocation()
@@ -55,6 +55,9 @@ export function Layout() {
                             selectedUser,
                             isSearching,
                             isSearchLoading,
+                            isFetchingNextPageSearch,
+                            canLoadMoreSearch,
+                            loadMoreSearch,
                             searchingError,
                             results,
                             query,
