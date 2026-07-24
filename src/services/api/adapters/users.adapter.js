@@ -8,6 +8,18 @@ function normalizeFollowItem(item) {
     return null;
 }
 
+// services/api/adapters/users.adapter.js (agregar esta función)
+
+/**
+ * @param {{ userId: string, following: number, followed: number, publications: number }} raw
+ * @returns {import('../contracts/types.js').UserStats}
+ */
+export const adaptUserStats = (raw) => ({
+    userId: raw.userId,
+    followersCount: raw.followed,   // gente que me sigue
+    followingCount: raw.following,  // gente que sigo
+    postsCount: raw.publications,
+});
 /**
  * @param {import('../../contracts/types.js').UserRaw} raw
  * @returns {import('../../contracts/types.js').User}
