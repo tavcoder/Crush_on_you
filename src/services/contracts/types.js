@@ -30,6 +30,14 @@
  */
 
 /**
+ * @typedef {Object} UserStats
+ * @property {string} userId
+ * @property {number} followersCount
+ * @property {number} followingCount
+ * @property {number} postsCount
+ */
+
+/**
  * @typedef {Object} PostRaw
  * @property {string} _id
  * @property {string} text

@@ -6,6 +6,7 @@ import {
     getUserSuggestions,
     searchUsers,
     getUserById,
+    getUserStats,
     updateProfile,
     uploadAvatar,
     followUser,
@@ -63,7 +64,13 @@ export function useUsersList(page = 1) {
         pagination: query.data?.pagination,
     };
 }
-
+export function useUserStats(userId) {
+    return useQuery({
+        queryKey: ["userStats", userId],
+        queryFn: () => getUserStats(userId),
+        enabled: !!userId, 
+    })
+}
 export function useUserSuggestions(page = 1) {
     const query = useQuery({                           // ← conecta con React Query
         queryKey: ["users", "suggestions", page],

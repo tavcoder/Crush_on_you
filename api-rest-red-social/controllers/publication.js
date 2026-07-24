@@ -130,6 +130,10 @@ const upload = (req, res) => {
         { file: req.file.filename },
         { new: true },
         (error, publicationUpdated) => {
+            console.log('DEBUG upload → publicationId:', publicationId, typeof publicationId)
+            console.log('DEBUG upload → req.user.id:', req.user.id, typeof req.user.id)
+            console.log('DEBUG upload → error:', error)
+            console.log('DEBUG upload → publicationUpdated:', publicationUpdated)
             if (error || !publicationUpdated) {
                 return res.status(500).send({
                     status: "error",

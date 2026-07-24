@@ -1,6 +1,6 @@
 // services/api/users.api.js
 import { apiClient } from '../apiClient'
-import { adaptUser, adaptUserList } from './adapters/users.adapter.js'
+import { adaptUser, adaptUserList, adaptUserStats } from './adapters/users.adapter.js'
 
 // ─── LISTS ───
 /**
@@ -27,6 +27,11 @@ export const getUserById = (id) =>
             };
             return adaptUser(raw);
         });
+
+export const getUserStats = (userId) =>
+    apiClient
+        .get(`user/counters/${userId}`)
+        .then(adaptUserStats)
 
 export const searchUsers = ({ search, page = 1 }) =>
     apiClient
