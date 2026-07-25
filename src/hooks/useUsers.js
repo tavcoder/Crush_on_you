@@ -68,7 +68,7 @@ export function useUserStats(userId) {
     return useQuery({
         queryKey: ["userStats", userId],
         queryFn: () => getUserStats(userId),
-        enabled: !!userId, 
+        enabled: !!userId,
     })
 }
 export function useUserSuggestions(page = 1) {
@@ -133,8 +133,17 @@ export function useFollowUser() {
             return followUser(userId)
         },
         onMutate: async (userId) => {
+            // Cancelar las 3 queries por separado
             await queryClient.cancelQueries({ queryKey: ["users", currentUser.id] })
+            await queryClient.cancelQueries({ queryKey: ["userStats", userId] })
+            await queryClient.cancelQueries({ queryKey: ["userStats", currentUser.id] })
+
+            // Snapshot de cada una por separado
             const previousUser = queryClient.getQueryData(["users", currentUser.id])
+            const previousTargetStats = queryClient.getQueryData(["userStats", userId])
+            const previousOwnStats = queryClient.getQueryData(["userStats", currentUser.id])
+
+            // Update optimista de mi lista de following (users)
             queryClient.setQueryData(["users", currentUser.id], (old) => {
                 if (!old) return old
                 return {
@@ -142,15 +151,42 @@ export function useFollowUser() {
                     following: [...(old.following ?? []), { userId }]
                 }
             })
-            return { previousUser }
+
+            // Update optimista: al usuario seguido le sube followersCount
+            queryClient.setQueryData(["userStats", userId], (old) => {
+                if (!old) return old
+                return {
+                    ...old,
+                    followersCount: (old.followersCount ?? 0) + 1
+                }
+            })
+
+            // Update optimista: a mí me sube followingCount
+            queryClient.setQueryData(["userStats", currentUser.id], (old) => {
+                if (!old) return old
+                return {
+                    ...old,
+                    followingCount: (old.followingCount ?? 0) + 1
+                }
+            })
+
+            return { previousUser, previousTargetStats, previousOwnStats }
         },
         onError: (err, userId, context) => {
             if (context?.previousUser) {
                 queryClient.setQueryData(["users", currentUser.id], context.previousUser)
             }
+            if (context?.previousTargetStats) {
+                queryClient.setQueryData(["userStats", userId], context.previousTargetStats)
+            }
+            if (context?.previousOwnStats) {
+                queryClient.setQueryData(["userStats", currentUser.id], context.previousOwnStats)
+            }
         },
-        onSettled: () => {
+        onSettled: (data, error, userId) => {
             queryClient.invalidateQueries({ queryKey: ["users", currentUser.id] })
+            queryClient.invalidateQueries({ queryKey: ["userStats", userId] })
+            queryClient.invalidateQueries({ queryKey: ["userStats", currentUser.id] })
         }
     });
 }
@@ -168,7 +204,13 @@ export function useUnfollowUser() {
         },
         onMutate: async (userId) => {
             await queryClient.cancelQueries({ queryKey: ["users", currentUser.id] })
+            await queryClient.cancelQueries({ queryKey: ["userStats", userId] })
+            await queryClient.cancelQueries({ queryKey: ["userStats", currentUser.id] })
+
             const previousUser = queryClient.getQueryData(["users", currentUser.id])
+            const previousTargetStats = queryClient.getQueryData(["userStats", userId])
+            const previousOwnStats = queryClient.getQueryData(["userStats", currentUser.id])
+
             queryClient.setQueryData(["users", currentUser.id], (old) => {
                 if (!old) return old
                 return {
@@ -176,15 +218,39 @@ export function useUnfollowUser() {
                     following: old.following.filter(f => f.userId !== userId)
                 }
             })
-            return { previousUser }
+
+            queryClient.setQueryData(["userStats", userId], (old) => {
+                if (!old) return old
+                return {
+                    ...old,
+                    followersCount: (old.followersCount ?? 0) - 1
+                }
+            })
+
+            queryClient.setQueryData(["userStats", currentUser.id], (old) => {
+                if (!old) return old
+                return {
+                    ...old,
+                    followingCount: (old.followingCount ?? 0) - 1
+                }
+            })
+            return { previousUser, previousTargetStats, previousOwnStats }
         },
         onError: (err, userId, context) => {
             if (context?.previousUser) {
                 queryClient.setQueryData(["users", currentUser.id], context.previousUser)
             }
+            if (context?.previousTargetStats) {
+                queryClient.setQueryData(["userStats", userId], context.previousTargetStats)
+            }
+            if (context?.previousOwnStats) {
+                queryClient.setQueryData(["userStats", currentUser.id], context.previousOwnStats)
+            }
         },
-        onSettled: () => {
+        onSettled: (data, error, userId) => {
             queryClient.invalidateQueries({ queryKey: ["users", currentUser.id] })
+            queryClient.invalidateQueries({ queryKey: ["userStats", userId] })
+            queryClient.invalidateQueries({ queryKey: ["userStats", currentUser.id] })
         }
     });
 }
