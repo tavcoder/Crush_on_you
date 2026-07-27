@@ -30,6 +30,7 @@ router.get("/media/:file", PublicationContoller.media); //cambio
 router.get("/feed/:page?", check.auth, PublicationContoller.feed);
 // Likes
 router.post("/:id/like", check.auth, PublicationContoller.toggleLike);
+router.post("/:id/bookmark", check.auth, PublicationContoller.toggleBookmark);
 
 // Comentarios
 router.post("/:id/comment", check.auth, PublicationContoller.addComment);

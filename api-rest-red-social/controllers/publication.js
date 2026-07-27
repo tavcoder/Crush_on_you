@@ -8,6 +8,7 @@ const Publication = require("../models/publication");
 
 // Importar servicios
 const followService = require("../services/followService");
+const bookmarkService = require("../services/bookmarkService");
 
 // Acciones de prueba
 const pruebaPublication = (req, res) => {
@@ -84,7 +85,7 @@ const user = (req, res) => {
     Publication.find({ "user": userId })
         .sort("-created_at")
         .populate('user', '-password -__v -role -email')
-        .paginate(page, itemsPerPage, (error, publications, total) => {
+        .paginate(page, itemsPerPage, async (error, publications, total) => {
             if (error || !publications || publications.length <= 0) {
                 return res.status(404).send({
                     status: "error",
@@ -92,13 +93,19 @@ const user = (req, res) => {
                 });
             }
 
+            const bookmarkSet = await bookmarkService.getUserBookmarkSet(req.user.id);
+            const publicationsWithBookmark = publications.map(pub => ({
+                ...pub.toObject(),
+                isBookmarked: bookmarkSet.has(pub._id.toString())
+            }));
+
             return res.status(200).send({
                 status: "success",
                 message: "Publicaciones del perfil de un usuario",
                 page,
                 total,
                 pages: Math.ceil(total / itemsPerPage),
-                publications
+                publications: publicationsWithBookmark
             });
         });
 }
@@ -174,6 +181,7 @@ const feed = async (req, res) => {
 
     try {
         const myFollows = await followService.followUserIds(req.user.id);
+        const bookmarkSet = await bookmarkService.getUserBookmarkSet(req.user.id);
 
         Publication.find({ user: myFollows.following })
             .populate("user", "-password -role -__v -email")
@@ -186,6 +194,11 @@ const feed = async (req, res) => {
                     });
                 }
 
+                const publicationsWithBookmark = publications.map(pub => ({
+                    ...pub.toObject(),
+                    isBookmarked: bookmarkSet.has(pub._id.toString())
+                }));
+
                 return res.status(200).send({
                     status: "success",
                     message: "Feed de publicaciones",
@@ -193,7 +206,7 @@ const feed = async (req, res) => {
                     total,
                     page,
                     pages: Math.ceil(total / itemsPerPage),
-                    publications
+                    publications: publicationsWithBookmark
                 });
             });
     } catch (error) {
@@ -345,7 +358,6 @@ const search = async (req, res) => {
     }
 
     try {
-        // 1. Encontrar ids de usuarios cuyo name o nick coincidan
         const matchingUserIds = (await User.find({
             $or: [
                 { name: { $regex: query, $options: 'i' } },
@@ -353,7 +365,8 @@ const search = async (req, res) => {
             ]
         }).select('_id')).map(user => user._id);
 
-        // 2. Buscar publicaciones cuyo texto coincida, o cuyo autor esté en la lista
+        const bookmarkSet = await bookmarkService.getUserBookmarkSet(req.user.id);
+
         Publication.find({
             $or: [
                 { text: { $regex: query, $options: 'i' } },
@@ -370,13 +383,18 @@ const search = async (req, res) => {
                     });
                 }
 
+                const publicationsWithBookmark = (publications ?? []).map(pub => ({
+                    ...pub.toObject(),
+                    isBookmarked: bookmarkSet.has(pub._id.toString())
+                }));
+
                 return res.status(200).send({
                     status: "success",
                     message: "Resultados de búsqueda",
                     page,
                     total,
                     pages: Math.ceil(total / itemsPerPage),
-                    publications: publications ?? []
+                    publications: publicationsWithBookmark
                 });
             });
     } catch (error) {
@@ -386,6 +404,36 @@ const search = async (req, res) => {
             message: "Error al buscar publicaciones",
             error: error.message
         });
+    }
+}
+
+// Guardar o quitar un post de guardados
+const toggleBookmark = async (req, res) => {
+    const publicationId = req.params.id;
+    const userId = req.user.id;
+
+    try {
+        const user = await User.findById(userId);
+        if (!user) {
+            return res.status(404).send({ status: "error", message: "Usuario no encontrado" });
+        }
+
+        const index = user.bookmarks.indexOf(publicationId);
+        if (index === -1) {
+            user.bookmarks.push(publicationId);
+        } else {
+            user.bookmarks.splice(index, 1);
+        }
+
+        await user.save();
+
+        return res.status(200).send({
+            status: "success",
+            message: index === -1 ? "Guardado agregado" : "Guardado quitado",
+            isBookmarked: index === -1
+        });
+    } catch (error) {
+        return res.status(500).send({ status: "error", message: "Error en toggle bookmark" });
     }
 }
 
@@ -402,5 +450,6 @@ module.exports = {
     toggleLike,
     addComment,
     removeComment,
-    listComments
+    listComments,
+    toggleBookmark,
 }
