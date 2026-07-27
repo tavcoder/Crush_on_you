@@ -82,6 +82,9 @@ export const createPost = async (data) => {
 export const likePost = (id) =>
     apiClient.call('POST', `publication/${id}/like`)
 
+export const bookmarkPost = (id) =>
+    apiClient.call('POST', `publication/${id}/bookmark`)
+
 /**
  * @param {string} id
  * @returns {Promise<import('../contracts/types.js').DeletePostResponseRaw>}

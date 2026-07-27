@@ -1,7 +1,7 @@
 // hooks/usePosts.js
 import { useContext } from "react";
 import { useMutation, useQueryClient, useInfiniteQuery } from '@tanstack/react-query'
-import { getPosts, createPost, getPostsByUser, searchPosts, likePost } from '../services/api/posts.api.js'
+import { getPosts, createPost, getPostsByUser, searchPosts, likePost, bookmarkPost } from '../services/api/posts.api.js'
 import { UserAuthContext } from "../context/UserAuthContext.jsx";
 
 /**
@@ -255,4 +255,67 @@ export function useLikePost() {
     });
 }
 
+export function useBookmarkPost() {
+    const queryClient = useQueryClient();
 
+    // Togglea un post individual, sin importar si viene suelto
+    // o dentro de una lista paginada { publications: [...] }
+    const toggleBookmarkInData = (data, postId) => {
+        if (!data) return data;
+
+        // Caso: respuesta paginada con array de publications
+        if (Array.isArray(data.pages)) {
+            return {
+                ...data,
+                pages: data.pages.map((page) => ({
+                    ...page,
+                    data: page.data.map((post) =>
+                        post._id === postId || post.id === postId
+                            ? {
+                                ...post,
+                                isBookmarked: !post.isBookmarked,
+                            }
+                            : post
+                    )
+                }))
+            };
+        }
+
+        // Caso: post individual (ej. ['posts', 'detail', postId])
+        if (data._id === postId || data.id === postId) {
+            return {
+                ...data,
+                isBookmarked: !data.isBookmarked,
+            };
+        }
+
+        return data;
+    };
+
+    return useMutation({
+        mutationFn: (postId) => bookmarkPost(postId),
+
+        onMutate: async (postId) => {
+            await queryClient.cancelQueries({ queryKey: ['posts'] });
+
+            const previousQueries = queryClient.getQueriesData({ queryKey: ['posts'] });
+
+            queryClient.setQueriesData({ queryKey: ['posts'] }, (old) =>
+                toggleBookmarkInData(old, postId)
+            );
+
+            return { previousQueries };
+        },
+
+        onError: (err, postId, context) => {
+            context?.previousQueries?.forEach(([queryKey, data]) => {
+                queryClient.setQueryData(queryKey, data);
+            });
+        },
+
+        onSettled: () => {
+           
+            queryClient.invalidateQueries({ queryKey: ['posts'] });
+        }
+    });
+}
