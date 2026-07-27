@@ -7,6 +7,7 @@ import { PostStats } from "../../molecules/postStats/PostStats.jsx"
 import { IconButton } from "../../ui/iconButton/IconButton.jsx"
 import { HighlightedText } from "../../ui/highlightedText/HighlightedText.jsx"
 import { getDateFormat, getUserFullNameFormat } from "../../../utils/formatUtils.js"
+import { useLikePost } from "../../../hooks/usePosts.js"
 import './PostCard.css'
 
 /** @typedef {import('../../../services/contracts/types.js').Post} Post */
@@ -17,17 +18,15 @@ import './PostCard.css'
  */
 
 export function PostCard({ post, query, isCurrentUser }) {
-    const [isLiked, setIsLiked] = useState(post.isLiked)
     const [isBookmarked, setIsBookmarked] = useState(post.isBookmarked)
-    const [likesCount, setLikesCount] = useState(post.stats.likesCount)
-    const handleLike = () => {
-        setIsLiked(prev => !prev)
-        setLikesCount(prev => isLiked ? prev - 1 : prev + 1)
-    }
-
+    const { mutate: likePost } = useLikePost()
     const handleBookmark = () => {
         setIsBookmarked(prev => !prev)
     }
+     const handleLike = () => {
+        likePost(post.id)
+    }
+    
     const {
         author,
         createdAt,
@@ -35,10 +34,13 @@ export function PostCard({ post, query, isCurrentUser }) {
         profileDetails,
         content,
         stats,
+        isLiked,
+        stats: { likesCount } = {},
     } = post || {};
 
     const primaryText = getUserFullNameFormat(author);
     const secondaryText = getDateFormat(createdAt);
+
     return (
         <article className='card post-card'>
             <UserInfo
