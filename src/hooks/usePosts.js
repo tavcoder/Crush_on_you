@@ -1,7 +1,7 @@
 // hooks/usePosts.js
 import { useContext } from "react";
 import { useMutation, useQueryClient, useInfiniteQuery } from '@tanstack/react-query'
-import { getPosts, createPost, getPostsByUser, searchPosts } from '../services/api/posts.api.js'
+import { getPosts, createPost, getPostsByUser, searchPosts, likePost } from '../services/api/posts.api.js'
 import { UserAuthContext } from "../context/UserAuthContext.jsx";
 
 /**
@@ -176,3 +176,83 @@ export function useSearchPosts(queryText, { enabled } = {}) {
         error,
     }
 }
+
+export function useLikePost() {
+    const queryClient = useQueryClient();
+
+    // Togglea un post individual, sin importar si viene suelto
+    // o dentro de una lista paginada { publications: [...] }
+    const toggleLikeInData = (data, postId) => {
+        if (!data) return data;
+
+        // Caso: respuesta paginada con array de publications
+        if (Array.isArray(data.pages)) {
+            return {
+                ...data,
+                pages: data.pages.map((page) => ({
+                    ...page,
+                    data: page.data.map((post) =>
+                        post._id === postId || post.id === postId
+                            ? {
+                                ...post,
+                                isLiked: !post.isLiked,
+                                stats: {
+                                    ...post.stats,
+                                    likesCount: post.isLiked ? post.stats.likesCount - 1 : post.stats.likesCount + 1
+                                }
+                            }
+                            : post
+                    )
+                }))
+            };
+        }
+
+        // Caso: post individual (ej. ['posts', 'detail', postId])
+        if (data._id === postId || data.id === postId) {
+            return {
+                ...data,
+                isLiked: !data.isLiked,
+                stats: {
+                    ...data.stats,
+                    likesCount: data.isLiked ? data.stats.likesCount - 1 : data.stats.likesCount + 1
+                }
+            };
+        }
+
+        return data;
+    };
+
+    return useMutation({
+        mutationFn: (postId) => likePost(postId),
+
+        onMutate: async (postId) => {
+            // Cancela cualquier query relacionada a posts que esté en vuelo
+            await queryClient.cancelQueries({ queryKey: ['posts'] });
+
+            // Snapshot de TODAS las queries bajo 'posts' (sin importar cuál esté montada)
+            const previousQueries = queryClient.getQueriesData({ queryKey: ['posts'] });
+
+            // Aplica el toggle optimista en cualquier query que contenga este post
+            queryClient.setQueriesData({ queryKey: ['posts'] }, (old) =>
+                toggleLikeInData(old, postId)
+            );
+
+            return { previousQueries };
+        },
+
+        onError: (err, postId, context) => {
+            // Restaura cada query exactamente a su snapshot previo
+            context?.previousQueries?.forEach(([queryKey, data]) => {
+                queryClient.setQueryData(queryKey, data);
+            });
+        },
+
+        onSettled: () => {
+            // Revalida todo lo relacionado a posts para corregir
+            // cualquier drift (ej. likesCount desincronizado)
+            queryClient.invalidateQueries({ queryKey: ['posts'] });
+        }
+    });
+}
+
+
