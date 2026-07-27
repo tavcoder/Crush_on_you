@@ -33,6 +33,10 @@ const UserSchema = Schema({
         type: String,
         default: "role_user"
     },
+    bookmarks: [{
+        type: Schema.ObjectId,
+        ref: "Publication"
+    }],
     image: {
         type: String,
         default: "default.png"
