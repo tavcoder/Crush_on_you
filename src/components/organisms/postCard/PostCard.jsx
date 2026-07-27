@@ -1,5 +1,4 @@
 /*PostCard.jsx*/
-import { useState } from "react"
 import { MoreHorizontal } from "lucide-react";
 import { UserInfo } from "../../molecules/userInfo/UserInfo.jsx"
 import { PostMedia } from "../../molecules/postMedia/PostMedia.jsx"
@@ -7,7 +6,7 @@ import { PostStats } from "../../molecules/postStats/PostStats.jsx"
 import { IconButton } from "../../ui/iconButton/IconButton.jsx"
 import { HighlightedText } from "../../ui/highlightedText/HighlightedText.jsx"
 import { getDateFormat, getUserFullNameFormat } from "../../../utils/formatUtils.js"
-import { useLikePost } from "../../../hooks/usePosts.js"
+import { useLikePost, useBookmarkPost } from "../../../hooks/usePosts.js"
 import './PostCard.css'
 
 /** @typedef {import('../../../services/contracts/types.js').Post} Post */
@@ -18,10 +17,11 @@ import './PostCard.css'
  */
 
 export function PostCard({ post, query, isCurrentUser }) {
-    const [isBookmarked, setIsBookmarked] = useState(post.isBookmarked)
     const { mutate: likePost } = useLikePost()
+    const { mutate: bookmarkPost } = useBookmarkPost()
+
     const handleBookmark = () => {
-        setIsBookmarked(prev => !prev)
+        bookmarkPost(post.id)
     }
      const handleLike = () => {
         likePost(post.id)
@@ -36,6 +36,8 @@ export function PostCard({ post, query, isCurrentUser }) {
         stats,
         isLiked,
         stats: { likesCount } = {},
+        isBookmarked,
+
     } = post || {};
 
     const primaryText = getUserFullNameFormat(author);
