@@ -33,7 +33,7 @@ export function adaptPost(raw, currentUserId) {
         isLiked: Array.isArray(raw.likes) && !!currentUserId
             ? raw.likes.map(String).includes(String(currentUserId))
             : false,
-        isBookmarked: false,
+        isBookmarked: !!raw.isBookmarked,
         createdAt: raw.created_at ?? new Date().toISOString(),
     };
 }
