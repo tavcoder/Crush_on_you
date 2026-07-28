@@ -31,11 +31,15 @@ function getNextPageParam(lastPage) {
  */
 export function useCreatePost() {
     const queryClient = useQueryClient()
+    const { currentUser } = useContext(UserAuthContext)
 
     const mutation = useMutation({
         mutationFn: createPost,
         onSuccess: (response) => {
-            const newPost = response.publicationStored
+            const newPost = {
+                ...response.publicationStored,
+                author: currentUser
+            }
 
             queryClient.setQueryData(['posts', 'feed'], (old) => {
                 if (!old) {
@@ -56,6 +60,10 @@ export function useCreatePost() {
 
             queryClient.invalidateQueries({ queryKey: ['posts', 'byUser'] })
             queryClient.invalidateQueries({ queryKey: ['posts', 'detail'] })
+
+            if (response.imageUploadFailed) {
+                alert('Your post was published successfully, but the image couldn\'t be uploaded. Please try uploading the image again.')
+            }
         },
     })
 
@@ -314,7 +322,7 @@ export function useBookmarkPost() {
         },
 
         onSettled: () => {
-           
+
             queryClient.invalidateQueries({ queryKey: ['posts'] });
         }
     });
