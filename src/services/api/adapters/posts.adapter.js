@@ -7,7 +7,6 @@ import { adaptUser } from './users.adapter.js';  // ← importa el adapter de us
  * @returns {import('../../contracts/types.js').Post}
  */
 export function adaptPost(raw, currentUserId) {
-    const API_BASE = import.meta.env.VITE_API_URL?.replace('/api', '') ?? 'http://localhost:3900';
 
     if (!raw || typeof raw !== 'object') {
         console.warn('adaptPost: recibió valor inválido', raw);
@@ -22,9 +21,7 @@ export function adaptPost(raw, currentUserId) {
         authorId: author?.id ?? raw.user?._id ?? '',
         author,  // ← adaptado, no crudo
         content: raw.text ?? '',
-        images: raw.file
-            ? [`${API_BASE}/uploads/publications/${raw.file}`]
-            : [],
+        images: raw.file ? [raw.file] : [],
         stats: {
             likesCount: Array.isArray(raw.likes) ? raw.likes.length : 0,
             commentsCount: Array.isArray(raw.comments) ? raw.comments.length : 0,
