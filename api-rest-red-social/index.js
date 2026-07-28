@@ -1,4 +1,5 @@
 // Importar dependencias
+require('dotenv').config();
 const connection = require("./database/connection");
 const express = require("express");
 const cors = require("cors");
@@ -18,7 +19,7 @@ app.use(cors());
 
 // Convertir los datos del body a objetos js
 app.use(express.json());
-app.use(express.urlencoded({extended: true}));
+app.use(express.urlencoded({ extended: true }));
 
 // Servir archivos estáticos desde uploads
 app.use("/uploads", express.static("uploads"));
@@ -34,7 +35,7 @@ app.use("/api/follow", FollowRoutes);
 
 // Ruta de prueba
 app.get("/ruta-prueba", (req, res) => {
-    
+
     return res.status(200).json(
         {
             "id": 1,
@@ -45,7 +46,14 @@ app.get("/ruta-prueba", (req, res) => {
 
 })
 
-// Poner servidor a escuchar peticiones http
+// Manejador de errores global — captura cualquier error no atrapado en middlewares/controllers
+app.use((err, req, res, next) => {
+    console.log('###### ERROR HANDLER GLOBAL ######')
+    console.log(err)
+    console.log('STACK:', err?.stack)
+    res.status(500).send({ status: "error", message: "Error interno del servidor" })
+})
+
 app.listen(puerto, () => {
     console.log("Servidor de node corriendo en el puerto: ", puerto);
 });
