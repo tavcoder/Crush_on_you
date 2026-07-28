@@ -43,7 +43,7 @@ export const searchPosts = ({ search, page = 1 }) =>
         .get(`publication/search/${encodeURIComponent(search)}/${page}`)
         .then(res => adaptPostList(res))
 
-        
+
 const sanitizeFile = (file) => {
     const ext = file.name.split('.').pop()
     const baseName = file.name.replace(/\./g, '-').replace(new RegExp(`-${ext}$`), '')
@@ -62,17 +62,27 @@ export const createPost = async (data) => {
         text: data.content,
     })
 
-    const publication = adaptPost(res.publicationStored)
+    let finalPublication = res.publicationStored
+    let imageUploadFailed = false
 
     if (data.files && data.files.length > 0) {
-        // TODO: [DEUDA TÉCNICA] El backend no actualiza la imagen en la publicación.
-        // Investigar por qué Publication.findOneAndUpdate no encuentra el documento.
-        // El upload llega correctamente (file0 en payload) pero no se persiste.
-        const cleanFile = sanitizeFile(data.files[0])
-        await apiClient.upload(`publication/upload/${publication.id}`, cleanFile)
+        try {
+            const cleanFile = sanitizeFile(data.files[0])
+            const uploadRes = await apiClient.upload(`publication/upload/${res.publicationStored._id}`, cleanFile)
+            finalPublication = uploadRes.publication
+        } catch (error) {
+            console.error('No se pudo subir la imagen del post:', error)
+            imageUploadFailed = true
+            // finalPublication se queda con el post original (sin imagen),
+            // el post en sí ya está guardado correctamente en el paso anterior
+        }
     }
 
-    return { ...res, publicationStored: publication }
+    return {
+        ...res,
+        publicationStored: adaptPost(finalPublication),
+        imageUploadFailed
+    }
 }
 
 /**
