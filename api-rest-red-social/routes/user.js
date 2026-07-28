@@ -1,20 +1,21 @@
 const express = require("express");
 const router = express.Router();
 const multer = require("multer");
+const { CloudinaryStorage } = require('multer-storage-cloudinary');
+const cloudinary = require('../database/cloudinary');
+
+const avatarStorage = new CloudinaryStorage({
+    cloudinary: cloudinary,
+    params: {
+        folder: 'avatars',
+        allowed_formats: ['png', 'jpg', 'jpeg', 'gif'],
+    },
+});
+
+const uploads = multer({ storage: avatarStorage });
 const UserContoller = require("../controllers/user");
 const check = require("../middlewares/auth");
 
-// Configuracion de subida
-const storage = multer.diskStorage({
-    destination: (req, file, cb) => {
-        cb(null, "uploads/avatars/")
-    },
-    filename: (req, file, cb) => {
-        cb(null, "avatar-" + Date.now() + "-" + file.originalname);
-    }
-});
-
-const uploads = multer({ storage });
 
 // Definir rutas
 router.get("/prueba-usuario", check.auth, UserContoller.pruebaUser);
