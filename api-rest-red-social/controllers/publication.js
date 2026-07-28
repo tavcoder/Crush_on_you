@@ -121,30 +121,16 @@ const upload = (req, res) => {
         });
     }
 
-    let image = req.file.originalname;
-    const extension = image.split(".")[1];
-
-    if (!["png", "jpg", "jpeg", "gif"].includes(extension)) {
-        fs.unlinkSync(req.file.path);
-        return res.status(400).send({
-            status: "error",
-            message: "Extensión del fichero invalida"
-        });
-    }
-
+    // req.file.path ahora es la URL pública de Cloudinary, no un path local
     Publication.findOneAndUpdate(
         { "user": req.user.id, "_id": publicationId },
-        { file: req.file.filename },
+        { file: req.file.path },
         { new: true },
         (error, publicationUpdated) => {
-            console.log('DEBUG upload → publicationId:', publicationId, typeof publicationId)
-            console.log('DEBUG upload → req.user.id:', req.user.id, typeof req.user.id)
-            console.log('DEBUG upload → error:', error)
-            console.log('DEBUG upload → publicationUpdated:', publicationUpdated)
             if (error || !publicationUpdated) {
                 return res.status(500).send({
                     status: "error",
-                    message: "Error en la subida del avatar"
+                    message: "Error en la subida de la imagen"
                 });
             }
 
@@ -157,22 +143,6 @@ const upload = (req, res) => {
     );
 }
 
-// Devolver archivos multimedia imagenes
-const media = (req, res) => {
-    const file = req.params.file;
-    const filePath = "./uploads/publications/" + file;
-
-    fs.stat(filePath, (error, exists) => {
-        if (!exists) {
-            return res.status(404).send({
-                status: "error",
-                message: "No existe la imagen"
-            });
-        }
-
-        return res.sendFile(path.resolve(filePath));
-    });
-}
 
 // Listar todas las publicaciones (FEED)
 const feed = async (req, res) => {
@@ -445,7 +415,6 @@ module.exports = {
     remove,
     user,
     upload,
-    media,
     feed,
     toggleLike,
     addComment,
