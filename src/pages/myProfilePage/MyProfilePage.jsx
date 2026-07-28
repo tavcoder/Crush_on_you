@@ -18,7 +18,6 @@ export default function MyProfilePage() {
         <section className="card my-profile-page" aria-labelledby="edit-profile-title">
             <h1 id="edit-profile-title">Edit Profile</h1>
             <AvatarUploader
-                userId={currentUser.id}
                 avatarUrl={currentUser.avatarUrl}
                 userName={currentUser.userName}
                 userSurName={currentUser.userSurName}
