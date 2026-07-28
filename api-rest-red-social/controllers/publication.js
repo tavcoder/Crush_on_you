@@ -79,7 +79,7 @@ const remove = (req, res) => {
 // listar publicaciones de un usuario
 const user = (req, res) => {
     const userId = req.params.id;
-    let page = req.params.page ? req.params.page : 1;
+    let page = parseInt(req.params.page) || 1;
     const itemsPerPage = 5;
 
     Publication.find({ "user": userId })
@@ -128,6 +128,8 @@ const upload = (req, res) => {
         { new: true },
         (error, publicationUpdated) => {
             if (error || !publicationUpdated) {
+                console.log('###### UPLOAD CATCH REACHED ######')
+                console.log('UPLOAD ERROR DETAIL:', JSON.stringify(error, null, 2))
                 return res.status(500).send({
                     status: "error",
                     message: "Error en la subida de la imagen"
@@ -146,14 +148,13 @@ const upload = (req, res) => {
 
 // Listar todas las publicaciones (FEED)
 const feed = async (req, res) => {
-    let page = req.params.page ? req.params.page : 1;
+    let page = parseInt(req.params.page) || 1;   // de paso, el fix de paginación pendiente
     let itemsPerPage = 5;
 
     try {
         const myFollows = await followService.followUserIds(req.user.id);
-        const bookmarkSet = await bookmarkService.getUserBookmarkSet(req.user.id);
 
-        Publication.find({ user: myFollows.following })
+        Publication.find({ user: { $in: [...myFollows.following, req.user.id] } })
             .populate("user", "-password -role -__v -email")
             .sort("-created_at")
             .paginate(page, itemsPerPage, (error, publications, total) => {
@@ -164,11 +165,6 @@ const feed = async (req, res) => {
                     });
                 }
 
-                const publicationsWithBookmark = publications.map(pub => ({
-                    ...pub.toObject(),
-                    isBookmarked: bookmarkSet.has(pub._id.toString())
-                }));
-
                 return res.status(200).send({
                     status: "success",
                     message: "Feed de publicaciones",
@@ -176,7 +172,7 @@ const feed = async (req, res) => {
                     total,
                     page,
                     pages: Math.ceil(total / itemsPerPage),
-                    publications: publicationsWithBookmark
+                    publications
                 });
             });
     } catch (error) {
@@ -317,7 +313,7 @@ const listComments = async (req, res) => {
 // Buscar publicaciones por texto o autor
 const search = async (req, res) => {
     const query = req.params.query;
-    let page = req.params.page ? req.params.page : 1;
+    let page = parseInt(req.params.page) || 1;
     const itemsPerPage = 5;
 
     if (!query || query.trim().length < 2) {
