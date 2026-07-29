@@ -8,6 +8,8 @@
     /* sin esto, max-width no tiene efecto útil */
     margin-inline: auto;
     /* centra el layout en pantallas anchas */
+    gap: var(--space-5);
+    /* separa NavBar de layout__body */
 }
 
 .layout__body {
@@ -22,4 +24,10 @@
     /* ocupa todo el espacio disponible entre los sidebars */
     min-width: 0;
     /* evita overflow en contenido largo — flex gotcha clásico */
+}
+
+@media (max-width: 767px) {
+    .layout__main {
+        padding-bottom: calc(var(--bottom-nav-height) + env(safe-area-inset-bottom) + var(--space-4));
+    }
 }
