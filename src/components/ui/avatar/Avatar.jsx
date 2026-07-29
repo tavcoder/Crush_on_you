@@ -28,7 +28,7 @@ export function Avatar({ user, isCurrentUser = false, avatarSize = "sm", hasStor
     return (
         <div className={`${className} avatar avatar--${avatarSize} avatar--${modifier} ${ringClass}`}>
             {avatarUrl && !imgError
-                ? <img
+                ? <img className="avatar__image"
                     src={avatarUrl}
                     alt={`${name} ${userSurName}`}
                     onError={() => setImgError(true)}
