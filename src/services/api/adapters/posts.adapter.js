@@ -27,6 +27,13 @@ export function adaptPost(raw, currentUserId) {
             commentsCount: Array.isArray(raw.comments) ? raw.comments.length : 0,
             sharesCount: 0,
         },
+        // ⚠️ currentUserId es OBLIGATORIO recibirlo como parámetro — el backend
+        // no calcula isLiked. raw.likes es la lista de IDs de TODOS los usuarios
+        // que dieron like (dato del post, no de la sesión). Para saber si
+        // el usuario actual dio like, hay que buscarlo en esa lista aquí.
+        // Si algún hook consumidor no pasa currentUserId, isLiked cae
+        // silenciosamente en `false` para todos los posts (bug ya visto
+        // en useUserPosts — TODO CERRADO).
         isLiked: Array.isArray(raw.likes) && !!currentUserId
             ? raw.likes.map(String).includes(String(currentUserId))
             : false,

@@ -118,6 +118,7 @@ export function usePosts() {
  */
 
 export function useUserPosts(userId) {
+    const { currentUser } = useContext(UserAuthContext)
     const {
         data,
         fetchNextPage,
@@ -128,7 +129,7 @@ export function useUserPosts(userId) {
         error,
     } = useInfiniteQuery({
         queryKey: ['posts', 'byUser', userId],
-        queryFn: ({ pageParam }) => getPostsByUser(userId, { page: pageParam }),
+        queryFn: ({ pageParam }) => getPostsByUser(userId, { page: pageParam }, currentUser?.id), // ← 3er arg
         getNextPageParam,
         initialPageParam: 1,
         enabled: !!userId && typeof userId === 'string',
@@ -155,6 +156,8 @@ export function useUserPosts(userId) {
  * }} UseSearchPostsResult
  */
 export function useSearchPosts(queryText, { enabled } = {}) {
+    const { currentUser } = useContext(UserAuthContext)
+
     const {
         data,
         fetchNextPage,
@@ -165,7 +168,7 @@ export function useSearchPosts(queryText, { enabled } = {}) {
         error,
     } = useInfiniteQuery({
         queryKey: ['posts', 'search', queryText],
-        queryFn: ({ pageParam }) => searchPosts({ search: queryText, page: pageParam }),
+        queryFn: ({ pageParam }) => searchPosts({ search: queryText, page: pageParam },currentUser?.id), // ← 2do arg
         getNextPageParam,
         initialPageParam: 1,
         enabled: enabled ?? queryText.trim().length >= 2,

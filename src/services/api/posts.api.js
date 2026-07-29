@@ -38,10 +38,10 @@ export const getPostsByUser = (userId, { page = 1 } = {}, currentUserId) =>
         })
 
 
-export const searchPosts = ({ search, page = 1 }) =>
+export const searchPosts = ({ search, page = 1 }, currentUserId) =>
     apiClient
         .get(`publication/search/${encodeURIComponent(search)}/${page}`)
-        .then(res => adaptPostList(res))
+        .then(res => adaptPostList(res, currentUserId))
 
 
 const sanitizeFile = (file) => {
