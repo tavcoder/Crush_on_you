@@ -31,7 +31,7 @@ export default function FeedPage() {
             <CreatePost user={currentUser} onPostCreated={addPost} isSubmitting={isAddingPost} />
             <SortByCard
                 onChange={undefined} //TODO: consumirá un hook useSortPosts que decide la estrategia de fetching.
-                disabled={undefined} />
+                disabled={true} />
 
             <PostFeed
                 query={query}
