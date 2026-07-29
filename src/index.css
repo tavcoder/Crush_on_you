@@ -74,6 +74,7 @@
   --space-11: 2.75rem;
   --space-12: 3rem;
 
+
   /* Radius */
   --radius-sm: 0.5rem;
   --radius-md: 0.75rem;
@@ -110,6 +111,7 @@
   --max-width-sidebar: 280px;
   --max-width-feed: 680px;
   --max-width-app: 1200px;
+  --bottom-nav-height: 4rem;
 
   /* ========================================
      SEMANTIC TOKENS ([type]-[role]-[variant])
