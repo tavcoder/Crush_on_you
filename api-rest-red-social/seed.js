@@ -1,9 +1,10 @@
 // seed.js
+const dns = require('dns');
+dns.setServers(['8.8.8.8', '1.1.1.1']);
 const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
 const { faker } = require('@faker-js/faker');
 
-// Asegúrate de usar tus modelos
 const User = require('./models/user');
 const Publication = require('./models/publication');
 const Follow = require('./models/follow');
@@ -51,24 +52,21 @@ async function createFakePublications(users, countPerUser = 3) {
     ];
 
     for (const user of users) {
-        // Obtener seguidores del usuario actual
         const followersData = await Follow.find({ followed: user._id }).lean();
         const followersIds = followersData.map(f => f.user.toString());
 
         for (let i = 0; i < countPerUser; i++) {
             const randomImage = techImages[Math.floor(Math.random() * techImages.length)];
 
-            // Crear publicación básica
             const publication = new Publication({
                 text: faker.lorem.paragraph(),
                 user: user._id,
                 file: randomImage,
-                created_at: new Date(),
+                created_at: faker.date.recent({ days: 30 }), // ← fecha aleatoria, no siempre "ahora"
                 likes: [],
                 comments: []
             });
 
-            // Likes aleatorios de seguidores
             const maxLikes = Math.min(5, followersIds.length);
             const likeCount = Math.floor(Math.random() * (maxLikes + 1));
             const usedLikes = new Set();
@@ -78,7 +76,6 @@ async function createFakePublications(users, countPerUser = 3) {
             }
             publication.likes = Array.from(usedLikes);
 
-            // Comentarios aleatorios de seguidores
             const maxComments = Math.min(3, followersIds.length);
             const commentCount = Math.floor(Math.random() * (maxComments + 1));
             for (let j = 0; j < commentCount; j++) {
