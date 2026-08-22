@@ -148,11 +148,12 @@ const upload = (req, res) => {
 
 // Listar todas las publicaciones (FEED)
 const feed = async (req, res) => {
-    let page = parseInt(req.params.page) || 1;   // de paso, el fix de paginación pendiente
+    let page = parseInt(req.params.page) || 1;
     let itemsPerPage = 5;
 
     try {
         const myFollows = await followService.followUserIds(req.user.id);
+        const bookmarkSet = await bookmarkService.getUserBookmarkSet(req.user.id);
 
         Publication.find({ user: { $in: [...myFollows.following, req.user.id] } })
             .populate("user", "-password -role -__v -email")
@@ -165,6 +166,11 @@ const feed = async (req, res) => {
                     });
                 }
 
+                const publicationsWithBookmark = publications.map(pub => ({
+                    ...pub.toObject(),
+                    isBookmarked: bookmarkSet.has(pub._id.toString())
+                }));
+
                 return res.status(200).send({
                     status: "success",
                     message: "Feed de publicaciones",
@@ -172,7 +178,7 @@ const feed = async (req, res) => {
                     total,
                     page,
                     pages: Math.ceil(total / itemsPerPage),
-                    publications
+                    publications: publicationsWithBookmark
                 });
             });
     } catch (error) {
