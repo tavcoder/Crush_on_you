@@ -37,6 +37,8 @@ export function adaptPost(raw, currentUserId) {
         isLiked: Array.isArray(raw.likes) && !!currentUserId
             ? raw.likes.map(String).includes(String(currentUserId))
             : false,
+        // isBookmarked ya viene calculado por el backend (bookmarkService.getUserBookmarkSet
+        // aplicado en feed/user/search) — no se recalcula en frontend.
         isBookmarked: !!raw.isBookmarked,
         createdAt: raw.created_at ?? new Date().toISOString(),
     };
@@ -49,6 +51,7 @@ export function adaptPost(raw, currentUserId) {
  * @param {Object} [response.pagination]
  * @param {number} [response.pagination.currentPage]
  * @param {number} [response.pagination.totalPages]
+ * @param {string} [currentUserId]
  * @returns {import('../../contracts/types.js').PaginatedPosts}
  */
 export function adaptPostList(response, currentUserId) {

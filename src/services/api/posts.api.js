@@ -37,12 +37,15 @@ export const getPostsByUser = (userId, { page = 1 } = {}, currentUserId) =>
             throw err
         })
 
-
+/**
+* @param {{ search: string, page?: number }} params
+* @param {string} [currentUserId]
+* @returns {Promise<import('../contracts/types.js').PaginatedPosts>}
+*/
 export const searchPosts = ({ search, page = 1 }, currentUserId) =>
     apiClient
         .get(`publication/search/${encodeURIComponent(search)}/${page}`)
         .then(res => adaptPostList(res, currentUserId))
-
 
 const sanitizeFile = (file) => {
     const ext = file.name.split('.').pop()
@@ -80,6 +83,10 @@ export const createPost = async (data) => {
 
     return {
         ...res,
+        // ⚠️ adaptPost se llama SIN currentUser a propósito, no es un bug:
+        // un post recién creado no puede tener isLiked ni isBookmarked en true
+        // (no existe forma de haberle dado like/bookmark antes de que exista).
+        // isLiked/isBookmarked caen en su default (false), que es el valor correcto.
         publicationStored: adaptPost(finalPublication),
         imageUploadFailed
     }

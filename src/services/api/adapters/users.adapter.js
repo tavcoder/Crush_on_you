@@ -79,6 +79,11 @@ export function adaptUser(raw) {
         followers,
         interests,
         profileDetails,
+        // TODO: [DEUDA TÉCNICA] bookmarks se mapea aquí para una futura vista de
+        // "posts guardados" del perfil. No se usa actualmente en ningún hook/adapter
+        // — isBookmarked por post ahora se calcula 100% en backend (ver
+        // posts.adapter.js). Si esta feature no se construye, eliminar este campo.
+        bookmarks: Array.isArray(raw.bookmarks) ? raw.bookmarks.filter(id => typeof id === 'string') : [],
     };
 }
 

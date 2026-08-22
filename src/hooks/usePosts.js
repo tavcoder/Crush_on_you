@@ -93,6 +93,7 @@ export function usePosts() {
     } = useInfiniteQuery({
         queryKey: ['posts', 'feed'],
         queryFn: ({ pageParam }) => getPosts({ page: pageParam }, currentUser?.id),
+
         getNextPageParam,
         initialPageParam: 1,
     })
@@ -168,7 +169,7 @@ export function useSearchPosts(queryText, { enabled } = {}) {
         error,
     } = useInfiniteQuery({
         queryKey: ['posts', 'search', queryText],
-        queryFn: ({ pageParam }) => searchPosts({ search: queryText, page: pageParam },currentUser?.id), // ← 2do arg
+        queryFn: ({ pageParam }) => searchPosts({ search: queryText, page: pageParam }, currentUser?.id), // ← 2do arg
         getNextPageParam,
         initialPageParam: 1,
         enabled: enabled ?? queryText.trim().length >= 2,
