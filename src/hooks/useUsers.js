@@ -115,8 +115,8 @@ export function useUpdateAvatar() {
         mutationFn: (file) => uploadAvatar(file),
         onSuccess: (updatedUser) => {
             queryClient.setQueryData(["users", updatedUser.id], updatedUser);
-            // invalida perfiles de usuarios si los tiene
             queryClient.invalidateQueries({ queryKey: ["users"] });
+            queryClient.invalidateQueries({ queryKey: ["posts"] });
         },
     });
 }
@@ -163,31 +163,31 @@ export function useFollowUser() {
 
             // Update optimista: a mí me sube followingCount
             queryClient.setQueryData(["userStats", currentUser.id], (old) => {
-        if (!old) return old
-        return {
-            ...old,
-            followingCount: (old.followingCount ?? 0) + 1
-        }
-    })
+                if (!old) return old
+                return {
+                    ...old,
+                    followingCount: (old.followingCount ?? 0) + 1
+                }
+            })
 
             return { previousUser, previousTargetStats, previousOwnStats }
-},
-onError: (err, userId, context) => {
-    if (context?.previousUser) {
-        queryClient.setQueryData(["users", currentUser.id], context.previousUser)
-    }
-    if (context?.previousTargetStats) {
-        queryClient.setQueryData(["userStats", userId], context.previousTargetStats)
-    }
-    if (context?.previousOwnStats) {
-        queryClient.setQueryData(["userStats", currentUser.id], context.previousOwnStats)
-    }
-},
-    onSettled: (data, error, userId) => {
-        queryClient.invalidateQueries({ queryKey: ["users", currentUser.id] })
-        queryClient.invalidateQueries({ queryKey: ["userStats", userId] })
-        queryClient.invalidateQueries({ queryKey: ["userStats", currentUser.id] })
-    }
+        },
+        onError: (err, userId, context) => {
+            if (context?.previousUser) {
+                queryClient.setQueryData(["users", currentUser.id], context.previousUser)
+            }
+            if (context?.previousTargetStats) {
+                queryClient.setQueryData(["userStats", userId], context.previousTargetStats)
+            }
+            if (context?.previousOwnStats) {
+                queryClient.setQueryData(["userStats", currentUser.id], context.previousOwnStats)
+            }
+        },
+        onSettled: (data, error, userId) => {
+            queryClient.invalidateQueries({ queryKey: ["users", currentUser.id] })
+            queryClient.invalidateQueries({ queryKey: ["userStats", userId] })
+            queryClient.invalidateQueries({ queryKey: ["userStats", currentUser.id] })
+        }
     });
 }
 
