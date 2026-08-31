@@ -19,12 +19,10 @@ export function Layout() {
     const { stories, onStorySeen } = useStories()
     const { pathname } = useLocation()
     const navigate = useNavigate()
-
     const handleUserClick = (user) => {
         setSelectedUser(user)
         navigate('/timeline')
     }
-
     useEffect(() => {
         if (pathname === '/feed') {
             setSelectedUser(null)

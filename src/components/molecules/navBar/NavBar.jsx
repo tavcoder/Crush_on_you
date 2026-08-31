@@ -1,6 +1,6 @@
 /*NavBar.jsx*/
 import { Link, useLocation } from 'react-router'
-import { Bell, Search } from "lucide-react";
+import { Bell} from "lucide-react";
 import { Input } from '../../ui/input/Input.jsx'
 import { BrandLogo } from '../../ui/brandLogo/BrandLogo.jsx'
 import { IconButton } from '../../ui/iconButton/IconButton.jsx'
