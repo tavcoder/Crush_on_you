@@ -187,6 +187,7 @@ export function useFollowUser() {
             queryClient.invalidateQueries({ queryKey: ["users", currentUser.id] })
             queryClient.invalidateQueries({ queryKey: ["userStats", userId] })
             queryClient.invalidateQueries({ queryKey: ["userStats", currentUser.id] })
+            queryClient.invalidateQueries({ queryKey: ["posts"] })
         }
     });
 }
