@@ -48,9 +48,17 @@ export const searchPosts = ({ search, page = 1 }, currentUserId) =>
         .then(res => adaptPostList(res, currentUserId))
 
 const sanitizeFile = (file) => {
-    const ext = file.name.split('.').pop()
-    const baseName = file.name.replace(/\./g, '-').replace(new RegExp(`-${ext}$`), '')
-    return new File([file], `${baseName}.${ext}`, { type: file.type })
+    const lastDotIndex = file.name.lastIndexOf('.')
+    const hasExtension = lastDotIndex > 0 // > 0, no >= 0, para no tratar ".gitignore" como "sin nombre + ext gitignore"
+
+    const rawBaseName = hasExtension ? file.name.slice(0, lastDotIndex) : file.name
+    const ext = hasExtension ? file.name.slice(lastDotIndex + 1) : ''
+
+    // Limpia el nombre base de cualquier carácter no alfanumérico (incluye puntos)
+    const safeBaseName = rawBaseName.replace(/[^a-zA-Z0-9-_]/g, '-')
+
+    const finalName = hasExtension ? `${safeBaseName}.${ext}` : safeBaseName
+    return new File([file], finalName, { type: file.type })
 }
 /**
  * Crea una publicación de texto y opcionalmente sube una imagen.

@@ -16,6 +16,12 @@ export const getUsers = ({ page = 1 } = {}) =>
  * @param {string} id
  * @returns {Promise<import('../contracts/types.js').User>}
  */
+/**
+ * ⚠️ El backend devuelve el campo de seguidores en singular: `res.follower`
+ * (no `res.followers`). Confirmado contra el endpoint real — no es un typo
+ * es así como lo nombra la API. Si este endpoint cambia de forma,
+ * revisar aquí primero antes de asumir que el frontend tiene el bug.
+ */
 export const getUserById = (id) =>
     apiClient
         .get(`user/profile/${id}`)

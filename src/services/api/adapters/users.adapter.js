@@ -14,12 +14,17 @@ function normalizeFollowItem(item) {
  * @param {{ userId: string, following: number, followed: number, publications: number }} raw
  * @returns {import('../contracts/types.js').UserStats}
  */
-export const adaptUserStats = (raw) => ({
-    userId: raw.userId,
-    followersCount: raw.followed,   // gente que me sigue
-    followingCount: raw.following,  // gente que sigo
-    postsCount: raw.publications,
-});
+export const adaptUserStats = (raw) => {
+    const followersCount = raw.followed;   // gente que ME sigue a mí
+    const followingCount = raw.following;  // gente que YO sigo
+
+    return {
+        userId: raw.userId,
+        followersCount,
+        followingCount,
+        postsCount: raw.publications,
+    };
+};
 /**
  * @param {import('../../contracts/types.js').UserRaw} raw
  * @returns {import('../../contracts/types.js').User}
