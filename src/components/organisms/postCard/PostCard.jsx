@@ -1,11 +1,12 @@
 /*PostCard.jsx*/
-import { useState } from "react"
 import { MoreHorizontal } from "lucide-react";
 import { UserInfo } from "../../molecules/userInfo/UserInfo.jsx"
 import { PostMedia } from "../../molecules/postMedia/PostMedia.jsx"
 import { PostStats } from "../../molecules/postStats/PostStats.jsx"
 import { IconButton } from "../../ui/iconButton/IconButton.jsx"
+import { HighlightedText } from "../../ui/highlightedText/HighlightedText.jsx"
 import { getDateFormat, getUserFullNameFormat } from "../../../utils/formatUtils.js"
+import { useLikePost, useBookmarkPost } from "../../../hooks/usePosts.js"
 import './PostCard.css'
 
 /** @typedef {import('../../../services/contracts/types.js').Post} Post */
@@ -15,18 +16,17 @@ import './PostCard.css'
  * @param {Post} props.post
  */
 
-export function PostCard({ post, isCurrentUser }) {
-    const [isLiked, setIsLiked] = useState(post.isLiked)
-    const [isBookmarked, setIsBookmarked] = useState(post.isBookmarked)
-    const [likesCount, setLikesCount] = useState(post.stats.likesCount)
-    const handleLike = () => {
-        setIsLiked(prev => !prev)
-        setLikesCount(prev => isLiked ? prev - 1 : prev + 1)
-    }
+export function PostCard({ post, query, isCurrentUser }) {
+    const { mutate: likePost } = useLikePost()
+    const { mutate: bookmarkPost } = useBookmarkPost()
 
     const handleBookmark = () => {
-        setIsBookmarked(prev => !prev)
+        bookmarkPost(post.id)
     }
+     const handleLike = () => {
+        likePost(post.id)
+    }
+    
     const {
         author,
         createdAt,
@@ -34,14 +34,20 @@ export function PostCard({ post, isCurrentUser }) {
         profileDetails,
         content,
         stats,
+        isLiked,
+        stats: { likesCount } = {},
+        isBookmarked,
+
     } = post || {};
 
     const primaryText = getUserFullNameFormat(author);
     const secondaryText = getDateFormat(createdAt);
+
     return (
         <article className='card post-card'>
             <UserInfo
                 user={author}
+                query={query}
                 isCurrentUser={isCurrentUser}
                 avatarSize="md"
                 primaryText={primaryText}
@@ -58,7 +64,7 @@ export function PostCard({ post, isCurrentUser }) {
                 images={images}
                 metadata={profileDetails}
             />
-            {content && <p className='post-card__content'>{content}</p>}
+            {content && <p className='post-card__content'><HighlightedText text={content} query={query} /></p>}
 
             <PostStats
                 stats={{ ...stats, likesCount }}

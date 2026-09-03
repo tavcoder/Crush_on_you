@@ -4,18 +4,19 @@ import { UserInfo } from "../userInfo/UserInfo.jsx"
 import { UserStats } from "../userStats/UserStats.jsx"
 import { ProfileCardSkeleton } from "../profileCard/ProfileCardSkeleton.jsx"
 import { getUserLocationFormat, getUserFullNameFormat } from "../../../utils/formatUtils.js"
+import { useUserStats } from "../../../hooks/useUsers.js"
 import './ProfileCard.css'
+
 /**
  * @param {Object} props
  * @param {User} props.user
- * @param {number} props.postsCount
  * @param {boolean} props.isLoading
  */
+export function ProfileCard({ user, isLoading }) {
+    const { data: stats, isLoading: isStatsLoading } = useUserStats(user?.id)
 
-export function ProfileCard({ user, postsCount, isLoading }) {
-    if (!user || isLoading) return <ProfileCardSkeleton />
+    if (!user || isLoading || isStatsLoading || !stats) return <ProfileCardSkeleton />
 
-    const { followers, following } = user;
     const primaryText = getUserFullNameFormat(user);
     const secondaryText = getUserLocationFormat(user);
 
@@ -33,9 +34,9 @@ export function ProfileCard({ user, postsCount, isLoading }) {
                 direction="column"
             />
             <UserStats
-                postsCount={postsCount}
-                followers={followers.length}
-                following={following.length} />
+                postsCount={stats.postsCount}
+                followers={stats.followersCount}
+                following={stats.followingCount} />
         </section>
     )
 }

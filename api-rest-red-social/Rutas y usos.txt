@@ -1,0 +1,87 @@
+
+get("/profile/:id", check.auth,); //perfil-UserProfileSidebar
+get("/list/:page?", check.auth,);Listar usuarios con información de seguimiento-People
+get("/avatar/:file");// Obtener avatar-no lo estoy usando
+get("/counters/:id", check.auth);//obtener contadores o estadísticas de un usuario
+get('/list/:page?', check.auth);//Listar todos los usuarios-No lo estoy usando
+get("/following/:id?/:page?", check.auth,);//Siguiendo-UserProfileSidebar
+get("/followers/:id?/:page?", check.auth,);//Seguidores-UserProfileSidebar
+get("/detail/:id", check.auth,);Detalle de publicación-
+get("/user/:id/:page?", check.auth,);//Publicaciones de un usuario-PostList
+get("/media/:file")//Imagen de publicación-no la estoy usando 
+get("/feed/:page?", check.auth);//Publicaciones de usuarios seguidos-People
+
+//AuthContext
+post("/register");
+post("/login");
+
+//UserProfileForm
+post("/upload", [check.auth, uploads.single("file0")],);//Subir avatar
+put("/update", check.auth,);//Actualizar datos de usuario
+
+[] Seguir y dejar de seguir debería ser un componente aparte.
+post("/save", check.auth);//Seguir usuario-People
+delete("/unfollow/:id", check.auth,);//Dejar de seguir usuario-People
+
+
+post("/save", check.auth);//Crear publicación-NewPostForm
+delete("/remove/:id", check.auth);//Eliminar publicación-A usar en PostItem []
+post("/upload/:id", [check.auth, uploads.single("file0")]);//Subir imagen de publicación-NewPostForm
+
+// Likes
+post("/:id/like", check.auth);//useToggleLike
+
+// Comentarios: No los estoy usando los obtengo de PostItem
+get("/:id/comments", check.auth);
+post("/:id/comment", check.auth);
+
+Hook:
+const queryEndpointsMap = {
+    profile: (id) => `user/profile/${id}`,
+    following: (id) => `follow/following/${id}`,          
+    followingPage: (params) => `follow/following/${params.userId}/${params.page}`,
+    followers: (id) => `follow/followers/${id}`,
+    posts: (id) => `publication/user/${id}`,
+    allUsersData: (page) => `user/list/${page}`,
+};
+//La parte que interesa devolver para el componente.
+const querySelectMap = {
+    profile: (res) => res.user,
+    following: (res) => res.total,
+    followingPage: (res) => res,   
+    followers: (res) => res.total,
+    posts: (res) => res.total,
+    allUsersData: (res) => res.users || [],
+};
+
+key: el nombre de la consulta (por ejemplo, "profile", "posts").
+param: el parámetro que se pasa a la función del endpoint (puede ser un id, un objeto con { userId, page }, etc.).
+options: opciones adicionales para configurar la consulta (como habilitarla o número de reintentos).
+
+export function useApiQuery(key, param, options = {}) {
+    if (!queryEndpointsMap[key]) {
+        throw new Error(`No query endpoint found for key "${key}"`);
+    }
+    if (!querySelectMap[key]) {
+        throw new Error(`No selector found for key "${key}"`);
+    }
+
+    return useQuery({
+        queryKey: [key, param],
+        enabled: options.enabled ?? !!param,
+        queryFn: async () => {
+            const res = await get(queryEndpointsMap[key](param));
+            return querySelectMap[key](res);
+        },
+        retry: options.retry ?? 1,
+        staleTime: options.staleTime ?? 1000 * 60,
+        ...options,
+    });
+}
+
+//Uso:
+const { data: userProfile, isLoading } = useApiQuery("profile", userId);
+Hace GET a user/profile/{userId}
+Extrae res.user de la respuesta
+Devuelve los datos en userProfile
+Controla la carga y errores con React Query

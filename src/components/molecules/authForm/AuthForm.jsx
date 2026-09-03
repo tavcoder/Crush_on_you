@@ -43,6 +43,23 @@ export function AuthForm({ mode }) {
                             {errors.name}
                         </p>
                     )}
+                    <label className='field__label' htmlFor="auth-surname">Surname:</label>
+                    <input
+                        className="field__input"
+                        type="surname"
+                        id="auth-surname"
+                        name="surname"
+                        value={formData.surname}
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                        aria-invalid={!!errors.surname}
+                        aria-describedby={errors.surname ? 'surname-error' : undefined}
+                    />
+                    {errors.name && (
+                        <p id="name-error" className="field__error auth-form__error" role="alert">
+                            {errors.name}
+                        </p>
+                    )}
                     <label className='field__label' htmlFor="auth-nick">Nick:</label>
                     <input
                         className="field__input"

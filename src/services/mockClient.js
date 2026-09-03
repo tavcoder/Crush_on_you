@@ -254,7 +254,7 @@ export const mockClient = {
         )
     },
 
-    uupload(endpoint, file) {
+    upload(endpoint, file) {
         const [resource, id] = endpoint.split('/')
         const user = MOCK_DB.users.find(u => u.id === id)
         if (!user) return Promise.reject(new ApiError(`User ${id} not found`, 404))

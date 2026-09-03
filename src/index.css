@@ -74,6 +74,7 @@
   --space-11: 2.75rem;
   --space-12: 3rem;
 
+
   /* Radius */
   --radius-sm: 0.5rem;
   --radius-md: 0.75rem;
@@ -110,6 +111,7 @@
   --max-width-sidebar: 280px;
   --max-width-feed: 680px;
   --max-width-app: 1200px;
+  --bottom-nav-height: 4rem;
 
   /* ========================================
      SEMANTIC TOKENS ([type]-[role]-[variant])
@@ -163,7 +165,12 @@
   --color-text-avatar-blue: var(--blue-deep);
   --color-text-avatar-yellow: var(--yellow-deep);
   --color-text-avatar-rose: var(--rose-dark);
+
+  --color-highlight: var(--lavender-mid);
+  --color-text-highlight: var(--gray-dark);
 }
+
+
 
 /* ========================================
    BASE STYLES

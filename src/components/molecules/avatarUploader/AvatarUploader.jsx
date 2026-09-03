@@ -6,14 +6,13 @@ import { useAvatarUploader } from '../../../hooks/useAvatarUploader.js'
 import './AvatarUploader.css'
 
 /**
- * @param {string} props.userId
  * @param {string} props.userName
  * @param {string} props.userSurName
  * @param {string} props.avatarUrl
  */
-export function AvatarUploader({ userId, userName, userSurName, avatarUrl }) {
+export function AvatarUploader({ userName, userSurName, avatarUrl }) {
     const inputRef = useRef(null)
-    const { avatarPreview, isLoading, error, isError, handleAvatarUpload } = useAvatarUploader(userId)
+    const { avatarPreview, isLoading, error, isError, handleAvatarUpload } = useAvatarUploader()
 
     return (
         <div className='my-profile-page__avatar-uploader'>

@@ -1,0 +1,38 @@
+const express = require("express");
+const router = express.Router();
+const multer = require("multer");
+const { CloudinaryStorage } = require('multer-storage-cloudinary');
+const cloudinary = require('../database/cloudinary');
+
+const avatarStorage = new CloudinaryStorage({
+    cloudinary: cloudinary,
+    params: {
+        folder: 'avatars',
+        allowed_formats: ['png', 'jpg', 'jpeg', 'gif'],
+    },
+});
+
+const uploads = multer({ storage: avatarStorage });
+const UserContoller = require("../controllers/user");
+const check = require("../middlewares/auth");
+
+
+// Definir rutas
+router.get("/prueba-usuario", check.auth, UserContoller.pruebaUser);
+router.post("/register", UserContoller.register);
+router.post("/login", UserContoller.login);
+router.get("/search/:query/:page?", check.auth, UserContoller.search);
+router.get("/profile/:id", check.auth, UserContoller.profile);
+router.get("/list/:page?", check.auth, UserContoller.list);
+router.put("/update", check.auth, UserContoller.update);
+router.post("/upload", [check.auth, uploads.single("file0")], UserContoller.upload);
+router.get("/avatar/:file", UserContoller.avatar); // cambio
+router.get("/counters/:id", check.auth, UserContoller.counters);
+// TODO: [DEUDA TÉCNICA] Ruta duplicada — esta línea nunca se ejecuta porque
+// Express ya resuelve GET /list/:page? con la declaración de arriba (UserContoller.list).
+// UserContoller.getUsers (versión async/await más moderna) queda muerta.
+// Decidir cuál conservar y eliminar la otra + su declaración correspondiente.
+router.get('/list/:page?', check.auth, UserContoller.getUsers);
+
+// Exportar router
+module.exports = router;

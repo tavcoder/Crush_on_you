@@ -21,7 +21,7 @@ export function InterestList({
     return (
         <div className="interest-list" role="group" aria-label="Interests">
             {options.map((option) => {
-                const isActive = selectedValues.includes(option.label);
+                const isActive = selectedValues.includes(option.id);
                 const isDisabled = !isActive && !canAddMore;
 
                 return (

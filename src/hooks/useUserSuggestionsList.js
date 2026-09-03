@@ -1,9 +1,11 @@
-import { useCurrentUser, useUserSuggestions } from '../hooks/useUsers'
+import { useContext } from 'react'
+import { useUserSuggestions } from '../hooks/useUsers'
+import { UserAuthContext } from "../context/UserAuthContext"
 
 
 export function useUserSuggestionsList() {
-    const { data: currentUser } = useCurrentUser()
     const { users, isLoading, isError, error } = useUserSuggestions();
+    const { currentUser, } = useContext(UserAuthContext);
     const currentsFollowings = currentUser?.following;
 
     const suggestionsList = users?.filter(result =>

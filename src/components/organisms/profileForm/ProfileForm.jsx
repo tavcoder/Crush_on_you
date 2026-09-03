@@ -3,7 +3,7 @@ import { SelectButton } from '../../ui/selectButton/SelectButton'
 import { InterestList } from '../../molecules/interestList/InterestList.jsx';
 import { Button } from '../../ui/button/Button.jsx';
 import { useProfileForm } from '../../../hooks/useProfileForm.js';
-import { interestOptions } from '../../../utils/insterestOptions.js';
+import { INTEREST_OPTIONS } from '../../../utils/insterestOptions.js';
 import './ProfileForm.css';
 
 const selectOptions = [
@@ -228,11 +228,12 @@ export function ProfileForm({ user }) {
                         No
                     </label>
                 </fieldset>
+
             </div>
             <div className="profile-form__field--wide">
                 <span className="field__label">Interests (max. 8)</span>
                 <InterestList
-                    options={interestOptions}
+                    options={INTEREST_OPTIONS}
                     selectedValues={formData.interests || []}
                     onToggle={handleInterestToggle}
                     maxSelection={8}

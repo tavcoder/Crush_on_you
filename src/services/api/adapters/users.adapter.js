@@ -8,6 +8,23 @@ function normalizeFollowItem(item) {
     return null;
 }
 
+// services/api/adapters/users.adapter.js (agregar esta función)
+
+/**
+ * @param {{ userId: string, following: number, followed: number, publications: number }} raw
+ * @returns {import('../contracts/types.js').UserStats}
+ */
+export const adaptUserStats = (raw) => {
+    const followersCount = raw.followed;   // gente que ME sigue a mí
+    const followingCount = raw.following;  // gente que YO sigo
+
+    return {
+        userId: raw.userId,
+        followersCount,
+        followingCount,
+        postsCount: raw.publications,
+    };
+};
 /**
  * @param {import('../../contracts/types.js').UserRaw} raw
  * @returns {import('../../contracts/types.js').User}
@@ -27,64 +44,69 @@ export function adaptUser(raw) {
         : [];
 
     const interests = Array.isArray(raw.interests)
-        ? raw.interests.filter(item => item && typeof item === 'object' && item.id && item.label)
+        ? raw.interests.filter(id => typeof id === 'string')
         : [];
 
     const profileDetails = raw.profileDetails && typeof raw.profileDetails === 'object'
         ? {
-            education: raw.profileDetails.education ?? null,
-            drink: raw.profileDetails.drink ?? null,
-            languages: raw.profileDetails.languages ?? null,
-            marijuana: raw.profileDetails.marijuana ?? null,
-            smoke: raw.profileDetails.smoke ?? null,
             bio: raw.profileDetails.bio ?? null,
+            education: raw.profileDetails.education ?? null,
+            languages: raw.profileDetails.languages ?? null,
+            smoke: raw.profileDetails.smoke ?? null,
+            drink: raw.profileDetails.drink ?? null,
         }
         : {
-            education: null,
-            drink: null,
-            languages: null,
-            marijuana: null,
-            smoke: null,
             bio: null,
+            education: null,
+            languages: null,
+            smoke: null,
+            drink: null,
         };
 
     return {
-        id: raw.id ?? '',
-        userName: raw.userName ?? '',
-        userSurName: raw.userSurName ?? '',
-        userNick: raw.userNick ?? '',
-        avatarUrl: raw.avatarUrl ?? null,
+        id: raw._id ?? '',
+        userName: raw.name ?? '',
+        userSurName: raw.surname ?? '',
+        userNick: raw.nick ?? '',
+        email: raw.email ?? '',
+        avatarUrl: raw.image ?? null,
         city: raw.city ?? null,
         country: raw.country ?? null,
+        // TODO: [DEUDA TÉCNICA] isOnline requiere sistema de presencia en tiempo real
+        // (WebSockets o lastActiveAt). Backend actual no lo soporta; siempre false.
         isOnline: raw.isOnline ?? false,
+
+        // TODO: [DEUDA TÉCNICA] hasStory requiere modelo Story en backend
+        // (crear/consultar stories no expiradas). No implementado; siempre false.
         hasStory: raw.hasStory ?? false,
         isUnseen: raw.isUnseen ?? false,
         following,
         followers,
         interests,
         profileDetails,
+        // TODO: [DEUDA TÉCNICA] bookmarks se mapea aquí para una futura vista de
+        // "posts guardados" del perfil. No se usa actualmente en ningún hook/adapter
+        // — isBookmarked por post ahora se calcula 100% en backend (ver
+        // posts.adapter.js). Si esta feature no se construye, eliminar este campo.
+        bookmarks: Array.isArray(raw.bookmarks) ? raw.bookmarks.filter(id => typeof id === 'string') : [],
     };
 }
 
 /**
- * Adapta una respuesta paginada de la API
- * @param {Object} response
- * @param {import('../../contracts/types.js').UserRaw[]} response.data
- * @param {Object} [response.pagination]
- * @param {number} [response.pagination.currentPage]
- * @param {number} [response.pagination.totalPages]
- * @returns {import('../../contracts/types.js').PaginatedUsers}
+ * @param {import('../contracts/types.js').UsersListResponseRaw} response
+ * @returns {import('../contracts/types.js').PaginatedUsers}
  */
+
 export function adaptUserList(response) {
     const safeResponse = response ?? {};
 
     return {
-        data: Array.isArray(safeResponse.data)
-            ? safeResponse.data.map(adaptUser).filter(Boolean)
+        data: Array.isArray(safeResponse.users)
+            ? safeResponse.users.map(adaptUser).filter(Boolean)
             : [],
         pagination: {
-            currentPage: safeResponse.pagination?.currentPage ?? 1,
-            totalPages: safeResponse.pagination?.totalPages ?? 1,
+            currentPage: safeResponse.page ?? 1,
+            totalPages: safeResponse.pages ?? 1,
         }
     };
 }

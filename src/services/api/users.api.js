@@ -1,60 +1,126 @@
 // services/api/users.api.js
 import { apiClient } from '../apiClient'
-import { adaptUser, adaptUserList } from './adapters/users.adapter.js'
+import { adaptUser, adaptUserList, adaptUserStats } from './adapters/users.adapter.js'
 
 // ─── LISTS ───
-
-export const getUsers = ({ page = 1, limit = 10 } = {}) =>
+/**
+ * @returns {Promise<import('../contracts/types.js').PaginatedUsers>}
+ */
+export const getUsers = ({ page = 1 } = {}) =>
     apiClient
-        .get(`users?page=${page}&limit=${limit}`)
-        .then(adaptUserList)
-
-export const getUserSuggestions = ({ page = 1, limit = 10 } = {}) =>
-    apiClient
-        .get(`users?page=${page}&limit=${limit}`)
-        .then(adaptUserList)
-
-export const searchUsers = ({ page = 1, limit = 10, search = '' } = {}) =>
-    apiClient
-        .get(`users?page=${page}&limit=${limit}&search=${encodeURIComponent(search)}`)
+        .get(`user/list/${page}`)
         .then(adaptUserList)
 
 // ─── SINGLE USER ───
-
+/**
+ * @param {string} id
+ * @returns {Promise<import('../contracts/types.js').User>}
+ */
+/**
+ * ⚠️ El backend devuelve el campo de seguidores en singular: `res.follower`
+ * (no `res.followers`). Confirmado contra el endpoint real — no es un typo
+ * es así como lo nombra la API. Si este endpoint cambia de forma,
+ * revisar aquí primero antes de asumir que el frontend tiene el bug.
+ */
 export const getUserById = (id) =>
     apiClient
-        .get(`users/${id}`)
-        .then(res => adaptUser(res.data));
+        .get(`user/profile/${id}`)
+        .then(res => {
+            const raw = {
+                ...res.user,
+                following: res.following,
+                followers: res.follower
+            };
+            return adaptUser(raw);
+        });
 
-export const getCurrentUser = () =>
+export const getUserStats = (userId) =>
     apiClient
-        .get('users/me')
-        .then(res => adaptUser(res.data));
+        .get(`user/counters/${userId}`)
+        .then(adaptUserStats)
+
+export const searchUsers = ({ search, page = 1 }) =>
+    apiClient
+        .get(`user/search/${encodeURIComponent(search)}/${page}`)
+        .then(adaptUserList)
+
+// TODO: [DEUDA TÉCNICA] No hay endpoint de sugerencias. Usa getUsers como fallback.
+export const getUserSuggestions = ({ page = 1 } = {}) =>
+    apiClient
+        .get(`user/list/${page}`)
+        .then(adaptUserList)
 
 // ─── MUTATIONS ───
+/**
+ * @returns {Promise<import('../contracts/types.js').LoginResponseRaw>}
+ */
 export const loginUser = ({ email, password }) =>
-    apiClient.call('POST', 'auth/login', { email, password })
-        .then(res => res.data.token)
+    apiClient.call('POST', 'user/login', { email, password })
+        .then(res => ({
+            token: res.token,
+            userId: res.user.id
+        }))
 
-export const registerUser = ({ name, nick, email, password }) =>
-    apiClient.call('POST', 'auth/register', { name, nick, email, password })
-        .then(res => res.data.token)
+/**
+ * @param {{ name:string, surname:string, nick:string, email:string, password:string }} payload
+ * @returns {Promise<import('../contracts/types.js').User>}
+ */
+export const registerUser = ({ name, surname, nick, email, password }) =>
+    apiClient.call('POST', 'user/register', { name, surname, nick, email, password })
+        .then(res => adaptUser(res.user))
 
-export const updateProfile = (id, data) =>
-    apiClient
-        .call('PUT', `users/${id}`, data)
-        .then(res => adaptUser(res.data))
+/**
+* @param {import('../contracts/types.js').User} data
+* @returns {Promise<import('../contracts/types.js').User>}
+*/
+export const updateProfile = (data) =>
+    apiClient.call('PUT', 'user/update', {
+        name: data.userName,
+        surname: data.userSurName,
+        nick: data.userNick,
+        email: data.email,
+        city: data.city,
+        country: data.country,
+        interests: data.interests,
+        profileDetails: {
+            bio: data.bio,
+            education: data.education,
+            languages: data.languages,
+            smoke: data.smoke,
+            drink: data.drink,
+        }
+    })
+        .then(res => adaptUser(res.user))
 
+/**
+* Crea una relación de follow entre el usuario autenticado y el usuario `id`.
+* Usa la respuesta cruda del backend solo como confirmación; la UI se actualiza
+* principalmente con actualización optimista e invalidación de caché.
+*
+* @param {string} id - ID del usuario al que se quiere seguir
+* @returns {Promise<import('../contracts/types.js').SaveFollowResponseRaw>}
+*/
 export const followUser = (id) =>
-    apiClient
-        .call('POST', `users/${id}/follow`)
+    apiClient.call('POST', 'follow/follow', { followed: id })
 
-
+/**
+ * Elimina la relación de follow con el usuario `id`.
+ * La respuesta solo contiene estado y mensaje; no devuelve un User.
+ *
+ * @param {string} id - ID del usuario al que se quiere dejar de seguir
+ * @returns {Promise<import('../contracts/types.js').UnfollowResponseRaw>}
+ */
 export const unfollowUser = (id) =>
-    apiClient
-        .call('DELETE', `users/${id}/follow`)
+    apiClient.call('DELETE', `follow/unfollow/${id}`)
 
-export const uploadAvatar = (id, data) =>
+/**
+ * Sube un nuevo avatar para el usuario autenticado y devuelve
+ * el usuario actualizado ya adaptado al dominio frontend.
+ *
+ * @param {File} file - Archivo de imagen a subir (PNG, JPG, JPEG, GIF)
+ * @returns {Promise<import('../contracts/types.js').User>}
+ */
+export const uploadAvatar = (file) =>
     apiClient
-        .upload(`users/${id}`, data)
-        .then(res => adaptUser(res.data))
+        .upload('user/upload', file)
+        .then(res => adaptUser(res.user));
