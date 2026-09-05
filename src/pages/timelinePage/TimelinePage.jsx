@@ -8,7 +8,7 @@ import { useUserPosts, useCreatePost } from "../../hooks/usePosts.js"
 export default function TimelinePage() {
     const { currentUser,
         currentUserError,
-        selectedUser,
+        displayUserProfile,
         isSearching,
         isSearchLoading,
         searchingError,
@@ -18,14 +18,13 @@ export default function TimelinePage() {
         results,
         query } = useOutletContext();
 
-    const effectiveUser = selectedUser ?? currentUser
 
     const { posts,
         fetchNextPage: loadMorePosts,
         hasNextPage: canLoadMorePosts,
         isLoading,
         isFetchingNextPage,
-        error, } = useUserPosts(effectiveUser?.id)
+        error, } = useUserPosts(displayUserProfile?.id)
 
     const { addPost, isAddingPost } = useCreatePost()
 
@@ -38,15 +37,15 @@ export default function TimelinePage() {
     const displayIsFetchingNextPage = isSearching ? isFetchingNextPageSearch : isFetchingNextPage
     const emptyMessage = isSearching
         ? `No posts match "${query}"`
-        : selectedUser
-            ? `${selectedUser.userName ?? 'This user'} hasn't posted anything yet.`
+        : displayUserProfile
+            ? `${displayUserProfile.userName ?? 'This user'} hasn't posted anything yet.`
             : "No posts yet. Be the first to share something!"
 
     return (
 
         <section className="page-content">
 
-            {!selectedUser && <CreatePost user={currentUser} onPostCreated={addPost} isSubmitting={isAddingPost} />}
+            {!displayUserProfile && <CreatePost user={currentUser} onPostCreated={addPost} isSubmitting={isAddingPost} />}
             <SortByCard
                 onChange={undefined} //TODO: consumirá un hook useSortPosts que decide la estrategia de fetching.
                 disabled={undefined} />

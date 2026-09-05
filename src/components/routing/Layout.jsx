@@ -50,7 +50,7 @@ export function Layout() {
                         context={{
                             currentUser,
                             currentUserError,
-                            selectedUser,
+                            displayUserProfile,
                             isSearching,
                             isSearchLoading,
                             isFetchingNextPageSearch,

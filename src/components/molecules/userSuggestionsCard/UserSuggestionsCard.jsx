@@ -1,10 +1,8 @@
 import { Link } from 'react-router'
-import { UserInfo } from '../userInfo/UserInfo'
-import { FollowButton } from '../../ui/followButton/FollowButton'
 import { EmptyState } from '../../ui/feedback/EmptyState.jsx'
 import { ErrorFallback } from '../../ui/feedback/ErrorFallback.jsx'
+import { UsersList } from '../../organisms/usersList/UsersList.jsx'
 import { UserSuggestionsCardSkeleton } from '../userSuggestionsCard/UserSuggestionsCardSkeleton.jsx'
-import { getFollowedByFormat } from '../../../utils/formatUtils.js'
 import './UserSuggestionsCard.css'
 
 export function UserSuggestionsCard({ currentUser, userSuggestionsList, isLoading, isError, error }) {
@@ -25,25 +23,10 @@ export function UserSuggestionsCard({ currentUser, userSuggestionsList, isLoadin
 
             <div className='suggestions-card__header'>
                 <h2 className='suggestions-card__title'>SUGGESTED FOR YOU</h2>
-                <Link className='suggestions-card__link' to="/userSuggestions">See all</Link>
+                <Link className='suggestions-card__link' to="/people/suggestions">See all</Link>
             </div>
 
-            <ul className='suggestions-card__users-list' role='list'>
-                {userSuggestionsList.map((user) => (
-                    <li key={user.id}>
-                        <UserInfo
-                            user={user}
-                            avatarSize="sm"
-                            primaryText={user.userNick}
-                            secondaryText={getFollowedByFormat(user?.followedBy)}
-                            action={<FollowButton
-                                userId={user.id}
-                                currentUser={currentUser}
-                            />}
-                        />
-                    </li>
-                ))}
-            </ul>
+            <UsersList usersList={userSuggestionsList} currentUser={currentUser} />
 
         </section>
     )

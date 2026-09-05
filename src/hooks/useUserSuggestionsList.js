@@ -3,8 +3,9 @@ import { useUserSuggestions } from '../hooks/useUsers'
 import { UserAuthContext } from "../context/UserAuthContext"
 
 
-export function useUserSuggestionsList() {
-    const { users, isLoading, isError, error } = useUserSuggestions();
+export function useUserSuggestionsList(enabled = true) {
+ 
+    const { users, isLoading, isError, error } = useUserSuggestions(enabled);
     const { currentUser, } = useContext(UserAuthContext);
     const currentsFollowings = currentUser?.following;
 

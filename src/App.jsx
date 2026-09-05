@@ -5,6 +5,7 @@ import { LoadingFallback } from './components/ui/feedback/LoadingFallback.jsx'
 import { UserAuthProvider } from './context/UserAuthContext.jsx'
 import { ProtectedRoute } from './components/routing/ProtectedRoute.jsx'
 import { LoginPage } from './pages/authPage/LoginPage.jsx'
+import { PeoplePage } from './pages/peoplePage/PeoplePage.jsx'
 import { RegisterPage } from './pages/authPage/RegisterPage.jsx'
 import { Layout } from './components/routing/Layout.jsx'
 import './App.css'
@@ -33,7 +34,7 @@ function App() {
                 <Route path="/profile" element={<MyProfilePage />} />
                 <Route path="/feed" element={<FeedPage />} />
                 <Route path="/timeline" element={<TimelinePage />} />
-                <Route path="/people" element={<ComingSoonPage />} />
+                <Route path="/people/:type" element={<PeoplePage />} />
                 <Route path="/search" element={<ComingSoonPage />} />
                 <Route path="/notifications" element={<ComingSoonPage />} />
                 <Route path="/messages" element={<ComingSoonPage />} />
