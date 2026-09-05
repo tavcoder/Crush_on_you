@@ -60,6 +60,7 @@ export function useCreatePost() {
 
             queryClient.invalidateQueries({ queryKey: ['posts', 'byUser'] })
             queryClient.invalidateQueries({ queryKey: ['posts', 'detail'] })
+            queryClient.invalidateQueries({ queryKey: ['userStats'] })
 
             if (response.imageUploadFailed) {
                 alert('Your post was published successfully, but the image couldn\'t be uploaded. Please try uploading the image again.')
