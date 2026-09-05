@@ -6,7 +6,7 @@ import { useUserSuggestionsList } from "../../hooks/useUserSuggestionsList.js"
 import { useFollowers, useFollowing } from "../../hooks/useFollows.js";
 
 
-export function PeoplePage() {
+export default function PeoplePage() {
     const { displayUserProfile, currentUser } = useOutletContext();
     const [page, setPage] = useState(1);
 

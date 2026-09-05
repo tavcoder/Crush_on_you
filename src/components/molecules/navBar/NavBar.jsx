@@ -11,7 +11,7 @@ import './NavBar.css'
 const NAV_LINKS = [
     { to: '/feed', label: 'Feed' },
     { to: '/timeline', label: 'Timeline' },
-    { to: '/people', label: 'People' },
+    { to: '/people/suggestions', label: 'People' },
 ];
 export function NavBar({ user }) {
     const { query, setQuery, clearQuery } = useSearchQuery()

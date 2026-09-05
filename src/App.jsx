@@ -5,7 +5,6 @@ import { LoadingFallback } from './components/ui/feedback/LoadingFallback.jsx'
 import { UserAuthProvider } from './context/UserAuthContext.jsx'
 import { ProtectedRoute } from './components/routing/ProtectedRoute.jsx'
 import { LoginPage } from './pages/authPage/LoginPage.jsx'
-import { PeoplePage } from './pages/peoplePage/PeoplePage.jsx'
 import { RegisterPage } from './pages/authPage/RegisterPage.jsx'
 import { Layout } from './components/routing/Layout.jsx'
 import './App.css'
@@ -13,6 +12,7 @@ import './App.css'
 // Lazy load de páginas que usan Layout
 const FeedPage = lazy(() => import('./pages/feedPage/FeedPage.jsx'));
 const TimelinePage = lazy(() => import('./pages/timelinePage/TimelinePage.jsx'));
+const PeoplePage = lazy(() => import('./pages/peoplePage/PeoplePage.jsx'));
 const MyProfilePage = lazy(() => import('./pages/myProfilePage/MyProfilePage.jsx'));
 const ComingSoonPage = lazy(() => import('./pages/ComingSoonPage.jsx'));
 
