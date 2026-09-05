@@ -6,7 +6,7 @@ import { IconButton } from '../../ui/iconButton/IconButton.jsx'
 import { SelectButton } from '../../ui/selectButton/SelectButton.jsx'
 import { PostMedia } from '../../molecules/postMedia/PostMedia.jsx'
 import { ALLOWED_FILE_TYPES } from '../../../utils/validateUtils.js'
-import { usePostMedia } from '../../../hooks/usePostMedia.jsx'
+import { usePostMedia } from '../../../hooks/usePostMedia.js'
 import './CreatePost.css'
 
 // TODO: cuando la API soporte upload real, cambiar createPost a usar FormData
