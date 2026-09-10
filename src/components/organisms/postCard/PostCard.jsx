@@ -23,10 +23,10 @@ export function PostCard({ post, query, isCurrentUser }) {
     const handleBookmark = () => {
         bookmarkPost(post.id)
     }
-     const handleLike = () => {
+    const handleLike = () => {
         likePost(post.id)
     }
-    
+
     const {
         author,
         createdAt,

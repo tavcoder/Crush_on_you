@@ -1,44 +1,45 @@
 /*PeoplePage.jsx*/
-import { useState } from "react";
 import { useOutletContext, useParams } from "react-router";
+import { Pagination } from "../../components/ui/pagination/Pagination.jsx";
 import { UsersList } from "../../components/organisms/usersList/UsersList";
-import { useUserSuggestionsList } from "../../hooks/useUserSuggestionsList.js"
-import { useFollowers, useFollowing } from "../../hooks/useFollows.js";
-
+import { ErrorFallback } from "../../components/ui/feedback/ErrorFallback.jsx";
+import { EmptyState } from "../../components/ui/feedback/EmptyState.jsx";
+import { usePeoplePage } from "./usePeoplePage.js";
+import { getPeoplePageTitle, getPeoplePageEmptyMessage } from "./peoplePageContent.js";
+import { PeoplePageSkeleton } from "./PeoplePageSkeleton.jsx";
+import './PeoplePage.css'
 
 export default function PeoplePage() {
-    const { displayUserProfile, currentUser } = useOutletContext();
-    const [page, setPage] = useState(1);
+    const { displayUserProfile, currentUser, onUserClick } = useOutletContext();
 
     const { type = "suggestions" } = useParams();
-    const { suggestionsList,
-        isLoading: suggestionsLoading,
-        isError: isSuggestionsError,
-        error: suggestionsError }
-        = useUserSuggestionsList(type === "suggestions");
-    const { followers,
-        isLoading: followersLoading,
-        isError: isFollowersError,
-        error: followersError }
-        = useFollowers(displayUserProfile?.id, page, type === "followers");
-    const { following,
-        isLoading: followingLoading,
-        isError: isFollowingError,
-        error: followingError }
-        = useFollowing(displayUserProfile?.id, page, type === "following");
-
-    const usersByType = {
-        suggestions: suggestionsList,
-        followers: followers,
-        following: following,
-    };
+    const { users, isLoading, isEmpty, isError, error, pagination, setPage } = usePeoplePage(type, displayUserProfile?.id);
 
 
-    const users = usersByType[type];
+    const isOwnProfile = currentUser?.id === displayUserProfile?.id
+    const pageTitle = getPeoplePageTitle(type, isOwnProfile, displayUserProfile?.userNick);
+    const emptyMessage = getPeoplePageEmptyMessage(type, isOwnProfile, displayUserProfile?.userNick);
+
+    if (isError) return <ErrorFallback error={error} />
+    if (isEmpty) return (
+        <section className='card suggestions-card'>
+            <EmptyState
+                content={emptyMessage}
+                onClick={undefined}
+                buttonText={undefined} />
+        </section>
+    )
     return (
-        <>
-            <h1>People Page</h1>
-            <UsersList usersList={users} currentUser={currentUser} type={type} />
-        </>
+        <section className="page-content card people-page">
+            <h1 className="people-page__title">{pageTitle?.toUpperCase()}</h1>
+            
+            {isLoading && <PeoplePageSkeleton />}
+
+            {!isLoading &&
+                <UsersList usersList={users} currentUser={currentUser} type={type} onUserClick={onUserClick} />}
+
+            <Pagination pagination={pagination} onPageChange={setPage} />
+
+        </section>
     );
 }

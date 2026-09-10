@@ -1,5 +1,34 @@
 .users-list {
     list-style: none;
-    padding: 0;
+    padding: var(--space-2);
     margin: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+    align-items: start;
+    min-width: 100%;
+}
+
+.users-list__item {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    padding: var(--space-2) var(--space-3);
+    border-radius: var(--radius-md);
+    transition: var(--transition-base);
+    min-width: 100%;
+}
+
+.users-list__item:hover {
+    background: var(--color-secondary);
+    color: var(--color-text-on-secondary);
+    transform: scale(1.02);
+}
+
+.users-list__user-button {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    text-align: left;
+    justify-content: start;
 }

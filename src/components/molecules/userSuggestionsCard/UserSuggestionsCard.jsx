@@ -5,7 +5,7 @@ import { UsersList } from '../../organisms/usersList/UsersList.jsx'
 import { UserSuggestionsCardSkeleton } from '../userSuggestionsCard/UserSuggestionsCardSkeleton.jsx'
 import './UserSuggestionsCard.css'
 
-export function UserSuggestionsCard({ currentUser, userSuggestionsList, isLoading, isError, error }) {
+export function UserSuggestionsCard({ currentUser, userSuggestionsList, isLoading, isError, error, onUserClick }) {
     const noSuggestions = userSuggestionsList?.length === 0;
 
     if (isLoading) return <UserSuggestionsCardSkeleton />
@@ -26,7 +26,7 @@ export function UserSuggestionsCard({ currentUser, userSuggestionsList, isLoadin
                 <Link className='suggestions-card__link' to="/people/suggestions">See all</Link>
             </div>
 
-            <UsersList usersList={userSuggestionsList} currentUser={currentUser} />
+            <UsersList usersList={userSuggestionsList} currentUser={currentUser} onUserClick={onUserClick} />
 
         </section>
     )
