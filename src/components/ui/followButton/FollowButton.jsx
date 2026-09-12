@@ -1,4 +1,4 @@
-import { useFollowUser, useUnfollowUser } from '../../../hooks/useUsers'
+import { useFollowUser, useUnfollowUser } from '../../../hooks/useFollows.js'
 import { RoundButton } from '../roundButton/RoundButton'
 
 export function FollowButton({ userId, currentUser }) {

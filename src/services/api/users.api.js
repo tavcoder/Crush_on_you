@@ -92,26 +92,6 @@ export const updateProfile = (data) =>
     })
         .then(res => adaptUser(res.user))
 
-/**
-* Crea una relación de follow entre el usuario autenticado y el usuario `id`.
-* Usa la respuesta cruda del backend solo como confirmación; la UI se actualiza
-* principalmente con actualización optimista e invalidación de caché.
-*
-* @param {string} id - ID del usuario al que se quiere seguir
-* @returns {Promise<import('../contracts/types.js').SaveFollowResponseRaw>}
-*/
-export const followUser = (id) =>
-    apiClient.call('POST', 'follow/follow', { followed: id })
-
-/**
- * Elimina la relación de follow con el usuario `id`.
- * La respuesta solo contiene estado y mensaje; no devuelve un User.
- *
- * @param {string} id - ID del usuario al que se quiere dejar de seguir
- * @returns {Promise<import('../contracts/types.js').UnfollowResponseRaw>}
- */
-export const unfollowUser = (id) =>
-    apiClient.call('DELETE', `follow/unfollow/${id}`)
 
 /**
  * Sube un nuevo avatar para el usuario autenticado y devuelve

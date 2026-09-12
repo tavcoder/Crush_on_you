@@ -12,6 +12,7 @@ import './App.css'
 // Lazy load de páginas que usan Layout
 const FeedPage = lazy(() => import('./pages/feedPage/FeedPage.jsx'));
 const TimelinePage = lazy(() => import('./pages/timelinePage/TimelinePage.jsx'));
+const PeoplePage = lazy(() => import('./pages/peoplePage/PeoplePage.jsx'));
 const MyProfilePage = lazy(() => import('./pages/myProfilePage/MyProfilePage.jsx'));
 const ComingSoonPage = lazy(() => import('./pages/ComingSoonPage.jsx'));
 
@@ -33,7 +34,7 @@ function App() {
                 <Route path="/profile" element={<MyProfilePage />} />
                 <Route path="/feed" element={<FeedPage />} />
                 <Route path="/timeline" element={<TimelinePage />} />
-                <Route path="/people" element={<ComingSoonPage />} />
+                <Route path="/people/:type" element={<PeoplePage />} />
                 <Route path="/search" element={<ComingSoonPage />} />
                 <Route path="/notifications" element={<ComingSoonPage />} />
                 <Route path="/messages" element={<ComingSoonPage />} />

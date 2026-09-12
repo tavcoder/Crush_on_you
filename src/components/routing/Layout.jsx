@@ -44,13 +44,14 @@ export function Layout() {
                 onStorySeen={onStorySeen}
             />
             <div className="layout__body">
-                <LeftSideBar user={displayUserProfile} isLoading={currentUserLoading} currentUser={currentUser} />
+                <LeftSideBar user={displayUserProfile} isLoading={currentUserLoading} currentUser={currentUser} onUserClick={handleUserClick} />
                 <main className="layout__main">
                     <Outlet
                         context={{
                             currentUser,
                             currentUserError,
-                            selectedUser,
+                            onUserClick: handleUserClick,
+                            displayUserProfile,
                             isSearching,
                             isSearchLoading,
                             isFetchingNextPageSearch,

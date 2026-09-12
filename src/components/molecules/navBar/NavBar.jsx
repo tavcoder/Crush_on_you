@@ -5,13 +5,13 @@ import { Input } from '../../ui/input/Input.jsx'
 import { BrandLogo } from '../../ui/brandLogo/BrandLogo.jsx'
 import { IconButton } from '../../ui/iconButton/IconButton.jsx'
 import { AvatarMenu } from '../../molecules/avatarMenu/AvatarMenu.jsx'
-import { useSearchQuery } from '../../../hooks/useSearchQuery.jsx'
+import { useSearchQuery } from '../../../hooks/useSearchQuery.js'
 import './NavBar.css'
 
 const NAV_LINKS = [
     { to: '/feed', label: 'Feed' },
     { to: '/timeline', label: 'Timeline' },
-    { to: '/people', label: 'People' },
+    { to: '/people/suggestions', label: 'People' },
 ];
 export function NavBar({ user }) {
     const { query, setQuery, clearQuery } = useSearchQuery()

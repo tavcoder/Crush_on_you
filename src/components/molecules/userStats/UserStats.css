@@ -11,6 +11,12 @@
 
 .user-stats__item {
     text-align: center;
+    transition: var(--transition-base);
+}
+.user-stats__item:hover {
+    color: var(--color-primary);
+    transform: scale(1.05);
+    cursor: pointer;
 }
 
 .user-stats__item+.user-stats__item {

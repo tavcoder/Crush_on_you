@@ -1,4 +1,5 @@
 //UserStats.jsx
+import { Link } from 'react-router'
 import { getStatsFormat } from "../../../utils/formatUtils.js"
 import './UserStats.css'
 
@@ -12,18 +13,19 @@ import './UserStats.css'
 export function UserStats({ postsCount, followers, following }) {
     return (
         <dl className="user-stats">
-            <div className="user-stats__item">
+            <Link className='user-stats__item' to="/timeline">
                 <dd className="user-stats__count">{getStatsFormat(postsCount)}</dd>
                 <dt className="user-stats__title">POSTS</dt>
-            </div>
-            <div className="user-stats__item">
+            </Link>
+
+            <Link className='user-stats__item' to="/people/followers">
                 <dd className="user-stats__count">{getStatsFormat(followers)}</dd>
                 <dt className="user-stats__title">FOLLOWERS</dt>
-            </div>
-            <div className="user-stats__item">
+            </Link>
+            <Link className='user-stats__item' to="/people/following">
                 <dd className="user-stats__count">{getStatsFormat(following)}</dd>
                 <dt className="user-stats__title">FOLLOWING</dt>
-            </div>
+            </Link>
         </dl>
     )
 }

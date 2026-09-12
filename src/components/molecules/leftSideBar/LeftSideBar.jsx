@@ -5,7 +5,7 @@ import { ProfileCard } from "../profileCard/ProfileCard.jsx"
 import { UserSuggestionsCard } from "../userSuggestionsCard/UserSuggestionsCard.jsx"
 import './LeftSideBar.css'
 
-export function LeftSideBar({ user, isLoading, currentUser }) {
+export function LeftSideBar({ user, isLoading, currentUser, onUserClick }) {
     const isCurrentUser = user?.id === currentUser?.id;
     const { suggestionsList, isLoading: suggestionsLoading, isError, error } = useUserSuggestionsList()
     const navigate = useNavigate();
@@ -23,13 +23,15 @@ export function LeftSideBar({ user, isLoading, currentUser }) {
                 user={user}
                 isLoading={isLoading}
                 isCurrentUser={isCurrentUser}
-                onClick={isCurrentUser ? handleClick : undefined} />
+                onClick={isCurrentUser ? handleClick : onUserClick}
+            />
             <UserSuggestionsCard
                 currentUser={currentUser}
                 userSuggestionsList={suggestionsList}
                 isLoading={suggestionsLoading}
                 isError={isError}
-                error={error} />
+                error={error}
+                onUserClick={onUserClick} />
 
         </aside>
     );
