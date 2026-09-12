@@ -16,7 +16,7 @@ export function useUserSuggestionsList(enabled = true) {
         )
     ).map(user => {
         // Paso 1 — encuentra la id del primer follower que el currentUser también sigue
-        const matchId = user.followers.find(follower =>
+        const matchId = user.followers?.find(follower =>
             currentsFollowings?.some(following => following.userId === follower.userId)
         )?.userId
 
