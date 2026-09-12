@@ -1,37 +1,16 @@
-/*peoplePageContent.js */
+// peoplePageContent.js
+import { PEOPLE_TYPES_CONFIG } from "./peopleTypes.js";
+
+function resolve(entry, userNick) {
+    return typeof entry === 'function' ? entry(userNick) : entry;
+}
+
 export function getPeoplePageTitle(type, isOwnProfile, userNick) {
-    const PAGE_TITLES = {
-        suggestions: {
-            own: "Suggested for you",
-            other: null,
-        },
-        followers: {
-            own: "Your followers",
-            other: `${userNick || 'This user'}'s followers`,
-        },
-        following: {
-            own: "Following",
-            other: `${userNick || 'This user'} is following`,
-        },
-    }
-    return PAGE_TITLES[type][isOwnProfile ? 'own' : 'other'];
-};
+    const entry = PEOPLE_TYPES_CONFIG[type].title[isOwnProfile ? 'own' : 'other'];
+    return resolve(entry, userNick);
+}
 
 export function getPeoplePageEmptyMessage(type, isOwnProfile, userNick) {
-    const EMPTY_MESSAGES = {
-
-        suggestions: {
-            own: "No suggestions available right now.",
-            other: null,
-        },
-        followers: {
-            own: "No followers yet. Explore users!",
-            other: `${userNick || 'This user'} has no followers yet.`,
-        },
-        following: {
-            own: "You're not following anyone yet.",
-            other: `${userNick || 'This user'} isn't following anyone yet.`,
-        },
-    }
-    return EMPTY_MESSAGES[type][isOwnProfile ? 'own' : 'other'];
-};  
+    const entry = PEOPLE_TYPES_CONFIG[type].emptyMessage[isOwnProfile ? 'own' : 'other'];
+    return resolve(entry, userNick);
+}
