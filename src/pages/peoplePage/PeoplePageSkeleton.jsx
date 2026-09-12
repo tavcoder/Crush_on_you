@@ -1,4 +1,4 @@
-// PostCardSkeleton.jsx
+// PeoplePageSkeleton.jsx
 import { SkeletonBase } from '../../components/ui/skeletons/SkeletonBase';
 
 export function PeoplePageSkeleton({ count = 3 }) {
@@ -7,7 +7,7 @@ export function PeoplePageSkeleton({ count = 3 }) {
         <ul className='users-list' aria-busy="true" aria-label="Loading users" >
             {
                 Array.from({ length: count }, (_, index) => (
-                    <li key={index} className="post-feed__item">
+                    <li key={index} className="users-list__item">
                         <SkeletonBase variant="avatar" />
                         <div className="user-info__text">
                             <SkeletonBase variant="title" width="120px" />
