@@ -1,17 +1,13 @@
 import { useState, useRef, useCallback, useContext } from 'react'
-import { Link } from 'react-router'
+import { Link, useLocation} from 'react-router'
 import { UserAuthContext } from "../../../context/UserAuthContext.jsx";
 import { useDismissible } from '../../../hooks/useDismissible.js'
 import { Avatar } from '../../ui/avatar/Avatar.jsx'
 import './AvatarMenu.css'
 
-const STATIC_ITEMS = [
-    { type: 'link', to: '/profile', label: 'Profile' },
-    { type: 'link', to: '/settings', label: 'Settings' },
-];
-
 export function AvatarMenu({ user }) {
     const context = useContext(UserAuthContext);
+    const location = useLocation();
     const [isOpen, setIsOpen] = useState(false);
     const menuRef = useRef(null);
     const buttonRef = useRef(null);
@@ -26,8 +22,9 @@ export function AvatarMenu({ user }) {
     });
 
     const menuItems = [
-        ...STATIC_ITEMS,
-        { type: 'action', label: 'Logout', variant: 'danger' },
+        { type: 'link', to: '/profile', label: 'Profile', state: { from: location.pathname } },
+        { type: 'link', to: '/settings', label: 'Settings', state: null }   ,
+        { type: 'action', label: 'Logout', variant: 'danger', state: null } 
     ];
 
     return (
@@ -55,6 +52,7 @@ export function AvatarMenu({ user }) {
                                 <li key={item.to} role="none">
                                     <Link
                                         to={item.to}
+                                        state={item.state}
                                         role="menuitem"
                                         className="link-reset avatar-menu__item"
                                         onClick={close}

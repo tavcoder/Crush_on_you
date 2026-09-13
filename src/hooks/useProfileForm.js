@@ -1,12 +1,13 @@
 // hooks/useProfileForm.js
 import { useCallback, useMemo, useState } from 'react';
-import { useNavigate } from 'react-router';
+import { useNavigate, useLocation } from 'react-router';
 import { useForm } from './useForm';
 import { useUpdateProfile } from '../hooks/useUsers'
 import { fieldValidators } from '../utils/validateUtils';
 
 export function useProfileForm(user) {
     const navigate = useNavigate();
+    const location = useLocation();
     const [errorMessage, setErrorMessage] = useState('');
     const { updateProfile } = useUpdateProfile();
     const handleSubmit = useCallback(async (formData) => {
@@ -22,7 +23,7 @@ export function useProfileForm(user) {
         }
     }, [user, navigate, updateProfile])
 
-    const handleCancel = () => navigate(-1);
+    const handleCancel = () => navigate(location.state?.from || '/feed');
 
     const validators = {
         userName: fieldValidators.nameOrSurname,
