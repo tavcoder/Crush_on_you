@@ -152,7 +152,9 @@ export function AuthForm({ mode }) {
                 className="auth-form__submit"
                 disabled={!isValid || isSubmitting}
             >
-                {isSubmitting ? 'Logging in...' : mode === 'register' ? 'Sign up' : 'Log in'}
+                {isSubmitting
+                    ? (mode === 'register' ? 'Signing up...' : 'Logging in...')
+                    : (mode === 'register' ? 'Sign up' : 'Log in')}
             </Button>
 
             {submitError && (
