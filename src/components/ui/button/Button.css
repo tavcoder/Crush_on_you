@@ -10,7 +10,6 @@
 
 
 .btn--primary:hover {
-    background: var(--color-primary-hover);
     box-shadow: var(--shadow-md);
     transform: translateY(-1px);
 }

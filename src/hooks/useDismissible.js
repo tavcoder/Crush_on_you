@@ -1,6 +1,12 @@
 // hooks/useDismissible.js
-import { useEffect } from 'react'
+import { useEffect, useCallback} from 'react'
 export function useDismissible({ isOpen, onClose, triggerRef, contentRef }) {
+
+    const dismiss = useCallback(() => {
+        onClose();
+        triggerRef.current?.focus();
+    }, [onClose, triggerRef]);
+
     useEffect(() => {
         if (!isOpen) return;
         function handleClickOutside(e) {
@@ -8,22 +14,22 @@ export function useDismissible({ isOpen, onClose, triggerRef, contentRef }) {
                 !contentRef.current?.contains(e.target) &&
                 !triggerRef.current?.contains(e.target)
             ) {
-                onClose();
+                dismiss();
             }
         }
         document.addEventListener('mousedown', handleClickOutside);
         return () => document.removeEventListener('mousedown', handleClickOutside);
-    }, [isOpen, onClose, contentRef, triggerRef]);
+    }, [isOpen, dismiss, contentRef, triggerRef]);
 
     useEffect(() => {
         if (!isOpen) return;
         function handleEscape(e) {
             if (e.key === 'Escape') {
-                onClose();
-                triggerRef.current?.focus();
+                dismiss();
             }
         }
         document.addEventListener('keydown', handleEscape);
         return () => document.removeEventListener('keydown', handleEscape);
-    }, [isOpen, onClose, triggerRef]);
+    }, [isOpen, dismiss]);
+    return { dismiss };
 }
