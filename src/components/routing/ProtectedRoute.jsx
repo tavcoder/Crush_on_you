@@ -1,9 +1,10 @@
 // ProtectedRoute.jsx
+import { useContext } from 'react'
 import { Navigate, Outlet } from 'react-router'
-import { getToken } from '../../services/apiClient'
+import { UserAuthContext } from '../../context/UserAuthContext'
 
 export function ProtectedRoute() {
-    const token = getToken()
-    if (!token) return <Navigate to="/" replace />
+    const { isAuthenticated } = useContext(UserAuthContext)
+    if (!isAuthenticated) return <Navigate to="/" replace />
     return <Outlet />
 }
