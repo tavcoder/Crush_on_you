@@ -1,0 +1,88 @@
+.hearts {
+    pointer-events: none;
+    /* para que no bloqueen clics sobre el form */
+}
+
+.hearts__heart {
+    position: absolute;
+    bottom: 0;
+    color: var(--color-secondary);
+    fill: var(--color-secondary);
+    opacity: 0;
+}
+
+.hearts__heart--1 {
+    width: 2rem;
+    height: 2rem;
+    left: 20%;
+    animation: heart-float-pop 3s ease-out infinite;
+
+
+
+}
+
+.hearts__heart--2 {
+    width: 2rem;
+    height: 2rem;
+    animation: heart-float 3.6s ease-out infinite;
+    left: 50%;
+
+}
+
+.hearts__heart--3 {
+    right: 20%;
+    animation: heart-float-pop 5.2s ease-out infinite;
+
+}
+
+@keyframes heart-float-pop {
+    0% {
+        opacity: 0;
+        transform: translateY(0) scale(0.3);
+    }
+
+    15% {
+        opacity: 1;
+        transform: translateY(-40px) scale(1);
+    }
+
+    70% {
+        opacity: 1;
+        transform: translateY(-160px) scale(1.1);
+    }
+
+    100% {
+        opacity: 0;
+        transform: translateY(-410px) scale(1.6);
+    }
+}
+
+@keyframes heart-float {
+    0% {
+        opacity: 0;
+        transform: translateY(0) translateX(0px) scale(0.3);
+    }
+
+    15% {
+        opacity: 1;
+        transform: translateY(-40px) translateX(-20px) scale(1);
+    }
+
+    70% {
+        opacity: 1;
+        transform: translateY(-160px) translateX(20px) scale(1.1);
+    }
+
+
+    100% {
+        opacity: 0;
+        transform: translateY(-410px) scale(1.6);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .hearts__heart {
+        animation: none;
+        opacity: 0;
+    }
+}

@@ -15,7 +15,7 @@ export function useAuthForm(mode = 'login') { // 'login' | 'register'
         if (mode === 'login') {
             const { token, userId } = await loginUser(formData)
             await authLogin(token, userId)
-            navigate('/profile')
+            navigate('/feed')
         } else {
             await registerUser(formData)
             const { token, userId } = await loginUser(formData)

@@ -11,6 +11,9 @@
 
 /* Mobile (base): el card se estira al ancho disponible */
 .auth-card {
+    position: relative;
+    margin-top: var(--space-8);
+    padding: var(--space-4) var(--space-8);
     width: 100%;
     display: flex;
     flex-direction: column;

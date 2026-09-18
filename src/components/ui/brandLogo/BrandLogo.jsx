@@ -13,7 +13,7 @@ export function BrandLogo({ asLink = true, size = "xs" }) {
 
     if (asLink) {
         return (
-            <Link to="/" className="brand-logo" aria-label="Crush On You — go to home">
+            <Link to="/feed" className="brand-logo" aria-label="Crush On You — go to feed">
                 {content}
             </Link>
         )
