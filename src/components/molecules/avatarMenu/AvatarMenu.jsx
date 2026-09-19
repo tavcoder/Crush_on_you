@@ -1,4 +1,4 @@
-import { useState, useRef, useCallback, useContext } from 'react'
+import { useState, useRef, useCallback, useContext, useEffect } from 'react'
 import { Link, useLocation } from 'react-router'
 import { UserAuthContext } from "../../../context/UserAuthContext.jsx";
 import { useDismissible } from '../../../hooks/useDismissible.js'
@@ -18,6 +18,15 @@ export function AvatarMenu({ user }) {
 
     const close = useCallback(() => setIsOpen(false), []);
 
+    useEffect(() => {
+        if (!isOpen) return;
+
+        const firstMenuItem = menuRef.current?.querySelector('[role="menuitem"]');
+
+        firstMenuItem?.focus();
+    }, [isOpen]);
+
+
     const handleLogoutClick = () => {
         close();
         setIsLogoutConfirmOpen(true);
@@ -30,6 +39,24 @@ export function AvatarMenu({ user }) {
 
     const handleCancelLogout = () => {
         setIsLogoutConfirmOpen(false);
+    };
+
+
+
+    const handleMenuKeyDown = (event) => {
+        if (event.key !== 'ArrowDown' && event.key !== 'ArrowUp') {
+            return;
+        }
+        event.preventDefault();
+        const items = [...menuRef.current.querySelectorAll('[role="menuitem"]')];
+
+        const currentIndex = items.indexOf(document.activeElement);
+        
+        const nextIndex = event.key === 'ArrowDown'
+            ? (currentIndex + 1) % items.length
+            : (currentIndex - 1 + items.length) % items.length;
+
+        items[nextIndex].focus();
     };
 
     useDismissible({
@@ -63,6 +90,7 @@ export function AvatarMenu({ user }) {
                     ref={menuRef}
                     className="card avatar-menu__dropdown"
                     role="menu"
+                    onKeyDown={handleMenuKeyDown}
                 >
                     {menuItems.map((item) => {
                         if (item.type === 'link') {
@@ -72,7 +100,7 @@ export function AvatarMenu({ user }) {
                                         to={item.to}
                                         state={item.state}
                                         role="menuitem"
-                                        className="link-reset avatar-menu__item"
+                                        className="avatar-menu__item"
                                         onClick={close}
                                     >
                                         {item.label}
