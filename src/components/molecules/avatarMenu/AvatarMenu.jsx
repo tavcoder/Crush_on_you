@@ -132,7 +132,6 @@ export function AvatarMenu({ user }) {
                 message="Are you sure you want to log out?"
                 confirmLabel="Logout"
                 cancelLabel="Cancel"
-                variant="danger"
                 onConfirm={handleConfirmLogout}
                 onCancel={handleCancelLogout}
                 triggerRef={buttonRef}

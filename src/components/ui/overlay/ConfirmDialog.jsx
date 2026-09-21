@@ -9,7 +9,6 @@ export function ConfirmDialog({
     message,
     confirmLabel = 'Confirm',
     cancelLabel = 'Cancel',
-    variant = 'default', // 'default' | 'danger'
     onConfirm,
     onCancel,
     triggerRef,

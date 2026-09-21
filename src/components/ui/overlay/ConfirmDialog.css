@@ -58,13 +58,3 @@
     justify-content: flex-end;
     gap: var(--space-3);
 }
-
-/* Variante danger sin tocar Button.css compartido */
-.confirm-dialog__actions .btn--danger {
-    background: var(--color-danger, #e02424);
-    color: var(--color-text-on-primary);
-}
-
-.confirm-dialog__actions .btn--danger:hover {
-    background: var(--color-danger-hover, #c81e1e);
-}
