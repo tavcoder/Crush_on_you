@@ -1,6 +1,7 @@
 // pages/RegisterPage/RegisterPage.jsx
 
 import { Link } from 'react-router';
+import { Hearts } from './Hearts.jsx';
 import { AuthForm } from '../../components/molecules/authForm/AuthForm.jsx';
 import { BrandLogo } from '../../components/ui/brandLogo/BrandLogo.jsx';
 import { PageFooter } from '../../components/ui/pageFooter/PageFooter.jsx';
@@ -10,6 +11,7 @@ export function RegisterPage() {
     return (
         <main className="auth-page">
             <BrandLogo size="xl" asLink={false} />
+            <Hearts />
             <div className="card auth-card">
                 <h1 className='auth-card__title'>Welcome</h1>
                 <p className='auth-card__text'>Sign up to meet amazing people.</p>

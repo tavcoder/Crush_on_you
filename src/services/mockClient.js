@@ -4,7 +4,7 @@ import { usersData } from './mocks/users.mock'
 import { enrichPostsWithUserData } from '../utils/postsUtils'
 import { ApiError } from '../services/ApiError'
 
-let currentToken = localStorage.getItem('token') ?? 'erch'
+let currentToken = localStorage.getItem('token')
 
 export function setMockToken(token) {
     currentToken = token
@@ -28,6 +28,9 @@ export function setMockToken(token) {
     }
 }
 
+export function removeMockToken() {
+    currentToken = null
+}
 export function getMockToken() {
     return currentToken
 }

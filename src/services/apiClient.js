@@ -1,5 +1,5 @@
 // services/apiClient.js
-import { mockClient, getMockToken, setMockToken } from './mockClient.js'
+import { mockClient, getMockToken, setMockToken, removeMockToken } from './mockClient.js'
 import { ApiError } from './ApiError.js'
 
 const USE_MOCK = import.meta.env.VITE_USE_MOCK === 'true'
@@ -13,6 +13,11 @@ export function getToken() {
 export function saveToken(token) {
     localStorage.setItem('token', token)
     if (USE_MOCK) setMockToken(token)
+}
+
+export function removeToken() {
+    localStorage.removeItem('token')
+    if (USE_MOCK) removeMockToken()
 }
 
 function authHeaders(endpoint) {
