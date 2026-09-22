@@ -1,7 +1,7 @@
 // context/UserAuthContext.jsx
 import { createContext, useState, useCallback } from "react"
 import { useQueryClient } from '@tanstack/react-query'
-import { getToken, saveToken } from '../services/apiClient'
+import { getToken, saveToken, removeToken } from '../services/apiClient'
 import { useUser } from '../hooks/useUsers.js'
 
 export const UserAuthContext = createContext(null)
@@ -24,7 +24,7 @@ export function UserAuthProvider({ children }) {
     }, [queryClient])
 
     const logout = useCallback(() => {
-        localStorage.removeItem('token')
+        removeToken()
         localStorage.removeItem('userId')
         setIsAuthenticated(false)
         setUserId(null)
