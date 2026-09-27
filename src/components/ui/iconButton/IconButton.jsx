@@ -78,7 +78,7 @@ export function IconButton({
 
     return (
         <div
-            className={`btn-icon__wrapper${tooltip ? ' btn-icon__wrapper--has-tooltip' : ''}`}
+            className={className="tooltip-wrapper"}
             data-tooltip={tooltip}
         >
             <button disabled={disabled} type={type} role={role} aria-checked={ariaChecked} {...commonProps}>
