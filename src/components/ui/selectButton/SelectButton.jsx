@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { ChevronDown } from "lucide-react";
 import './SelectButton.css'
 
-export function SelectButton({ label, name, options = [], onChange, disabled = false, className = "" }) {
+export function SelectButton({ label, name, options = [], onChange, disabled = false, tooltip = undefined, className = "" }) {
     const [value, setValue] = useState(options[0]?.value ?? "");
 
     const handleChange = (e) => {
@@ -14,31 +14,33 @@ export function SelectButton({ label, name, options = [], onChange, disabled = f
     const activeIcon = options.find(o => o.value === value)?.icon;
 
     return (
-        <div className={`btn-reset select-button ${className}`} >
-            {activeIcon && (
-                <span className='select-button__icon'>{activeIcon}</span>
-            )}
-            <p className='select-button__label'>{label}</p>
+        <div className="tooltip-wrapper" data-tooltip={tooltip}>
+            <div className={`btn-reset select-button ${className} ${disabled ? 'select-button--disabled' : ''}`} >
+                {activeIcon && (
+                    <span className='select-button__icon'>{activeIcon}</span>
+                )}
+                <p className='select-button__label'>{label}</p>
 
-            <select
-                className='select-button__select '
-                value={value}
-                disabled={disabled}
-                onChange={handleChange}
-                name={label}
-                aria-label={label}
-            >
-                {options.map((option) => (
-                    <option key={option.value} value={option.value}>
-                        {option.label}
-                    </option>
-                ))}
-            </select>
-            <ChevronDown
-                size={14}
-                className='select-button__chevron'
-                aria-hidden="true"
-            />
+                <select
+                    className='select-button__select '
+                    value={value}
+                    disabled={disabled}
+                    onChange={handleChange}
+                    name={label}
+                    aria-label={label}
+                >
+                    {options.map((option) => (
+                        <option key={option.value} value={option.value}>
+                            {option.label}
+                        </option>
+                    ))}
+                </select>
+                <ChevronDown
+                    size={14}
+                    className='select-button__chevron'
+                    aria-hidden="true"
+                />
+            </div>
         </div>
     )
 }
