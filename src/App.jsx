@@ -34,7 +34,9 @@ function App() {
                 <Route path="/profile" element={<MyProfilePage />} />
                 <Route path="/feed" element={<FeedPage />} />
                 <Route path="/timeline" element={<TimelinePage />} />
-                <Route path="/people/:type" element={<PeoplePage />} />
+                <Route path="/timeline/:userId" element={<TimelinePage />} />
+                <Route path="/people/:type" element={<PeoplePage />}/>
+                <Route path="/people/:type/:userId" element={<PeoplePage />}/>
                 <Route path="/search" element={<ComingSoonPage />} />
                 <Route path="/notifications" element={<ComingSoonPage />} />
                 <Route path="/messages" element={<ComingSoonPage />} />
