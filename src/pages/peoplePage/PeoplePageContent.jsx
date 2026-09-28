@@ -8,7 +8,7 @@ import { getPeoplePageTitle, getPeoplePageEmptyMessage } from "./peoplePageConte
 import { PeoplePageSkeleton } from "./PeoplePageSkeleton.jsx";
 import './PeoplePageContent.css'
 
-export function PeoplePageContent({type, displayUserProfile, currentUser, onUserClick}) {
+export function PeoplePageContent({type, displayUserProfile, currentUser}) {
     
     const { users, isLoading, isEmpty, isError, error, pagination, setPage } = usePeoplePage(type, displayUserProfile?.id);
 
@@ -33,7 +33,7 @@ export function PeoplePageContent({type, displayUserProfile, currentUser, onUser
             {isLoading && <PeoplePageSkeleton />}
 
             {!isLoading &&
-                <UsersList usersList={users} currentUser={currentUser} type={type} onUserClick={onUserClick} />}
+                <UsersList usersList={users} currentUser={currentUser} type={type} />}
 
             <Pagination pagination={pagination} onPageChange={setPage} />
 

@@ -6,6 +6,7 @@ import { PostStats } from "../../molecules/postStats/PostStats.jsx"
 import { IconButton } from "../../ui/iconButton/IconButton.jsx"
 import { HighlightedText } from "../../ui/highlightedText/HighlightedText.jsx"
 import { getDateFormat, getUserFullNameFormat } from "../../../utils/formatUtils.js"
+import { useProfilePath } from "../../../hooks/useProfilePath.js"
 import { useLikePost, useBookmarkPost } from "../../../hooks/usePosts.js"
 import './PostCard.css'
 
@@ -19,6 +20,7 @@ import './PostCard.css'
 export function PostCard({ post, query, isCurrentUser }) {
     const { mutate: likePost } = useLikePost()
     const { mutate: bookmarkPost } = useBookmarkPost()
+    const buildProfilePath = useProfilePath()
 
     const handleBookmark = () => {
         bookmarkPost(post.id)
@@ -53,6 +55,7 @@ export function PostCard({ post, query, isCurrentUser }) {
                 primaryText={primaryText}
                 secondaryText={secondaryText}
                 direction="row"
+                to={buildProfilePath(author)}
                 action={<IconButton
                     icon={<MoreHorizontal />}
                     variant="ghost"

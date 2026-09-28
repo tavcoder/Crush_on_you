@@ -1,11 +1,12 @@
 import { UserInfo } from '../../molecules/userInfo/UserInfo'
-import { getFollowedByFormat } from '../../../utils/formatUtils.js'
 import { FollowButton } from '../../ui/followButton/FollowButton'
+import { getFollowedByFormat } from '../../../utils/formatUtils.js'
+import { useProfilePath } from '../../../hooks/useProfilePath.js'
 import './UsersList.css'
 
 
-export function UsersList({ usersList, currentUser, type = 'suggestions', onUserClick }) {
-
+export function UsersList({ usersList, currentUser, type = 'suggestions' }) {
+    const buildProfilePath = useProfilePath();
 
     return (
         <ul className='users-list ' role='list'>
@@ -16,16 +17,15 @@ export function UsersList({ usersList, currentUser, type = 'suggestions', onUser
 
                 return (
                     <li key={user.id} className='users-list__item' role='listitem'>
-                        <button
-                            className="btn-reset users-list__user-button"
-                            onClick={() => onUserClick(user)}>
-                            <UserInfo
-                                user={user}
-                                avatarSize="sm"
-                                primaryText={user.userNick}
-                                secondaryText={type === 'suggestions' ? getFollowedByFormat(user?.followedBy) : secondaryText}
-                            />
-                        </button>
+
+                        <UserInfo
+                            user={user}
+                            avatarSize="sm"
+                            primaryText={user.userNick}
+                            secondaryText={type === 'suggestions' ? getFollowedByFormat(user?.followedBy) : secondaryText}
+                            to={buildProfilePath(user)}
+                        />
+
                         <FollowButton
                             userId={user.id}
                             currentUser={currentUser}
