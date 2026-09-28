@@ -14,7 +14,7 @@ import './Layout.css'
 
 
 export function Layout() {
-    const { results, isLoading: isSearchLoading, isSearching, query, error: searchingError, hasNextPage: canLoadMoreSearch, fetchNextPage: loadMoreSearch, isFetchingNextPage: isFetchingNextPageSearch } = useSearch('posts')
+    const search = useSearch('posts')
     const { currentUser, isLoading: currentUserLoading, error: currentUserError } = useContext(UserAuthContext)
     const { stories, onStorySeen } = useStories()
     const { viewedUser: displayUserProfile } = useViewedUserProfile(currentUser)
@@ -35,15 +35,7 @@ export function Layout() {
                             currentUser,
                             currentUserError,
                             displayUserProfile,
-                            isSearching,
-                            isSearchLoading,
-                            isFetchingNextPageSearch,
-                            canLoadMoreSearch,
-                            loadMoreSearch,
-                            searchingError,
-                            results,
-                            query,
-
+                            search,
                         }}
                     />
                 </main>
