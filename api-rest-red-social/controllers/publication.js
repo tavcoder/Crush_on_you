@@ -18,22 +18,26 @@ const pruebaPublication = (req, res) => {
 }
 
 // Guardar publicacion
-const save = (req, res) => {
+const save = async (req, res) => {
     const params = req.body;
     if (!params.text) return res.status(400).send({ status: "error", message: "Debes enviar el texto de la publicacion." });
 
-    let newPublication = new Publication(params);
-    newPublication.user = req.user.id;
+    try {
+        let newPublication = new Publication(params);
+        newPublication.user = req.user.id;
 
-    newPublication.save((error, publicationStored) => {
-        if (error || !publicationStored) return res.status(400).send({ status: "error", message: "No se ha guardado la publicación." });
+        await newPublication.save();
+        const publicationStored = await Publication.findById(newPublication._id)
+            .populate('user', '-password -__v -role -email');
 
         return res.status(200).send({
             status: "success",
             message: "Publicación guardada",
             publicationStored
         });
-    });
+    } catch (error) {
+        return res.status(400).send({ status: "error", message: "No se ha guardado la publicación." });
+    }
 }
 
 // Sacar una publicacion
@@ -56,24 +60,41 @@ const detail = (req, res) => {
     });
 }
 
-// Eliminar publicaciones
-const remove = (req, res) => {
+// Eliminar publicacion
+const remove = async (req, res) => {
     const publicationId = req.params.id;
+    const userId = req.user.id;
 
-    Publication.find({ "user": req.user.id, "_id": publicationId }).remove(error => {
-        if (error) {
-            return res.status(500).send({
+    try {
+        const publication = await Publication.findById(publicationId);
+
+        if (!publication) {
+            return res.status(404).send({
                 status: "error",
-                message: "No se ha eliminado la publicacion"
+                message: "La publicación no existe"
             });
         }
 
+        if (publication.user.toString() !== userId) {
+            return res.status(403).send({
+                status: "error",
+                message: "No tienes permiso para eliminar esta publicación"
+            });
+        }
+
+        await Publication.deleteOne({ _id: publicationId });
+
         return res.status(200).send({
             status: "success",
-            message: "Eliminar publicacion",
+            message: "Publicación eliminada",
             publication: publicationId
         });
-    });
+    } catch (error) {
+        return res.status(500).send({
+            status: "error",
+            message: "Error al eliminar la publicación"
+        });
+    }
 }
 
 // listar publicaciones de un usuario
