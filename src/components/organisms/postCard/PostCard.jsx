@@ -3,6 +3,7 @@ import { MoreHorizontal } from "lucide-react";
 import { UserInfo } from "../../molecules/userInfo/UserInfo.jsx"
 import { PostMedia } from "../../molecules/postMedia/PostMedia.jsx"
 import { PostStats } from "../../molecules/postStats/PostStats.jsx"
+import { PostOptionsMenu } from "../../molecules/postOptionsMenu/PostOptionsMenu.jsx"
 import { IconButton } from "../../ui/iconButton/IconButton.jsx"
 import { HighlightedText } from "../../ui/highlightedText/HighlightedText.jsx"
 import { getDateFormat, getUserFullNameFormat } from "../../../utils/formatUtils.js"
@@ -56,12 +57,14 @@ export function PostCard({ post, query, isCurrentUser }) {
                 secondaryText={secondaryText}
                 direction="row"
                 to={buildProfilePath(author)}
-                action={<IconButton
-                    icon={<MoreHorizontal />}
-                    variant="ghost"
-                    ariaLabel="Post options"
-                    disabled
-                    tooltip="More options coming soon" />}
+                action={isCurrentUser
+                    ? <PostOptionsMenu postId={post.id} />
+                    : <IconButton
+                        icon={<MoreHorizontal />}
+                        variant="ghost"
+                        ariaLabel="Post options"
+                        disabled
+                        tooltip="More options coming soon" />}
             />
             <PostMedia
                 images={images}
