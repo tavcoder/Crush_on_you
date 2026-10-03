@@ -88,8 +88,8 @@ export const createPost = async (data) => {
             // el post en sí ya está guardado correctamente en el paso anterior
         }
     }
-
     return {
+
         ...res,
         // ⚠️ adaptPost se llama SIN currentUser a propósito, no es un bug:
         // un post recién creado no puede tener isLiked ni isBookmarked en true
@@ -98,6 +98,7 @@ export const createPost = async (data) => {
         publicationStored: adaptPost(finalPublication),
         imageUploadFailed
     }
+
 }
 
 /**

@@ -1,7 +1,7 @@
 // hooks/usePosts.js
 import { useContext } from "react";
 import { useMutation, useQueryClient, useInfiniteQuery } from '@tanstack/react-query'
-import { getPosts, createPost, getPostsByUser, searchPosts, likePost, bookmarkPost } from '../services/api/posts.api.js'
+import { getPosts, createPost, getPostsByUser, searchPosts, likePost, bookmarkPost, deletePost } from '../services/api/posts.api.js'
 import { UserAuthContext } from "../context/UserAuthContext.jsx";
 
 /**
@@ -330,5 +330,37 @@ export function useBookmarkPost() {
 
             queryClient.invalidateQueries({ queryKey: ['posts'] });
         }
+    });
+}
+
+export function useDeletePost() {
+    const queryClient = useQueryClient();
+
+    const removeFromData = (data, postId) => {
+        if (!data) return data;
+
+        if (Array.isArray(data.pages)) {
+            return {
+                ...data,
+                pages: data.pages.map((page) => ({
+                    ...page,
+                    data: page.data.filter((post) => post._id !== postId && post.id !== postId)
+                }))
+            };
+        }
+
+        return data;
+    };
+
+    return useMutation({
+        mutationFn: (postId) => deletePost(postId),
+
+        onSuccess: (_response, postId) => {
+            queryClient.setQueriesData({ queryKey: ['posts'] }, (old) =>
+                removeFromData(old, postId)
+            );
+            queryClient.removeQueries({ queryKey: ['posts', 'detail', postId] });
+            queryClient.invalidateQueries({ queryKey: ['userStats'] });
+        },
     });
 }
