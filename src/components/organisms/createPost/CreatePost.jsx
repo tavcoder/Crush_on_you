@@ -4,15 +4,10 @@ import { Avatar } from '../../ui/avatar/Avatar.jsx'
 import { Button } from '../../ui/button/Button.jsx'
 import { IconButton } from '../../ui/iconButton/IconButton.jsx'
 import { SelectButton } from '../../ui/selectButton/SelectButton.jsx'
-import { PostMedia } from '../../molecules/postMedia/PostMedia.jsx'
 import { ALLOWED_FILE_TYPES } from '../../../utils/validateUtils.js'
 import { usePostMedia } from '../../../hooks/usePostMedia.js'
 import './CreatePost.css'
 
-// TODO: cuando la API soporte upload real, cambiar createPost a usar FormData
-// y ajustar la clave ("files" vs "file") según el backend.
-// Por ahora, el estado local actualiza correctamente, pero la imagen se rompe
-// porque el backend no recibe los archivos como multipart/form-data.
 
 export function CreatePost({ user, onPostCreated, isSubmitting = false }) {
     const [content, setContent] = useState('');

@@ -2,25 +2,36 @@
 .user-stats {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    /* ← cada stat ocupa exactamente 1/3 */
     border-top: 1px solid var(--color-border-strong);
     padding: var(--space-4) var(--space-2);
     margin: 0;
-    /* ← elimina el margin por defecto del <dl> */
+    list-style: none;
+}
+
+
+.user-stats__cell {
+    display: flex;
+    padding: var(--space-1);
+    border-left: 2px solid var(--color-border-strong);
+}
+
+.user-stats__cell:first-child{
+    border-left: none;
 }
 
 .user-stats__item {
-    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    text-align: start;
     transition: var(--transition-base);
 }
+
 .user-stats__item:hover {
     color: var(--color-primary);
     transform: scale(1.05);
     cursor: pointer;
-}
-
-.user-stats__item+.user-stats__item {
-    border-left: 1px solid var(--color-border-strong);
 }
 
 .user-stats__count {
