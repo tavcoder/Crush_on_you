@@ -1,4 +1,5 @@
 // seed.js
+require('dotenv').config();
 const dns = require('dns');
 dns.setServers(['8.8.8.8', '1.1.1.1']);
 const mongoose = require('mongoose');
@@ -8,11 +9,42 @@ const { faker } = require('@faker-js/faker');
 const User = require('./models/user');
 const Publication = require('./models/publication');
 const Follow = require('./models/follow');
+const { posts, comments, bios } = require('./seedData');
 
-mongoose.connect('mongodb+srv://admin:!123Friends@cluster0.hpqftkg.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0', {
-    useNewUrlParser: true,
-    useUnifiedTopology: true
-});
+mongoose.connect(process.env.MONGO_URI);
+
+// Elige un elemento al azar (se pueden repetir)
+function pickRandom(array) {
+    return array[Math.floor(Math.random() * array.length)];
+}
+
+// Baraja una copia del array (Fisher-Yates)
+function shuffle(array) {
+    const copy = [...array];
+    for (let i = copy.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [copy[i], copy[j]] = [copy[j], copy[i]];
+    }
+    return copy;
+}
+
+// Devuelve una función que entrega elementos sin repetir hasta agotar el array,
+// y entonces vuelve a barajar y empieza otra vuelta
+function createDeck(array) {
+    let deck = shuffle(array);
+    let index = 0;
+
+    return function next() {
+        if (index >= deck.length) {
+            deck = shuffle(array);
+            index = 0;
+        }
+        return deck[index++];
+    };
+}
+
+const nextPost = createDeck(posts);
+const nextBio = createDeck(bios);
 
 async function createFakeUsers(count = 10) {
     const users = [];
@@ -21,18 +53,22 @@ async function createFakeUsers(count = 10) {
         const firstname = faker.person.firstName();
         const lastname = faker.person.lastName();
         const email = faker.internet.email({ firstName: firstname, lastName: lastname });
-        const nick = faker.internet.userName({ firstName: firstname, lastName: lastname });
+        const nick = faker.internet.username({ firstName: firstname, lastName: lastname });
         const avatar = faker.image.avatar();
         const password = await bcrypt.hash('123456', 10); // contraseña por defecto
 
         const user = new User({
             name: firstname,
-            lastname: lastname,
+            surname: lastname,
             nick: nick.toLowerCase(),
             email: email.toLowerCase(),
             password: password,
             image: avatar,
-            bio: faker.person.bio()
+            city: faker.location.city(),
+            country: faker.location.country(),
+            profileDetails: {
+                bio: nextBio()
+            }
         });
 
         await user.save();
@@ -56,13 +92,11 @@ async function createFakePublications(users, countPerUser = 3) {
         const followersIds = followersData.map(f => f.user.toString());
 
         for (let i = 0; i < countPerUser; i++) {
-            const randomImage = techImages[Math.floor(Math.random() * techImages.length)];
-
             const publication = new Publication({
-                text: faker.lorem.paragraph(),
+                text: nextPost(),
                 user: user._id,
-                file: randomImage,
-                created_at: faker.date.recent({ days: 30 }), // ← fecha aleatoria, no siempre "ahora"
+                file: Math.random() < 0.7 ? `https://picsum.photos/seed/crush-${user._id}-${i}/800/800` : undefined,
+                created_at: faker.date.recent({ days: 30 }), // fecha aleatoria, no siempre "ahora"
                 likes: [],
                 comments: []
             });
@@ -71,18 +105,16 @@ async function createFakePublications(users, countPerUser = 3) {
             const likeCount = Math.floor(Math.random() * (maxLikes + 1));
             const usedLikes = new Set();
             while (usedLikes.size < likeCount) {
-                const randomFollowerId = followersIds[Math.floor(Math.random() * followersIds.length)];
-                usedLikes.add(randomFollowerId);
+                usedLikes.add(pickRandom(followersIds));
             }
             publication.likes = Array.from(usedLikes);
 
             const maxComments = Math.min(3, followersIds.length);
             const commentCount = Math.floor(Math.random() * (maxComments + 1));
             for (let j = 0; j < commentCount; j++) {
-                const commenterId = followersIds[Math.floor(Math.random() * followersIds.length)];
                 publication.comments.push({
-                    user: commenterId,
-                    text: faker.lorem.sentence(),
+                    user: pickRandom(followersIds),
+                    text: pickRandom(comments),
                     created_at: new Date()
                 });
             }
@@ -91,7 +123,6 @@ async function createFakePublications(users, countPerUser = 3) {
         }
     }
 }
-
 
 async function createFakeFollows(users, followsPerUser = 3) {
     for (const user of users) {
@@ -104,20 +135,17 @@ async function createFakeFollows(users, followsPerUser = 3) {
         // Escoge aleatoriamente a quién seguir (sin repetir)
         const followedSet = new Set();
         while (followedSet.size < followsPerUser && followedSet.size < others.length) {
-            const randomUser = others[Math.floor(Math.random() * others.length)];
-            followedSet.add(randomUser._id.toString());
+            followedSet.add(pickRandom(others)._id.toString());
         }
 
         // Guardar las relaciones de seguimiento
         for (const followedId of followedSet) {
-            if (followedId) {
-                const follow = new Follow({
-                    user: user._id,
-                    followed: followedId
-                });
+            const follow = new Follow({
+                user: user._id,
+                followed: followedId
+            });
 
-                await follow.save();
-            }
+            await follow.save();
         }
     }
 }
@@ -138,10 +166,10 @@ async function seed() {
     await createFakePublications(users, 5);
 
     console.log('✅ ¡Todo listo!');
-    mongoose.disconnect();
+    await mongoose.disconnect();
 }
 
-seed().catch((err) => {
+seed().catch(async (err) => {
     console.error('❌ Error al generar datos:', err);
-    mongoose.disconnect();
+    await mongoose.disconnect();
 });
