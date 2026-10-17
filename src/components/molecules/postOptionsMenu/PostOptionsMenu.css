@@ -1,3 +1,4 @@
+/*PostOptionsMenu.css*/
 .post-options-menu {
     position: relative;
 }
@@ -35,16 +36,18 @@
     text-align: left;
     padding: 8px 12px;
     font-size: var(--fs-sm);
-    transition: background 0.1s;
-}
-
-.post-options-menu__item:hover {
-    color: var(--color-text-secondary);
+    transition: background var(--transition-fast);
 }
 
 .post-options-menu__item--danger {
     color: var(--color-error);
 }
+
+.post-options-menu__item:hover,
+.post-options-menu__item:focus-visible {
+    background: var(--color-secondary);
+}
+
 
 .post-options-menu__error {
     color: var(--color-error);
