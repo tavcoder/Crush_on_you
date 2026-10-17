@@ -32,7 +32,6 @@ export const getPostsByUser = (userId, { page = 1 } = {}, currentUserId) =>
         .get(`publication/user/${userId}/${page}`)
         .then(res => adaptPostList(res, currentUserId))
         .catch(err => {
-            console.log('tipo:', typeof err.status, 'valor:', err.status)
             if (Number(err.status) === 404) return { data: [], pagination: { currentPage: 1, totalPages: 1 } }
             throw err
         })
@@ -76,16 +75,23 @@ export const createPost = async (data) => {
     let finalPublication = res.publicationStored
     let imageUploadFailed = false
 
+    // save() devuelve el post con el autor populado; upload() lo devuelve SIN popular.
+    // La subida solo aporta `file`, así que se mezcla sobre lo que ya tenemos
+    // en vez de reemplazar el objeto entero.
     if (data.files && data.files.length > 0) {
         try {
             const cleanFile = sanitizeFile(data.files[0])
             const uploadRes = await apiClient.upload(`publication/upload/${res.publicationStored._id}`, cleanFile)
-            finalPublication = uploadRes.publication
+            const uploadedFile = uploadRes?.publication?.file
+
+            if (uploadedFile) {
+                finalPublication = { ...res.publicationStored, file: uploadedFile }
+            } else {
+                imageUploadFailed = true
+            }
         } catch (error) {
-            console.error('No se pudo subir la imagen del post:', error)
+            console.error('Failed to upload the post image:', error)
             imageUploadFailed = true
-            // finalPublication se queda con el post original (sin imagen),
-            // el post en sí ya está guardado correctamente en el paso anterior
         }
     }
     return {
