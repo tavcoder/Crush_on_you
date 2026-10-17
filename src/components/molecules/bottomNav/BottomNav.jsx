@@ -7,7 +7,7 @@ import './BottomNav.css'
 
 const messages = 3;
 const NAV_ITEMS = [
-    { to: '/', icon: Home, label: 'Home', badge: false },
+    { to: '/feed', icon: Home, label: 'Home', badge: false },
     { to: '/search', icon: Search, label: 'Search', badge: false },
     { to: '/messages', icon: MessageCircle, label: 'Messages', badge: Boolean(messages) },
     { to: '/profile', icon: User, label: 'Profile', badge: false },
