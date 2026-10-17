@@ -8,12 +8,6 @@
     transition: var(--transition-base);
 }
 
-
-.btn--primary:hover {
-    box-shadow: var(--shadow-md);
-    transform: translateY(-1px);
-}
-
 .btn--secondary {
     padding: var(--space-2) var(--space-5);
     border-radius: var(--radius-full);
@@ -23,24 +17,30 @@
     transition: var(--transition-base);
 }
 
-.btn--secondary:hover {
-    background: var(--color-secondary-hover);
-    box-shadow: var(--shadow-md);
-    transform: translateY(-1px);
-}
-
 .btn--ghost {
     background: none;
     color: var(--color-text-on-secondary);
     padding: 0;
 }
 
-.btn--ghost:hover {
+.btn--primary:hover:not(:disabled) {
+    box-shadow: var(--shadow-md);
+    transform: translateY(-1px);
+}
+
+.btn--secondary:hover:not(:disabled) {
+    background: var(--color-secondary-hover);
+    box-shadow: var(--shadow-md);
+    transform: translateY(-1px);
+}
+
+.btn--ghost:hover:not(:disabled) {
     text-decoration: underline;
 }
 
-.btn--primary:disabled {
+.btn--primary:disabled,
+.btn--secondary:disabled,
+.btn--ghost:disabled {
     opacity: 0.6;
     cursor: not-allowed;
-    transform: none;
 }

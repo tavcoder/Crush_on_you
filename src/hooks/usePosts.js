@@ -1,7 +1,7 @@
 // hooks/usePosts.js
 import { useContext } from "react";
 import { useMutation, useQueryClient, useInfiniteQuery } from '@tanstack/react-query'
-import { getPosts, createPost, getPostsByUser, searchPosts, likePost, bookmarkPost } from '../services/api/posts.api.js'
+import { getPosts, createPost, getPostsByUser, searchPosts, likePost, bookmarkPost, deletePost } from '../services/api/posts.api.js'
 import { UserAuthContext } from "../context/UserAuthContext.jsx";
 
 /**
@@ -40,7 +40,7 @@ export function useCreatePost() {
                 ...response.publicationStored,
                 author: currentUser
             }
-
+            // Inserción inmediata: el usuario ve su post sin esperar al servidor
             queryClient.setQueryData(['posts', 'feed'], (old) => {
                 if (!old) {
                     return {
@@ -58,8 +58,9 @@ export function useCreatePost() {
                 }
             })
 
-            queryClient.invalidateQueries({ queryKey: ['posts', 'byUser'] })
-            queryClient.invalidateQueries({ queryKey: ['posts', 'detail'] })
+            // Reconcilia con el servidor. La paginación es por offset: un post nuevo
+            // desplaza las páginas siguientes y, sin refetch, al cargar más aparece duplicado.
+            queryClient.invalidateQueries({ queryKey: ['posts'] })
             queryClient.invalidateQueries({ queryKey: ['userStats'] })
 
             if (response.imageUploadFailed) {
@@ -330,5 +331,40 @@ export function useBookmarkPost() {
 
             queryClient.invalidateQueries({ queryKey: ['posts'] });
         }
+    });
+}
+
+export function useDeletePost() {
+    const queryClient = useQueryClient();
+
+    const removeFromData = (data, postId) => {
+        if (!data) return data;
+
+        if (Array.isArray(data.pages)) {
+            return {
+                ...data,
+                pages: data.pages.map((page) => ({
+                    ...page,
+                    data: page.data.filter((post) => post._id !== postId && post.id !== postId)
+                }))
+            };
+        }
+
+        return data;
+    };
+    // No es optimista a propósito: borrar es irreversible, y si la petición falla,
+    // un post que reaparece en una pantalla que el usuario ya dejó es peor que una
+    // espera breve.
+    return useMutation({
+        mutationFn: (postId) => deletePost(postId),
+
+        onSuccess: (_response, postId) => {
+            queryClient.setQueriesData({ queryKey: ['posts'] }, (old) =>
+                removeFromData(old, postId)
+            );
+            queryClient.removeQueries({ queryKey: ['posts', 'detail', postId] });
+            queryClient.invalidateQueries({ queryKey: ['posts'] });
+            queryClient.invalidateQueries({ queryKey: ['userStats'] });
+        },
     });
 }

@@ -1,6 +1,7 @@
 //UserStats.jsx
 import { Link } from 'react-router'
 import { getStatsFormat } from "../../../utils/formatUtils.js"
+import { getTimelinePath, getPeoplePath } from "../../../utils/routeUtils.js"
 import './UserStats.css'
 
 /**
@@ -8,24 +9,32 @@ import './UserStats.css'
  * @param {number} props.postsCount
  * @param {number} props.followers
  * @param {number} props.following
+ * @param {string} [props.userId] Id del perfil ajeno; omitido = usuario logueado
  */
 
-export function UserStats({ postsCount, followers, following }) {
+export function UserStats({ postsCount, followers, following, userId }) {
     return (
-        <dl className="user-stats">
-            <Link className='user-stats__item' to="/timeline">
-                <dd className="user-stats__count">{getStatsFormat(postsCount)}</dd>
-                <dt className="user-stats__title">POSTS</dt>
-            </Link>
+        <ul className="user-stats" role="list">
+            <li className="user-stats__cell">
+                <Link className='user-stats__item' to={getTimelinePath(userId)}>
+                    <span className="user-stats__count">{getStatsFormat(postsCount)}</span>
+                    <span className="user-stats__title">Posts</span>
+                </Link>
+            </li>
 
-            <Link className='user-stats__item' to="/people/followers">
-                <dd className="user-stats__count">{getStatsFormat(followers)}</dd>
-                <dt className="user-stats__title">FOLLOWERS</dt>
-            </Link>
-            <Link className='user-stats__item' to="/people/following">
-                <dd className="user-stats__count">{getStatsFormat(following)}</dd>
-                <dt className="user-stats__title">FOLLOWING</dt>
-            </Link>
-        </dl>
+            <li className="user-stats__cell">
+                <Link className='user-stats__item' to={getPeoplePath('followers', userId)}>
+                    <span className="user-stats__count">{getStatsFormat(followers)}</span>
+                    <span className="user-stats__title">Followers</span>
+                </Link>
+            </li>
+
+            <li className="user-stats__cell">
+                <Link className='user-stats__item' to={getPeoplePath('following', userId)}>
+                    <span className="user-stats__count">{getStatsFormat(following)}</span>
+                    <span className="user-stats__title">Following</span>
+                </Link>
+            </li>
+        </ul>
     )
 }

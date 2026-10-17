@@ -15,7 +15,7 @@ import './Avatar.css'
  * 
  */
 
-export function Avatar({ user, isCurrentUser = false, avatarSize = "sm", hasStory = true, isUnseen = false,className, badge }) {
+export function Avatar({ user, isCurrentUser = false, avatarSize = "sm", hasStory = false, isUnseen = false,className = '' , badge }) {
 
     const [imgError, setImgError] = useState(false)
     if (!user) return null;

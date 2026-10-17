@@ -1,30 +1,23 @@
+/*FeedPage.jsx*/
 import { useOutletContext } from "react-router";
 import { CreatePost } from "../../components/organisms/createPost/CreatePost.jsx";
 import { SortByCard } from "../../components/molecules/sortByCard/SortByCard.jsx";
 import { PostFeed } from "../../components/organisms/postFeed/PostFeed.jsx"
 import { usePosts, useCreatePost } from "../../hooks/usePosts.js"
+import { selectFeedSource } from "../../utils/selectFeedSource.js"
 
 export default function FeedPage() {
-    const {
-        posts,
-        fetchNextPage: loadMorePosts,
-        hasNextPage: canLoadMorePosts,
-        isLoading,
-        isFetchingNextPage,
-        error,
-    } = usePosts()
+    const feed = usePosts()
 
     const { addPost, isAddingPost } = useCreatePost()
+    const { currentUser, currentUserError, search } = useOutletContext();
 
-    const { currentUser, currentUserError, isSearching, isSearchLoading, searchingError, loadMoreSearch, canLoadMoreSearch, isFetchingNextPageSearch, results, query } = useOutletContext();
 
-    const displayPosts = isSearching ? results : posts
-    const displayLoading = isSearching ? isSearchLoading : isLoading
-    const displayError = error ? error : currentUserError ? currentUserError : searchingError
-    const displayCanLoadMore = isSearching ? canLoadMoreSearch : canLoadMorePosts
-    const displayLoadMore = isSearching ? loadMoreSearch : loadMorePosts
-    const displayIsFetchingNextPage = isSearching ? isFetchingNextPageSearch : isFetchingNextPage
-    const emptyMessage = isSearching ? `No posts match "${query}"` : "No posts yet. Be the first to share something!"
+    const feedState = selectFeedSource({
+        feed: { ...feed, error: feed.error ?? currentUserError },
+        search,
+        emptyMessage: "No posts yet. Be the first to share something!",
+    })
 
     return (
         <section className="page-content">
@@ -34,14 +27,14 @@ export default function FeedPage() {
                 disabled={true} />
 
             <PostFeed
-                query={query}
-                posts={displayPosts}
-                isInitialLoading={displayLoading}
-                isLoadingNextPage={displayIsFetchingNextPage}
-                canLoadMore={displayCanLoadMore}
-                onLoadMore={displayLoadMore}
-                emptyMessage={emptyMessage}
-                error={displayError}
+                query={search.query}
+                posts={feedState.posts}
+                isInitialLoading={feedState.isInitialLoading}
+                isLoadingNextPage={feedState.isLoadingNextPage}
+                canLoadMore={feedState.canLoadMore}
+                onLoadMore={feedState.onLoadMore}
+                emptyMessage={feedState.emptyMessage}
+                error={feedState.error}
             />
         </section>
     )

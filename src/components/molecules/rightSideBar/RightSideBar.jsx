@@ -3,7 +3,7 @@ import { useOnlineUsers } from "../../../hooks/useOnlineUsers.js"
 import { UsersOnlineCard } from "../usersOnlineCard/UsersOnlineCard.jsx"
 import './RightSideBar.css'
 
-export function RightSideBar({onUserClick}) {
+export function RightSideBar() {
 
     const { onlineUsers, isLoading, isError, error } = useOnlineUsers()
 
@@ -14,7 +14,7 @@ export function RightSideBar({onUserClick}) {
                 isLoading={isLoading}
                 isError={isError}
                 error={error}
-                onUserClick={onUserClick} />
+            />
         </aside>
     );
 }

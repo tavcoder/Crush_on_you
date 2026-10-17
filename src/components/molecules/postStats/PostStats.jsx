@@ -12,7 +12,9 @@ export function PostStats({ stats, isLiked = false, isBookmarked = false, onLike
                 <IconButton
                     icon={<Heart fill={isLiked ? "currentColor" : "none"} />}
                     isPressed={isLiked}
+                    animateIcon
                     ariaLabel={isLiked ? "Remove like" : "Like post"}
+                    className='btn-icon--counter'
                     onClick={onLike}
                     direction="row">
                     {getStatsFormat(stats?.likesCount ?? 0)}
@@ -21,6 +23,7 @@ export function PostStats({ stats, isLiked = false, isBookmarked = false, onLike
                 <IconButton
                     icon={<MessageCircle />}
                     ariaLabel="comments count"
+                    className='btn-icon--counter'
                     direction="row"
                     disabled
                     tooltip="Comments coming soon">
@@ -30,6 +33,7 @@ export function PostStats({ stats, isLiked = false, isBookmarked = false, onLike
                 <IconButton
                     icon={<Share />}
                     ariaLabel="shares count"
+                    className='btn-icon--counter'
                     direction="row"
                     disabled
                     tooltip="Share coming soon">
@@ -39,6 +43,7 @@ export function PostStats({ stats, isLiked = false, isBookmarked = false, onLike
             <IconButton
                 icon={<Bookmark fill={isBookmarked ? "currentColor" : "none"} />}
                 isPressed={isBookmarked}
+                animateIcon
                 ariaLabel={isBookmarked ? "Remove bookmark" : "Save post"}
                 onClick={onBookmark}
                 variant="ghost"

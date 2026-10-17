@@ -13,13 +13,15 @@ export function adaptPost(raw, currentUserId) {
         return null;
     }
 
-    // ✅ ADAPTA EL AUTOR — ahora siempre tendrá formato { id, userName, avatarUrl, ... }
-    const author = raw.user ? adaptUser(raw.user) : null;
+    // `user` llega populado (objeto) en save/feed/search, y como ObjectId (string)
+    // en endpoints que no hacen populate. Solo se adapta cuando es un objeto.
+    const author = raw.user && typeof raw.user === 'object' ? adaptUser(raw.user) : null
+    const authorId = author?.id ?? (typeof raw.user === 'string' ? raw.user : '')
 
     return {
         id: raw._id ?? '',
-        authorId: author?.id ?? raw.user?._id ?? '',
-        author,  // ← adaptado, no crudo
+        authorId,
+        author,
         content: raw.text ?? '',
         images: raw.file ? [raw.file] : [],
         stats: {

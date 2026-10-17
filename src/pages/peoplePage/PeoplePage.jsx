@@ -5,7 +5,7 @@ import { isValidPeopleType } from "./peopleTypes.js";
 import { ErrorFallback } from "../../components/ui/feedback/ErrorFallback.jsx";
 
 export default function PeoplePage() {
-    const { displayUserProfile, currentUser, onUserClick } = useOutletContext();
+    const { displayUserProfile, currentUser} = useOutletContext();
 
     const { type = "suggestions" } = useParams();
 
@@ -18,7 +18,6 @@ export default function PeoplePage() {
             type={type}
             displayUserProfile={displayUserProfile}
             currentUser={currentUser}
-            onUserClick={onUserClick}
         />
     );
 }

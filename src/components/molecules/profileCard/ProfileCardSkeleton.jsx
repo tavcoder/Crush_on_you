@@ -4,8 +4,8 @@ import { SkeletonBase } from "../../ui/skeletons/SkeletonBase";
 export function ProfileCardSkeleton() {
     return (<article className='card profile-card' aria-busy="true" aria-label="Loading profile info">
         {/* Header: Avatar + UserFullName + UserLocation */}
-        <div className="user-info" >
-            <SkeletonBase variant="avatar" />
+        <div className="user-info" style={{ display: 'flex', flexDirection: 'column', gap: '0.25rem' }} >
+            <SkeletonBase variant="avatar" width= "60px" height= "60px"/>
             <div className="user-info__text">
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '0.25rem' }}>
                     <SkeletonBase variant="title" width="120px" />

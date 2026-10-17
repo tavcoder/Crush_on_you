@@ -1,6 +1,8 @@
 .select-button {
     position: relative;
     gap: var(--space-1);
+    cursor: pointer;
+
 }
 
 .select-button__label {
@@ -24,10 +26,17 @@
     position: absolute;
     inset: 0;
     opacity: 0;
-    cursor: pointer;
     width: 100%;
 }
 
-@media (min-width: 768px) {.select-button__label {
+.select-button--disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+
+}
+
+@media (min-width: 768px) {
+    .select-button__label {
         display: flex;
-    }}
+    }
+}

@@ -12,6 +12,7 @@ export function ConfirmDialog({
     onConfirm,
     onCancel,
     triggerRef,
+    isConfirmDisabled = false,
 }) {
     const dialogRef = useRef(null)
     const cancelButtonRef = useRef(null)
@@ -89,6 +90,7 @@ export function ConfirmDialog({
                         type="button"
                         variant={'secondary'}
                         onClick={onConfirm}
+                        disabled={isConfirmDisabled}
                     >
                         {confirmLabel}
                     </Button>
