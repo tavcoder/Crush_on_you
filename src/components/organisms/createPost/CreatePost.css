@@ -1,9 +1,10 @@
+/*CreatePost.css*/
 .create-post {
     display: grid;
-    grid-template-columns: auto 1fr auto;
+    grid-template-columns: auto minmax(0, 1fr) auto;
     grid-template-areas:
         "header header header"
-        "img img img"
+        "extras extras extras"
         "actions actions button";
     gap: var(--space-2);
     width: 100%;
@@ -15,15 +16,24 @@
 
 .create-post__header {
     grid-area: header;
+    min-width: 0;
     width: 100%;
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     gap: var(--space-2);
 
 }
 
+.create-post__field {
+    min-width: 0;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
 .create-post__header-input {
     all: unset;
+    box-sizing: border-box;
     width: 100%;
     min-height: 44px;
     padding-left: var(--space-6);
@@ -45,8 +55,38 @@
     box-shadow: 0 0 0 3px var(--color-secondary);
 }
 
-.create-post__header-img {
-    grid-area: img;
+/* Falta el texto: el borde ya señala el campo aunque no tenga el foco */
+.create-post__header-input--needs-text {
+    border-color: var(--color-primary);
+}
+
+.create-post__hint {
+    display: flex;
+    align-items: start;
+    gap: var(--space-2);
+    color: var(--color-text-primary);
+    font-size: var(--fs-sm);
+}
+
+.create-post__hint svg {
+    flex-shrink: 0;
+    width: 1rem;
+    height: 1rem;
+    color: var(--color-primary);
+}
+
+/* Preview y error de envío comparten una zona del grid */
+.create-post__extras {
+    grid-area: extras;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+}
+
+.create-post__error {
+    margin: 0;
+    color: var(--color-error);
+    font-size: var(--fs-sm);
 }
 
 .create-post__actions {
@@ -60,33 +100,66 @@
     font-size: var(--fs-xs);
 }
 
-.create-post__actions-input {
-    position: absolute;
-    width: 1px;
-    height: 1px;
-    opacity: 0;
-    overflow: hidden;
-}
-
 .create-post__button {
     grid-area: button;
     align-self: end;
+}
+
+.create-post__preview {
+    position: relative;
+    width: fit-content;
+    max-width: 100%;
+}
+
+.create-post__preview img {
+    width: 10rem;
+    max-width: 100%;
+    aspect-ratio: 4 / 3;
+    object-fit: cover;
+    border-radius: var(--radius-md);
+}
+
+.create-post__preview-remove {
+    position: absolute;
+    top: 0;
+    right: 0;
+    /* .btn-reset fuerza 44px, demasiado para una miniatura de 160px */
+    min-width: 2rem;
+    min-height: 2rem;
+    border-radius: var(--radius-full);
+    /* fondo propio: una X sin fondo no se ve sobre una imagen */
+    background: var(--color-surface);
+    box-shadow: var(--shadow-md);
+    color: var(--color-text-primary);
+    transition: var(--transition-base);
+}
+
+.create-post__preview-remove:hover {
+    background: var(--color-surface-hover);
+    color: var(--color-text-on-secondary);
+    scale: 1.1;
+}
+
+.create-post__preview-remove svg {
+    width: 1rem;
+    height: 1rem;
 }
 
 @media (min-width: 768px) {
     .create-post {
         grid-template-areas:
             "header header button"
+            "extras extras extras"
             "actions actions actions";
     }
-}
 
-.create-post__preview {
-    position: relative;
-}
+    /* Arriba, junto al textarea: no baja cuando aparece el aviso */
+    .create-post__button {
+        align-self: start;
+    }
 
-.create-post__preview-remove {
-    position: absolute;
-    top: 8px;
-    right: 8px;
+    /* La fila `extras` vacía añade un hueco de gap: se compensa aquí */
+    .create-post__actions {
+        margin-top: var(--space-2);
+    }
 }
