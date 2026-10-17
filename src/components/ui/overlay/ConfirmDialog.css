@@ -18,7 +18,6 @@
     width: 100%;
     padding: var(--space-6);
     border-radius: var(--radius-lg);
-    box-shadow: var(--shadow-lg);
     animation: confirm-dialog-scale-in 0.2s ease-out;
 }
 
