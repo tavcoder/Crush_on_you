@@ -2,7 +2,7 @@
 
 import './RoundButton.css'
 
-export function RoundButton({ buttonText = "+", ariaLabel, className, buttonSize = "sm", onClick }) {
+export function RoundButton({ buttonText = "+", ariaLabel, className = '', buttonSize = "sm", onClick }) {
     return (
         <button
             aria-label={ariaLabel}

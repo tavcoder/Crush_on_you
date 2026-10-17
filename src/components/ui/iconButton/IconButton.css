@@ -14,7 +14,8 @@
     transition: var(--transition-base);
 }
 
-.btn-icon:hover {
+
+.btn-icon:hover:not(:disabled) {
     background: var(--color-secondary);
     color: var(--color-text-on-secondary);
 }
@@ -34,7 +35,7 @@
 
 }
 
-.btn-icon--ghost:hover {
+.btn-icon--ghost:hover:not(:disabled) {
     background: var(--color-secondary);
 }
 
