@@ -2,6 +2,10 @@
 const fs = require("fs");
 const path = require("path");
 const User = require("../models/user");
+const mongoose = require("mongoose");
+const escapeRegex = require("../helpers/escapeRegex");
+
+const USER_PUBLIC_SELECT = "-password -__v -role -email -bookmarks";
 
 // Importar modelos
 const Publication = require("../models/publication");
@@ -19,16 +23,15 @@ const pruebaPublication = (req, res) => {
 
 // Guardar publicacion
 const save = async (req, res) => {
-    const params = req.body;
-    if (!params.text) return res.status(400).send({ status: "error", message: "Debes enviar el texto de la publicacion." });
+    const { text } = req.body;
+    if (!text) return res.status(400).send({ status: "error", message: "Debes enviar el texto de la publicacion." });
 
     try {
-        let newPublication = new Publication(params);
-        newPublication.user = req.user.id;
-
+        const newPublication = new Publication({ text, user: req.user.id });
         await newPublication.save();
+
         const publicationStored = await Publication.findById(newPublication._id)
-            .populate('user', '-password -__v -role -email');
+            .populate("user", USER_PUBLIC_SELECT);
 
         return res.status(200).send({
             status: "success",
@@ -36,6 +39,7 @@ const save = async (req, res) => {
             publicationStored
         });
     } catch (error) {
+        console.error("Error al guardar publicación:", error);
         return res.status(400).send({ status: "error", message: "No se ha guardado la publicación." });
     }
 }
@@ -66,6 +70,9 @@ const remove = async (req, res) => {
     const userId = req.user.id;
 
     try {
+        if (!mongoose.isValidObjectId(publicationId)) {
+            return res.status(400).send({ status: "error", message: "Id de publicación no válido" });
+        }
         const publication = await Publication.findById(publicationId);
 
         if (!publication) {
@@ -105,7 +112,7 @@ const user = (req, res) => {
 
     Publication.find({ "user": userId })
         .sort("-created_at")
-        .populate('user', '-password -__v -role -email')
+        .populate("user", USER_PUBLIC_SELECT)
         .paginate(page, itemsPerPage, async (error, publications, total) => {
             if (error || !publications || publications.length <= 0) {
                 return res.status(404).send({
@@ -149,8 +156,6 @@ const upload = (req, res) => {
         { new: true },
         (error, publicationUpdated) => {
             if (error || !publicationUpdated) {
-                console.log('###### UPLOAD CATCH REACHED ######')
-                console.log('UPLOAD ERROR DETAIL:', JSON.stringify(error, null, 2))
                 return res.status(500).send({
                     status: "error",
                     message: "Error en la subida de la imagen"
@@ -177,7 +182,7 @@ const feed = async (req, res) => {
         const bookmarkSet = await bookmarkService.getUserBookmarkSet(req.user.id);
 
         Publication.find({ user: { $in: [...myFollows.following, req.user.id] } })
-            .populate("user", "-password -role -__v -email")
+            .populate("user", USER_PUBLIC_SELECT)
             .sort("-created_at")
             .paginate(page, itemsPerPage, (error, publications, total) => {
                 if (error || !publications) {
@@ -302,7 +307,7 @@ const removeComment = async (req, res) => {
         }
 
         // Eliminar el comentario
-        comment.remove();
+        publication.comments.pull(commentId);
         await publication.save();
 
         return res.status(200).send({
@@ -351,23 +356,24 @@ const search = async (req, res) => {
     }
 
     try {
+        const safeQuery = escapeRegex(query.trim());
+
         const matchingUserIds = (await User.find({
             $or: [
-                { name: { $regex: query, $options: 'i' } },
-                { nick: { $regex: query, $options: 'i' } }
+                { name: { $regex: safeQuery, $options: "i" } },
+                { nick: { $regex: safeQuery, $options: "i" } }
             ]
-        }).select('_id')).map(user => user._id);
-
+        }).select("_id")).map(user => user._id);
         const bookmarkSet = await bookmarkService.getUserBookmarkSet(req.user.id);
 
         Publication.find({
             $or: [
-                { text: { $regex: query, $options: 'i' } },
+                { text: { $regex: safeQuery, $options: 'i' } },
                 { user: { $in: matchingUserIds } }
             ]
         })
             .sort("-created_at")
-            .populate('user', '-password -__v -role -email')
+            .populate("user", USER_PUBLIC_SELECT)
             .paginate(page, itemsPerPage, (error, publications, total) => {
                 if (error) {
                     return res.status(500).send({

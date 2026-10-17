@@ -13,6 +13,7 @@ const Publication = require("../models/publication");
 const jwt = require("../services/jwt");
 const followService = require("../services/followService");
 const validate = require("../helpers/validate");
+const escapeRegex = require("../helpers/escapeRegex");
 
 // Acciones de prueba
 const pruebaUser = (req, res) => {
@@ -24,7 +25,6 @@ const pruebaUser = (req, res) => {
 
 // Regristro de usuarios
 const register = (req, res) => {
-    console.log("Register request received with params:", req.body);
     // Recoger datos de la peticion
     let params = req.body;
 
@@ -66,26 +66,31 @@ const register = (req, res) => {
         }
 
         // Cifrar la contraseña
-        let pwd = await bcrypt.hash(params.password, 10);
-        params.password = pwd;
+        const pwd = await bcrypt.hash(params.password, 10);
 
-        // Crear objeto de usuario
-        let user_to_save = new User(params);
+        // Crear objeto de usuario con una lista blanca de campos: nunca se
+        // asigna `role` (ni ningún otro campo) que llegue en el body
+        const user_to_save = new User({
+            name: params.name,
+            surname: params.surname,
+            nick: params.nick,
+            email: params.email,
+            password: pwd,
+        });
 
         // Guardar usuario en la bbdd
         user_to_save.save((error, userStored) => {
             if (error || !userStored) return res.status(500).send({ status: "error", "message": "Error al guardar el ususario" });
 
-            // añadido
-            userStored.toObject();
-            delete userStored.password;
-            delete userStored.role;
+            // Quitar password y role de la respuesta. `delete` sobre un documento
+            // de Mongoose no funciona: hay que convertirlo a objeto plano antes
+            const { password, role, ...safeUser } = userStored.toObject();
 
             // Devolver resultado
             return res.status(200).json({
                 status: "success",
                 message: "Usuario registrado correctamente",
-                user: userStored
+                user: safeUser
             });
 
         });
@@ -95,7 +100,6 @@ const register = (req, res) => {
 const login = (req, res) => {
     // Recoger parametros body
     let params = req.body;
-    console.log("LOGIN PARAMS:", params);
     if (!params.email || !params.password) {
         return res.status(400).send({
             status: "error",
@@ -138,14 +142,15 @@ const login = (req, res) => {
 }
 
 const profile = (req, res) => {
-    // Recibir el parametro del id de usuario por la url
     const id = req.params.id;
 
-    // Consulta para sacar los datos del usuario
-    //const userProfile = await User.findById(id);
+    // email y bookmarks son privados: solo los recibe el propio usuario
+    const hiddenFields = id === req.user.id
+        ? "-password -role"
+        : "-password -role -email -bookmarks";
 
     User.findById(id)
-        .select({ password: 0, role: 0 })
+        .select(hiddenFields)
         .exec(async (error, userProfile) => {
             if (error || !userProfile) {
                 return res.status(404).send({
@@ -180,7 +185,7 @@ const list = (req, res) => {
     // Consulta con mongoose paginate
     let itemsPerPage = 5;
 
-    User.find().select("-password -email -role -__v").sort('_id').paginate(page, itemsPerPage, async (error, users, total) => {
+    User.find().select("-password -email -role -__v -bookmarks").sort('_id').paginate(page, itemsPerPage, async (error, users, total) => {
 
         if (error || !users) {
             return res.status(404).send({
@@ -253,7 +258,9 @@ const update = (req, res) => {
 
         // Buscar y actualizar 
         try {
-            let userUpdated = await User.findByIdAndUpdate({ _id: userIdentity.id }, userToUpdate, { new: true });
+            // .select(): la respuesta nunca incluye el hash de la contraseña ni el rol
+            let userUpdated = await User.findByIdAndUpdate({ _id: userIdentity.id }, userToUpdate, { new: true })
+                .select("-password -role");
 
             if (!userUpdated) {
                 return res.status(400).json({ status: "error", message: "Error al actualizar" });
@@ -297,9 +304,12 @@ const upload = (req, res) => {
                 });
             }
 
+            // Quitar password y role de la respuesta
+            const { password, role, ...safeUser } = userUpdated.toObject();
+
             return res.status(200).send({
                 status: "success",
-                user: userUpdated,
+                user: safeUser,
                 file: req.file,
             });
         }
@@ -361,6 +371,8 @@ const counters = async (req, res) => {
 }
 
 //Obtener la lista de todos los usuarios
+// TODO: ruta duplicada de `list` que nunca se ejecuta (ver routes/user.js).
+// El select está alineado con `list` por si algún día se activa.
 
 const getUsers = async (req, res) => {
     const page = parseInt(req.params.page) || 1;
@@ -368,7 +380,7 @@ const getUsers = async (req, res) => {
 
     try {
         const users = await User.find()
-            .select('-password') // Excluir contraseña
+            .select('-password -email -role -__v -bookmarks')
             .sort('_id') // Orden consistente para paginación
             .skip((page - 1) * itemsPerPage)
             .limit(itemsPerPage);
@@ -391,8 +403,9 @@ const getUsers = async (req, res) => {
 };
 // Buscar usuarios por nombre o nick
 const search = async (req, res) => {
+
     const query = req.params.query;
-    let page = req.params.page ? req.params.page : 1;
+    const page = parseInt(req.params.page) || 1;
     const itemsPerPage = 5;
 
     if (!query || query.trim().length < 2) {
@@ -403,20 +416,19 @@ const search = async (req, res) => {
     }
 
     try {
-        const total = await User.countDocuments({
+        // Se escapa el texto: "C++" se busca literalmente, sin romper el regex
+        const safeQuery = escapeRegex(query.trim());
+        const filter = {
             $or: [
-                { name: { $regex: query, $options: 'i' } },
-                { nick: { $regex: query, $options: 'i' } }
+                { name: { $regex: safeQuery, $options: 'i' } },
+                { nick: { $regex: safeQuery, $options: 'i' } }
             ]
-        });
+        };
 
-        const users = await User.find({
-            $or: [
-                { name: { $regex: query, $options: 'i' } },
-                { nick: { $regex: query, $options: 'i' } }
-            ]
-        })
-            .select('-password -role -__v')
+        const total = await User.countDocuments(filter);
+
+        const users = await User.find(filter)
+            .select('-password -role -__v -email -bookmarks')
             .sort('_id')
             .skip((page - 1) * itemsPerPage)
             .limit(itemsPerPage);
