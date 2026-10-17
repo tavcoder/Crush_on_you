@@ -40,7 +40,7 @@ export function useCreatePost() {
                 ...response.publicationStored,
                 author: currentUser
             }
-
+            // Inserción inmediata: el usuario ve su post sin esperar al servidor
             queryClient.setQueryData(['posts', 'feed'], (old) => {
                 if (!old) {
                     return {
@@ -58,8 +58,9 @@ export function useCreatePost() {
                 }
             })
 
-            queryClient.invalidateQueries({ queryKey: ['posts', 'byUser'] })
-            queryClient.invalidateQueries({ queryKey: ['posts', 'detail'] })
+            // Reconcilia con el servidor. La paginación es por offset: un post nuevo
+            // desplaza las páginas siguientes y, sin refetch, al cargar más aparece duplicado.
+            queryClient.invalidateQueries({ queryKey: ['posts'] })
             queryClient.invalidateQueries({ queryKey: ['userStats'] })
 
             if (response.imageUploadFailed) {
@@ -351,7 +352,9 @@ export function useDeletePost() {
 
         return data;
     };
-
+    // No es optimista a propósito: borrar es irreversible, y si la petición falla,
+    // un post que reaparece en una pantalla que el usuario ya dejó es peor que una
+    // espera breve.
     return useMutation({
         mutationFn: (postId) => deletePost(postId),
 
@@ -360,6 +363,7 @@ export function useDeletePost() {
                 removeFromData(old, postId)
             );
             queryClient.removeQueries({ queryKey: ['posts', 'detail', postId] });
+            queryClient.invalidateQueries({ queryKey: ['posts'] });
             queryClient.invalidateQueries({ queryKey: ['userStats'] });
         },
     });
