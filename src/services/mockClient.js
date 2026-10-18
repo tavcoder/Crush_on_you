@@ -93,7 +93,7 @@ export const mockClient = {
 
         if (resource === 'users' && id === 'me') {
             const user = MOCK_DB.users.find(u => u.id === currentToken)
-            if (!user) return Promise.reject(new ApiError('User not found', 404))
+            if (!user) return Promise.reject(new ApiError('NOT_FOUND', { status: 404 }))
             return resolve({ data: user })
         }
 
@@ -115,7 +115,7 @@ export const mockClient = {
 
         if (resource === 'users' && id) {
             const user = MOCK_DB.users.find(u => u.id === id)
-            if (!user) return Promise.reject(new ApiError(`User ${id} not found`))
+            if (!user) return Promise.reject(new ApiError('NOT_FOUND', { status: 404 }))
             return resolve({ data: user })
         }
 
@@ -140,11 +140,11 @@ export const mockClient = {
 
         if (resource === 'posts' && id) {
             const post = MOCK_DB.posts.find(p => p.id === id)
-            if (!post) return Promise.reject(new ApiError(`Post ${id} not found`))
+            if (!post) return Promise.reject(new ApiError('NOT_FOUND', { status: 404 }))
             return resolve({ data: post })
         }
 
-        return Promise.reject(new ApiError(`No mock GET for: ${endpoint}`))
+        return Promise.reject(new ApiError('UNKNOWN'))
     },
 
     call(method, endpoint, data) {
@@ -152,7 +152,7 @@ export const mockClient = {
         if (method === 'POST' && resource === 'auth' && id === 'login') {
             const { email } = data
             const user = MOCK_DB.users.find(u => u.email === email)
-            if (!user) return Promise.reject(new ApiError('User not found', 404))
+            if (!user) return Promise.reject(new ApiError('NOT_FOUND', { status: 404 }))
 
             //Sincronizar currentUser (saveToken lo hará también, pero el mock necesita estar listo)
             MOCK_DB.currentUser = user
@@ -188,7 +188,7 @@ export const mockClient = {
         if (method === 'POST' && resource === 'posts' && !action) {
             // Defensivo: si no hay currentUser, rechazar
             if (!MOCK_DB.currentUser) {
-                return Promise.reject(new ApiError('Not authenticated', 401))
+                return Promise.reject(new ApiError('SESSION_EXPIRED', { status: 401 }))
             }
 
             const newPost = {
@@ -208,7 +208,7 @@ export const mockClient = {
 
         if (method === 'PUT' && resource === 'users' && id && !action) {
             const user = MOCK_DB.users.find(u => u.id === id)
-            if (!user) return Promise.reject(new ApiError(`User ${id} not found`, 404))
+            if (!user) return Promise.reject(new ApiError('NOT_FOUND', { status: 404 }))
 
             Object.assign(user, data)// ← actualiza solo los campos que llegan en data
             MOCK_DB.currentUser = user  // siempre sincroniza — solo el currentUser puede editarse
@@ -253,14 +253,14 @@ export const mockClient = {
         }
 
         return Promise.reject(
-            new ApiError(`[MOCK] There is no implementation for: ${method} /${endpoint}`)
+            new ApiError('UNKNOWN')
         )
     },
 
     upload(endpoint, file) {
         const [resource, id] = endpoint.split('/')
         const user = MOCK_DB.users.find(u => u.id === id)
-        if (!user) return Promise.reject(new ApiError(`User ${id} not found`, 404))
+        if (!user) return Promise.reject(new ApiError('NOT_FOUND', { status: 404 }))
 
         return new Promise((resolve, reject) => {
             const reader = new FileReader()
@@ -271,7 +271,7 @@ export const mockClient = {
                     data: { avatarUrl: reader.result }
                 })
             }
-            reader.onerror = () => reject(new ApiError('Error al leer el archivo'))
+            reader.onerror = () => reject(new ApiError('UNKNOWN'))
             reader.readAsDataURL(file)
         })
     }
