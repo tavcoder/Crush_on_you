@@ -1,6 +1,6 @@
 // services/apiClient.js
 import { mockClient, getMockToken, setMockToken, removeMockToken } from './mockClient.js'
-import { ApiError } from './ApiError.js'
+import { ApiError, codeFromStatus } from './ApiError.js'
 
 const USE_MOCK = import.meta.env.VITE_USE_MOCK === 'true'
 const API_BASE_URL = import.meta.env.VITE_API_URL ?? 'http://localhost:3900/api'
@@ -29,42 +29,45 @@ function authHeaders(endpoint) {
 function handleResponse(res) {
     if (!res.ok) {
         return res.json()
-            .catch(() => ({}))
-            .then(err => {
-                throw new ApiError(
-                    err.message || res.statusText,
-                    res.status
-                )
+            .catch(() => ({}))// el catch solo envuelve fetch: los errores de handleResponse ya son ApiError.
+            .then(body => {
+                throw new ApiError(codeFromStatus(res.status), { status: res.status, cause: body })
             })
     }
     return res.json()
 }
 
+function request(url, options) {
+    return fetch(url, options)
+        .catch(cause => { throw new ApiError('NETWORK', { cause }) })
+        .then(handleResponse)
+}
+
 export const apiClient = {
     get(endpoint) {
         if (USE_MOCK) return mockClient.get(endpoint)
-        return fetch(`${API_BASE_URL}/${endpoint}`, {
+        return request(`${API_BASE_URL}/${endpoint}`, {
             headers: { 'Content-Type': 'application/json', ...authHeaders(endpoint) }
-        }).then(res => handleResponse(res, endpoint))
+        })
     },
 
     call(method, endpoint, data) {
         if (USE_MOCK) return mockClient.call(method, endpoint, data)
-        return fetch(`${API_BASE_URL}/${endpoint}`, {
+        return request(`${API_BASE_URL}/${endpoint}`, {
             method,
             headers: { 'Content-Type': 'application/json', ...authHeaders(endpoint) },
             body: JSON.stringify(data),
-        }).then(res => handleResponse(res, endpoint))
+        })
     },
 
     upload(endpoint, file, fieldName = 'file0') {
         if (USE_MOCK) return mockClient.upload(endpoint, file)
         const formData = new FormData()
         formData.append(fieldName, file)
-        return fetch(`${API_BASE_URL}/${endpoint}`, {
+        return request(`${API_BASE_URL}/${endpoint}`, {
             method: 'POST',
             headers: authHeaders(endpoint),
             body: formData,
-        }).then(res => handleResponse(res, endpoint))
+        })
     }
 }
