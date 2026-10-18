@@ -35,12 +35,12 @@ function App() {
                 <Route path="/feed" element={<FeedPage />} />
                 <Route path="/timeline" element={<TimelinePage />} />
                 <Route path="/timeline/:userId" element={<TimelinePage />} />
-                <Route path="/people/:type" element={<PeoplePage />}/>
-                <Route path="/people/:type/:userId" element={<PeoplePage />}/>
-                <Route path="/search" element={<ComingSoonPage />} />
-                <Route path="/notifications" element={<ComingSoonPage />} />
-                <Route path="/messages" element={<ComingSoonPage />} />
-                <Route path="/settings" element={<ComingSoonPage />} />
+                <Route path="/people/:type" element={<PeoplePage />} />
+                <Route path="/people/:type/:userId" element={<PeoplePage />} />
+                <Route path="/search" element={<ComingSoonPage feature="Search" />} />
+                <Route path="/notifications" element={<ComingSoonPage feature="Notifications" />} />
+                <Route path="/messages" element={<ComingSoonPage feature="Messages" />} />
+                <Route path="/settings" element={<ComingSoonPage feature="Settings" />} />
               </Route>
             </Route>
             <Route path="*" element={<p>404-Page Not Found</p>} />
