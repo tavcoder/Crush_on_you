@@ -55,9 +55,9 @@ export function AuthForm({ mode }) {
                         aria-invalid={!!errors.surname}
                         aria-describedby={errors.surname ? 'surname-error' : undefined}
                     />
-                    {errors.name && (
-                        <p id="name-error" className="field__error auth-form__error" role="alert">
-                            {errors.name}
+                    {errors.surname && (
+                        <p id="surname-error" className="field__error auth-form__error" role="alert">
+                            {errors.surname}
                         </p>
                     )}
                     <label className='field__label' htmlFor="auth-nick">Nick:</label>
