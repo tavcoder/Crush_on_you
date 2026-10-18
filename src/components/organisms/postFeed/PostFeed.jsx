@@ -15,9 +15,11 @@ export function PostFeed({ posts, query, isInitialLoading, isLoadingNextPage, em
     // Estados de carga y vacío
     const postCount = posts?.length ?? 0;
 
-    const isEmpty = !isInitialLoading && postCount === 0;
     const hasPosts = postCount > 0;
-    if (error) return <ErrorFallback error={error} />
+    const showError = Boolean(error) && !hasPosts;          // sin datos y con error
+    const isEmpty = !isInitialLoading && !error && !hasPosts; // vacío solo si no hubo error
+
+    if (showError) return <ErrorFallback error={error} />
     return (
         <section
             aria-live="polite"
