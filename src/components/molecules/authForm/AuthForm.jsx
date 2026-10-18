@@ -1,9 +1,9 @@
 //AuthForm.jsx
 import { useState } from 'react';
 import { Eye, EyeOff } from 'lucide-react';
-import { useAuthForm } from '../../../hooks/useAuthForm';
 import { Button } from '../../ui/button/Button';
 import { IconButton } from '../../ui/iconButton/IconButton';
+import { useAuthForm } from '../../../hooks/useAuthForm';
 import './AuthForm.css'
 export function AuthForm({ mode }) {
     const [showPassword, setShowPassword] = useState(false);

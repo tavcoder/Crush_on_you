@@ -6,6 +6,26 @@ import { loginUser, registerUser } from '../services/api/users.api';
 import { useForm } from './useForm';
 import { fieldValidators } from '../utils/validateUtils';
 
+const FORM_CONFIG = {
+    login: {
+        initialValues: { email: '', password: '' },
+        validators: {
+            email: fieldValidators.email,
+            password: fieldValidators.password
+        }
+    },
+    register: {
+        initialValues: { email: '', password: '', name: '', surname: '', nick: '' },
+        validators: {
+            email: fieldValidators.email,
+            password: fieldValidators.password,
+            name: fieldValidators.nameOrSurname,
+            surname: fieldValidators.nameOrSurname,
+            nick: fieldValidators.nick
+        }
+    }
+};
+
 export function useAuthForm(mode = 'login') { // 'login' | 'register'
     const { login: authLogin } = useContext(UserAuthContext);
     const navigate = useNavigate();
@@ -25,23 +45,7 @@ export function useAuthForm(mode = 'login') { // 'login' | 'register'
 
     }, [mode, authLogin, navigate])
 
-    const validators = mode === 'login'
-        ? { email: fieldValidators.email, password: fieldValidators.password }
-        : {
-            email: fieldValidators.email,
-            password: fieldValidators.password,
-            name: fieldValidators.nameOrSurname,
-            surname: fieldValidators.nameOrSurname,
-            nick: fieldValidators.nick
-        };
-
-    const initialValues = mode === 'login'
-        ? { email: '', password: '' }
-        : { email: '', password: '', name: '', surname: '', nick: '' };
-
-    const form = useForm({ initialValues, validators, onSubmit: handleSubmit })
-
-    return {
-        ...form,
-    }
+    const { initialValues, validators } = FORM_CONFIG[mode];
+    const form = useForm({ initialValues, validators, onSubmit: handleSubmit });
+    return { ...form };
 }
