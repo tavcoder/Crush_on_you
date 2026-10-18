@@ -1,0 +1,47 @@
+/* pages/ComingSoonPage.css */
+.coming-soon {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-3);
+    padding: var(--space-8) var(--space-5);
+    text-align: center;
+}
+
+.coming-soon__icon {
+    color: var(--color-primary);
+}
+
+.coming-soon__title {
+    font-family: var(--font-display);
+    font-size: var(--fs-xl);
+    color: var(--color-text-primary);
+}
+
+.coming-soon__text {
+    max-width: 32ch;
+    color: var(--color-text-secondary);
+}
+
+.coming-soon__link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 44px;
+    padding: 0 var(--space-6);
+    border-radius: var(--radius-full);
+    background: var(--color-gradient-primary);
+    color: var(--color-text-on-primary);
+    font-weight: var(--fw-semibold);
+    transition: var(--transition-fast);
+}
+
+.coming-soon__link:hover {
+    opacity: 0.9;
+}
+
+@media (min-width: 1024px) {
+    .coming-soon {
+        padding: var(--space-13) var(--space-8);
+    }
+}

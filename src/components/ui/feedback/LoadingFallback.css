@@ -1,0 +1,52 @@
+/* components/ui/feedback/LoadingFallback.css */
+.loading-fallback {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+    align-items: center;
+    justify-content: center;
+    min-height: 40vh;
+    color: var(--color-primary);
+    /* Aparece con retraso: si la carga es rápida, no hay parpadeo */
+    animation: loading-fade-in var(--transition-base) 150ms backwards;
+}
+
+.loading-fallback__text {
+    color: var(--color-text-secondary);
+    font-size: var(--fs-sm);
+    text-align: center;
+    animation: loading-fade-in var(--transition-base) backwards;
+}
+
+.loading-fallback__icon {
+    animation: loading-pulse 1s ease-in-out infinite;
+}
+
+@keyframes loading-fade-in {
+    from {
+        opacity: 0;
+    }
+}
+
+@keyframes loading-pulse {
+
+    0%,
+    100% {
+        transform: scale(1);
+        opacity: 0.6;
+    }
+
+    50% {
+        transform: scale(1.15);
+        opacity: 1;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+    .loading-fallback,
+    .loading-fallback__icon,
+    .loading-fallback__text {
+        animation: none;
+    }
+}
