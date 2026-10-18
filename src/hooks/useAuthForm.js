@@ -46,6 +46,7 @@ export function useAuthForm(mode = 'login') { // 'login' | 'register'
     }, [mode, authLogin, navigate])
 
     const { initialValues, validators } = FORM_CONFIG[mode];
-    const form = useForm({ initialValues, validators, onSubmit: handleSubmit });
+    const requiredFields = Object.keys(initialValues);
+    const form = useForm({ initialValues, validators, requiredFields, onSubmit: handleSubmit });
     return { ...form };
 }
