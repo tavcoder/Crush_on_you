@@ -29,7 +29,8 @@ export function AuthForm({ mode }) {
                     <label className='field__label' htmlFor="auth-name">Name:</label>
                     <input
                         className="field__input"
-                        type="name"
+                        type="text"
+                        autoComplete="given-name"
                         id="auth-name"
                         name="name"
                         value={formData.name}
@@ -46,7 +47,8 @@ export function AuthForm({ mode }) {
                     <label className='field__label' htmlFor="auth-surname">Surname:</label>
                     <input
                         className="field__input"
-                        type="surname"
+                        type="text"
+                        autoComplete="family-name"
                         id="auth-surname"
                         name="surname"
                         value={formData.surname}
@@ -63,7 +65,8 @@ export function AuthForm({ mode }) {
                     <label className='field__label' htmlFor="auth-nick">Nick:</label>
                     <input
                         className="field__input"
-                        type="nick"
+                        type="text"
+                        autoComplete="nickname"
                         id="auth-nick"
                         name="nick"
                         value={formData.nick}
@@ -84,6 +87,7 @@ export function AuthForm({ mode }) {
                 <input
                     className="field__input"
                     type="email"
+                    autoComplete="email"
                     id="auth-email"
                     name="email"
                     value={formData.email}
@@ -105,6 +109,7 @@ export function AuthForm({ mode }) {
                     <input
                         className="field__input"
                         type={showPassword ? 'text' : 'password'}
+                        autoComplete={mode === 'register' ? 'new-password' : 'current-password'}
                         id="auth-password"
                         name="password"
                         value={formData.password}
