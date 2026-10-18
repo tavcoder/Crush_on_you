@@ -32,7 +32,9 @@ export const getPostsByUser = (userId, { page = 1 } = {}, currentUserId) =>
         .get(`publication/user/${userId}/${page}`)
         .then(res => adaptPostList(res, currentUserId))
         .catch(err => {
-            if (Number(err.status) === 404) return { data: [], pagination: { currentPage: 1, totalPages: 1 } }
+            // TODO: [DEUDA TÉCNICA] el backend responde 404 tanto para "sin resultados" como para
+            // "token inválido" (middleware/auth.js). Con un token manipulado el feed se ve vacío sin error.
+            if (err.code === 'NOT_FOUND') return { data: [], pagination: { currentPage: 1, totalPages: 1 } }
             throw err
         })
 

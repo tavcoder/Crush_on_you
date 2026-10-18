@@ -1,6 +1,23 @@
 // services/api/users.api.js
 import { apiClient } from '../apiClient'
+import { ApiError } from '../ApiError.js'
 import { adaptUser, adaptUserList, adaptUserStats } from './adapters/users.adapter.js'
+
+// Login: el backend responde 400 (contraseña incorrecta) o 404 (usuario inexistente).
+// Se unifican en un solo mensaje para no revelar si el email está registrado.
+const toCredentialsError = (e) => {
+    if (e instanceof ApiError && (e.status === 400 || e.status === 404)) {
+        throw new ApiError('INVALID_CREDENTIALS', { status: e.status, cause: e })
+    }
+    throw e
+}
+
+// TODO: [DEUDA TÉCNICA] el backend responde 200 sin `user` cuando el email/nick ya existe;
+// debería ser un 409. Se resuelve en el front para no tocar el backend.
+const assertUserReturned = (res) => {
+    if (!res.user) throw new ApiError('USER_EXISTS', { status: 200 })
+    return res
+}
 
 // ─── LISTS ───
 /**
@@ -56,6 +73,7 @@ export const getUserSuggestions = ({ page = 1 } = {}) =>
  */
 export const loginUser = ({ email, password }) =>
     apiClient.call('POST', 'user/login', { email, password })
+        .catch(toCredentialsError)
         .then(res => ({
             token: res.token,
             userId: res.user.id
@@ -67,6 +85,7 @@ export const loginUser = ({ email, password }) =>
  */
 export const registerUser = ({ name, surname, nick, email, password }) =>
     apiClient.call('POST', 'user/register', { name, surname, nick, email, password })
+        .then(assertUserReturned)
         .then(res => adaptUser(res.user))
 
 /**
@@ -90,6 +109,7 @@ export const updateProfile = (data) =>
             drink: data.drink,
         }
     })
+        .then(assertUserReturned)
         .then(res => adaptUser(res.user))
 
 
