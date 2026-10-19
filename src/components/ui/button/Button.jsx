@@ -16,9 +16,9 @@ export const Button = forwardRef(function Button(
     { children, onClick, type = "button", variant = "primary", disabled = false, ariaLabel, className = '' },
     ref
 ) {
-    const classes = ['btn-reset', `btn--${variant}`, className].filter(Boolean).join(' ')
+    const classes = ['btn', `btn--${variant}`, className].filter(Boolean).join(' ')
 
-    return (
+    return (    
         <button
             ref={ref}
             className={classes}
