@@ -13,7 +13,7 @@ export function UserAuthProvider({ children }) {
         const stored = localStorage.getItem('userId')
         return stored && stored !== 'undefined' ? stored : null
     })
-    const { data: currentUser, isLoading } = useUser(userId)
+    const { data: currentUser, isLoading, error } = useUser(userId)
 
     const login = useCallback(async (token, userId) => {
         saveToken(token)
@@ -32,7 +32,7 @@ export function UserAuthProvider({ children }) {
     }, [queryClient])
 
     return (
-        <UserAuthContext value={{ isAuthenticated, isLoading, currentUser, login, logout }}>
+        <UserAuthContext value={{ isAuthenticated, isLoading, error, currentUser, login, logout }}>
             {children}
         </UserAuthContext>
     )
