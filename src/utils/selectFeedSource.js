@@ -1,3 +1,4 @@
+/*selectFeedSource.jsx*/
 /** @typedef {import('../services/contracts/types.js').Post} Post */
 
 /**
