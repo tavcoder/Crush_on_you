@@ -31,7 +31,14 @@ export function Layout() {
                 onStorySeen={onStorySeen}
             />
             <div className="layout__body">
-                <LeftSideBar user={displayUserProfile} isLoading={currentUserLoading} currentUser={currentUser} />
+
+                <LeftSideBar
+                    user={displayUserProfile}
+                    isLoading={currentUserLoading}
+                    currentUser={currentUser}
+                    error={currentUserError}
+                />
+
                 <main className="layout__main">
                     <ErrorBoundary FallbackComponent={ErrorFallback} resetKeys={[pathname]}>
                         <Outlet

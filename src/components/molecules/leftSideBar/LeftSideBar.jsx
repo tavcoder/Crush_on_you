@@ -4,7 +4,7 @@ import { ProfileCard } from "../profileCard/ProfileCard.jsx"
 import { UserSuggestionsCard } from "../userSuggestionsCard/UserSuggestionsCard.jsx"
 import './LeftSideBar.css'
 
-export function LeftSideBar({ user, isLoading, currentUser }) {
+export function LeftSideBar({ user, isLoading, currentUser, error: currentUserError }) {
     const { suggestionsList, isLoading: suggestionsLoading, isError, error } = useUserSuggestionsList()
 
     return (
@@ -12,6 +12,7 @@ export function LeftSideBar({ user, isLoading, currentUser }) {
             <ProfileCard
                 user={user}
                 isLoading={isLoading}
+                error={currentUserError}
             />
             <UserSuggestionsCard
                 currentUser={currentUser}
