@@ -18,7 +18,6 @@ import './ProfileCard.css'
  * @param {Error} props.error
  */
 export function ProfileCard({ user, isLoading, error }) {
-    console.log({ user, isLoading, error })
     const { data: stats, isLoading: isStatsLoading } = useUserStats(user?.id)
     const { currentUser } = useContext(UserAuthContext)
     const buildProfilePath = useProfilePath()

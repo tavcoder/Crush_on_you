@@ -1,0 +1,17 @@
+/* ConnectionBanner.css: mobile-first */
+.connection-banner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-2);
+    padding: var(--space-3) var(--space-4);
+    background: var(--color-secondary);
+    color: var(--color-text-on-secondary);
+    border-bottom: 1px solid var(--color-border-strong);
+    text-align: center;
+    font-size: var(--fs-sm);
+}
+
+@media (min-width: 768px) {
+    .connection-banner { flex-direction: row; justify-content: center; }
+}

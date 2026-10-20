@@ -3,6 +3,7 @@ import { useContext } from "react"
 import { Outlet, useLocation } from "react-router"
 import { ErrorBoundary } from "react-error-boundary"
 import { ErrorFallback } from "../ui/feedback/ErrorFallback.jsx"
+import { ConnectionBanner } from "../ui/feedback/ConnectionBanner.jsx"
 import { NavBar } from "../molecules/navBar/NavBar"
 import { LeftSideBar } from "../molecules/leftSideBar/LeftSideBar"
 import { RightSideBar } from "../molecules/rightSideBar/RightSideBar"
@@ -30,6 +31,9 @@ export function Layout() {
                 users={stories}
                 onStorySeen={onStorySeen}
             />
+
+            <ConnectionBanner />
+
             <div className="layout__body">
 
                 <LeftSideBar
