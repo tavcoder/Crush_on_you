@@ -21,7 +21,7 @@ export function Layout() {
     const search = useSearch('posts')
     const { currentUser, isLoading: currentUserLoading, error: currentUserError } = useContext(UserAuthContext)
     const { stories, onStorySeen } = useStories()
-    const { viewedUser: displayUserProfile } = useViewedUserProfile(currentUser)
+    const { viewedUser: displayUserProfile, error: displayUserError } = useViewedUserProfile(currentUser)
 
     return (
         <div className="layout">
@@ -48,9 +48,9 @@ export function Layout() {
                         <Outlet
                             context={{
                                 currentUser,
-                                currentUserError,
                                 displayUserProfile,
                                 search,
+                                displayUserError: displayUserError ?? currentUserError,
                             }}
                         />
                     </ErrorBoundary>

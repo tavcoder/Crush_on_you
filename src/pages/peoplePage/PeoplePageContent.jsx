@@ -8,9 +8,9 @@ import { getPeoplePageTitle, getPeoplePageEmptyMessage } from "./peoplePageConte
 import { PeoplePageSkeleton } from "./PeoplePageSkeleton.jsx";
 import './PeoplePageContent.css'
 
-export function PeoplePageContent({type, displayUserProfile, currentUser}) {
-    
-    const { users, isLoading, isEmpty, isError, error, pagination, setPage } = usePeoplePage(type, displayUserProfile?.id);
+export function PeoplePageContent({ type, displayUserProfile, currentUser, profileError }) {
+
+    const { users, isLoading, isEmpty, isError, error, pagination, setPage } = usePeoplePage(type, displayUserProfile?.id, profileError);
 
 
     const isOwnProfile = currentUser?.id === displayUserProfile?.id
@@ -29,7 +29,7 @@ export function PeoplePageContent({type, displayUserProfile, currentUser}) {
     return (
         <section className="page-content card people-page">
             <h1 className="people-page__title">{pageTitle?.toUpperCase()}</h1>
-            
+
             {isLoading && <PeoplePageSkeleton />}
 
             {!isLoading &&
