@@ -1,6 +1,6 @@
 // services/ApiError.js
 export const ERROR_MESSAGES = {
-    NETWORK: "Can't reach the server. Check your connection and try again.",
+    NETWORK: "You're offline. Check your connection and try again.",
     INVALID_CREDENTIALS: 'Incorrect email or password.',
     USER_EXISTS: 'An account with this email or nickname already exists.',
     VALIDATION: 'Some of the data is not valid. Please check it and try again.',
