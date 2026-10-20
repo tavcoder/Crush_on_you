@@ -28,9 +28,10 @@ export default function TimelinePage() {
     const feedState = selectFeedSource({
         feed: {
             ...userPosts,
-            isLoading: userPosts.isLoading || isViewedUserLoading,
+            isLoading: userPosts.isLoading || isViewedUserLoading
+                || (!effectiveUserId && !currentUserError),
             error: userPosts.error ?? viewedUserError ?? currentUserError,
-        },
+        },/*sin currentUser y esperando se ve el skeleton, sin currentUser y con error se ve el mensaje, y query terminada sin posts muestra el vacío.*/
         search,
         emptyMessage: displayUserProfile
             ? `${displayUserProfile.userName ?? 'This user'} hasn't posted anything yet.`
@@ -52,6 +53,7 @@ export default function TimelinePage() {
                 posts={feedState.posts}
                 isInitialLoading={feedState.isInitialLoading}
                 isLoadingNextPage={feedState.isLoadingNextPage}
+                isLoaded={feedState.isLoaded}
                 canLoadMore={feedState.canLoadMore}
                 onLoadMore={feedState.onLoadMore}
                 emptyMessage={feedState.emptyMessage}

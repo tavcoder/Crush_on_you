@@ -46,5 +46,7 @@ export function useSearch(type = 'posts') {
         isFetchingNextPage: type === 'posts' ? postsQuery.isFetchingNextPage : false,
         query,
         isSearching: isActive,
+        isSuccess: activeQuery.isSuccess,
+        refetch: activeQuery.refetch,
     }
 }

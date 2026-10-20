@@ -31,6 +31,7 @@ export default function FeedPage() {
                 posts={feedState.posts}
                 isInitialLoading={feedState.isInitialLoading}
                 isLoadingNextPage={feedState.isLoadingNextPage}
+                isLoaded={feedState.isLoaded}
                 canLoadMore={feedState.canLoadMore}
                 onLoadMore={feedState.onLoadMore}
                 emptyMessage={feedState.emptyMessage}

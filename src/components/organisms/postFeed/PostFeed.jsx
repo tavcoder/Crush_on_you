@@ -9,7 +9,7 @@ import { UserAuthContext } from "../../../context/UserAuthContext.jsx"
 import { useInfiniteScroll } from '../../../hooks/useInfiniteScroll.js';
 import './PostFeed.css';
 
-export function PostFeed({ posts, query, isInitialLoading, isLoadingNextPage, emptyMessage, canLoadMore, onLoadMore, error }) {
+export function PostFeed({ posts, query, isInitialLoading, isLoadingNextPage, isLoaded, emptyMessage, canLoadMore, onLoadMore, error }) {
     const sentinelRef = useInfiniteScroll(onLoadMore, { enabled: canLoadMore });
     const { currentUser } = useContext(UserAuthContext);
     // Estados de carga y vacío
@@ -17,9 +17,10 @@ export function PostFeed({ posts, query, isInitialLoading, isLoadingNextPage, em
 
     const hasPosts = postCount > 0;
     const showError = Boolean(error) && !hasPosts;          // sin datos y con error
-    const isEmpty = !isInitialLoading && !error && !hasPosts; // vacío solo si no hubo error
+    const isEmpty = isLoaded && !hasPosts;
 
     if (showError) return <ErrorFallback error={error} />
+
     return (
         <section
             aria-live="polite"

@@ -91,6 +91,8 @@ export function usePosts() {
         isLoading,
         isFetchingNextPage,
         isError,
+        isSuccess,
+        refetch,
         error,
     } = useInfiniteQuery({
         queryKey: ['posts', 'feed'],
@@ -110,6 +112,8 @@ export function usePosts() {
         isFetchingNextPage,
         isError,
         error,
+        isSuccess,
+        refetch,
     }
 }
 /**
@@ -129,6 +133,8 @@ export function useUserPosts(userId) {
         isLoading,
         isFetchingNextPage,
         isError,
+        isSuccess,
+        refetch,
         error,
     } = useInfiniteQuery({
         queryKey: ['posts', 'byUser', userId],
@@ -148,6 +154,8 @@ export function useUserPosts(userId) {
         isFetchingNextPage,
         isError,
         error,
+        isSuccess,
+        refetch,
     }
 }
 
@@ -168,6 +176,8 @@ export function useSearchPosts(queryText, { enabled } = {}) {
         isLoading,
         isFetchingNextPage,
         isError,
+        isSuccess,
+        refetch,        
         error,
     } = useInfiniteQuery({
         queryKey: ['posts', 'search', queryText],
@@ -188,6 +198,8 @@ export function useSearchPosts(queryText, { enabled } = {}) {
         isFetchingNextPage,
         isError,
         error,
+        isSuccess,
+        refetch,
     }
 }
 
