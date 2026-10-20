@@ -9,7 +9,7 @@ export function UserSuggestionsCard({ currentUser, userSuggestionsList, isLoadin
     const noSuggestions = userSuggestionsList?.length === 0;
 
     if (isLoading) return <UserSuggestionsCardSkeleton />
-    if (isError) return <ErrorFallback error={error} />
+    if (isError) return <ErrorFallback error={error} compact/>
     if (noSuggestions) return (
         <section className='card suggestions-card'>
             <EmptyState

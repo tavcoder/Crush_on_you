@@ -1,5 +1,5 @@
 // components/ui/feedback/ErrorFallback.jsx
-import { ApiError } from '../../../services/ApiError.js'
+import { ApiError,isConnectionError } from '../../../services/ApiError.js'
 import { Button } from '../button/Button.jsx'
 import './ErrorFallback.css'
 
@@ -14,11 +14,17 @@ function getErrorInfo(error) {
     return { kind: 'unknown', message: 'Something went wrong. Please try again.' }
 }
 
-export function ErrorFallback({ error, resetErrorBoundary, onRetry }) {
+export function ErrorFallback({ error, resetErrorBoundary, onRetry, compact = false }) {
     const { kind, message } = getErrorInfo(error)
     // Un chunk fallido no se recupera reseteando el boundary: se recarga la página
     const retry = kind === 'chunk' ? () => window.location.reload() : (onRetry ?? resetErrorBoundary)
-
+    if (compact && isConnectionError(error)) {
+        return (
+            <p className="error-state error-state--compact">
+                Unavailable right now
+            </p>
+        )
+    }
     return (
         <div role="alert" className="error-state">
             <p className="error-state__message">{message}</p>

@@ -11,3 +11,9 @@
     max-width: 36ch;
     color: var(--color-text-secondary);
 }
+
+.error-state--compact {
+    padding: var(--space-3) var(--space-4);
+    font-size: var(--fs-sm);
+    color: var(--color-text-muted);
+}

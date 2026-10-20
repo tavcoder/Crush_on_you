@@ -22,7 +22,7 @@ export function ProfileCard({ user, isLoading, error }) {
     const { currentUser } = useContext(UserAuthContext)
     const buildProfilePath = useProfilePath()
 
-    if (!user && error) return <ErrorFallback error={error} />
+    if (!user && error) return <ErrorFallback error={error} compact />
     if (!user || isLoading || isStatsLoading) return <ProfileCardSkeleton />
 
 

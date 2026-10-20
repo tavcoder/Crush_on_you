@@ -29,3 +29,6 @@ export class ApiError extends Error {
         this.status = status
     }
 }
+
+export const isConnectionError = (error) =>
+    error instanceof ApiError && (error.code === 'NETWORK' || error.code === 'SERVER')
