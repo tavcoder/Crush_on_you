@@ -1,3 +1,4 @@
+/*AvatarUploader.jsx*/
 import { useRef } from 'react'
 import { Avatar } from '../../ui/avatar/Avatar'
 import { IconButton } from '../../ui/iconButton/IconButton'
@@ -24,7 +25,7 @@ export function AvatarUploader({ userName, userSurName, avatarUrl }) {
                 onChange={e => handleAvatarUpload(e.target.files[0])}
             />
 
-            {isLoading ? <SkeletonBase variant="avatar" />
+            {isLoading ? <SkeletonBase variant="avatar" avatarSize="xl" />
 
                 : <Avatar
                     user={{
@@ -34,7 +35,6 @@ export function AvatarUploader({ userName, userSurName, avatarUrl }) {
                     }}
                     avatarSize='xl'
                     isCurrentUser={true}
-                    alt={userName}
                 />}
 
             {isError && <span role="alert" className='field__error'>{error?.message ?? 'Failed to upload the image'}</span>}

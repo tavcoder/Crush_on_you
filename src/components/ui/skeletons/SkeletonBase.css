@@ -35,10 +35,26 @@
 }
 
 .skeleton--avatar {
-    width: 40px;
-    height: 40px;
+    width: var(--avatar-size, var(--avatar-size-sm));
+    height: var(--avatar-size, var(--avatar-size-sm));
     border-radius: 50%;
     flex-shrink: 0;
+}
+
+.skeleton--avatar-sm {
+    --avatar-size: var(--avatar-size-sm);
+}
+
+.skeleton--avatar-md {
+    --avatar-size: var(--avatar-size-md);
+}
+
+.skeleton--avatar-lg {
+    --avatar-size: var(--avatar-size-lg);
+}
+
+.skeleton--avatar-xl {
+    --avatar-size: var(--avatar-size-xl);
 }
 
 .skeleton--circle {

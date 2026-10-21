@@ -1,6 +1,8 @@
 /*Avatar.css*/
 .avatar {
     position: relative;
+    width: var(--avatar-size, var(--avatar-size-sm));
+    height: var(--avatar-size, var(--avatar-size-sm));
     border-radius: var(--radius-full);
     display: flex;
     justify-content: center;
@@ -16,33 +18,27 @@
     border-radius: inherit;
 }
 
+
 .avatar--sm {
-    width: 2rem;
-    height: 2rem;
+    --avatar-size: var(--avatar-size-sm);
     font-size: var(--fs-xs);
 }
 
-/* 32px — comentarios */
 .avatar--md {
-    width: 2.5rem;
-    height: 2.5rem;
+    --avatar-size: var(--avatar-size-md);
     font-size: var(--fs-sm);
 }
 
-/* 40px — post header */
 .avatar--lg {
-    width: 3.5rem;
-    height: 3.5rem;
+    --avatar-size: var(--avatar-size-lg);
     font-size: var(--fs-base);
 }
 
 .avatar--xl {
-    width: 6rem;
-    height: 6rem;
+    --avatar-size: var(--avatar-size-xl);
     font-size: var(--fs-base);
 }
 
-/* 56px — stories, profile */
 .avatar--no-story {
     border: 2px solid var(--border-avatar);
 }

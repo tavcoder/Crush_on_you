@@ -8,7 +8,7 @@ export function PeoplePageSkeleton({ count = 3 }) {
             {
                 Array.from({ length: count }, (_, index) => (
                     <li key={index} className="users-list__item">
-                        <SkeletonBase variant="avatar" />
+                        <SkeletonBase variant="avatar" avatarSize="sm" />
                         <div className="user-info__text">
                             <SkeletonBase variant="title" width="120px" />
                             <SkeletonBase variant="text" width="80px" />

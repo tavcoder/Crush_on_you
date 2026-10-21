@@ -117,6 +117,15 @@
   --max-width-app: 1200px;
   --bottom-nav-height: 4rem;
 
+  --avatar-size-sm: 2rem;
+  /* 32px */
+  --avatar-size-md: 2.5rem;
+  /* 40px */
+  --avatar-size-lg: 3.5rem;
+  /* 56px */
+  --avatar-size-xl: 6rem;
+  /* 96px */
+
   /* ========================================
      SEMANTIC TOKENS ([type]-[role]-[variant])
      ======================================== */
@@ -393,7 +402,7 @@ a {
   opacity: 1;
 }
 
- .tooltip-wrapper button:disabled {
-   cursor: not-allowed;
-   opacity: 0.5;
- }
+.tooltip-wrapper button:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}

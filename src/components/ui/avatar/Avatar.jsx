@@ -8,14 +8,15 @@ import './Avatar.css'
 /**
  * @param {Object} props
  * @param {User} props.user
- * @param {'sm'|'md'|'lg'} [props.avatarSize]
+ * @param {'sm'|'md'|'lg'|'xl'} [props.avatarSize]
  * @param {boolean} [props.hasStory]
  * @param {boolean} [props.isUnseen]
  * @param {ReactNode} [props.badge]
- * 
+ * @param {boolean} [props.isCurrentUser]
+ * @param {string} [props.className]
  */
 
-export function Avatar({ user, isCurrentUser = false, avatarSize = "sm", hasStory = false, isUnseen = false,className = '' , badge }) {
+export function Avatar({ user, isCurrentUser = false, avatarSize = "sm", hasStory = false, isUnseen = false, className = '', badge }) {
 
     const [imgError, setImgError] = useState(false)
     if (!user) return null;
@@ -30,7 +31,7 @@ export function Avatar({ user, isCurrentUser = false, avatarSize = "sm", hasStor
             {avatarUrl && !imgError
                 ? <img className="avatar__image"
                     src={avatarUrl}
-                    alt={`${name} ${userSurName}`}
+                    alt={`${userName} ${userSurName}`}
                     onError={() => setImgError(true)}
                 /> : (
                     <span className="avatar__initials">{initials}</span>
