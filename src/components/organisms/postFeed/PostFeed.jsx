@@ -5,11 +5,12 @@ import { PostCardSkeleton } from '../postCard/PostCardSkeleton.jsx';
 import { PostFeedSkeleton } from './PostFeedSkeleton.jsx';
 import { EmptyState } from '../../ui/feedback/EmptyState.jsx';
 import { ErrorFallback } from '../../ui/feedback/ErrorFallback.jsx';
+import { Button } from '../../ui/button/Button.jsx';
 import { UserAuthContext } from "../../../context/UserAuthContext.jsx"
 import { useInfiniteScroll } from '../../../hooks/useInfiniteScroll.js';
 import './PostFeed.css';
 
-export function PostFeed({ posts, query, isInitialLoading, isLoadingNextPage, isLoaded, emptyMessage, canLoadMore, onLoadMore, error , onRetry}) {
+export function PostFeed({ posts, query, isInitialLoading, isLoadingNextPage, isLoaded, isLoadMoreError, emptyMessage, canLoadMore, onLoadMore, error, onRetry }) {
     const sentinelRef = useInfiniteScroll(onLoadMore, { enabled: canLoadMore });
     const { currentUser } = useContext(UserAuthContext);
     // Estados de carga y vacío
@@ -58,6 +59,14 @@ export function PostFeed({ posts, query, isInitialLoading, isLoadingNextPage, is
                         <li className="post-feed__loading">
                             <PostCardSkeleton />
                             <span className="sr-only">Loading more posts</span>
+                        </li>
+                    )}
+                    {isLoadMoreError && (
+                        <li className="post-feed__load-error">
+                            <p>Couldn't load more posts.</p>
+                            <Button type="button" variant="secondary" onClick={onLoadMore}>
+                                Try again
+                            </Button>
                         </li>
                     )}
                 </ul>

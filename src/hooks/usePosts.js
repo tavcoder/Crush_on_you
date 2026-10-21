@@ -12,6 +12,7 @@ import { UserAuthContext } from "../context/UserAuthContext.jsx";
  * @property {boolean} hasNextPage
  * @property {boolean} isLoading           - true solo durante la carga inicial
  * @property {boolean} isFetchingNextPage  - true mientras se carga una página adicional
+ * @property {boolean} isFetchNextPageError - true si ocurre un error al cargar una página adicional
  * @property {boolean} isError
  * @property {unknown} error
  */
@@ -90,9 +91,8 @@ export function usePosts() {
         hasNextPage,
         isLoading,
         isFetchingNextPage,
-        isError,
+        isFetchNextPageError,
         isSuccess,
-
         error,
     } = useInfiniteQuery({
         queryKey: ['posts', 'feed'],
@@ -110,7 +110,7 @@ export function usePosts() {
         hasNextPage,
         isLoading,
         isFetchingNextPage,
-        isError,
+        isFetchNextPageError,
         error,
         isSuccess,
 
@@ -132,7 +132,7 @@ export function useUserPosts(userId) {
         hasNextPage,
         isLoading,
         isFetchingNextPage,
-        isError,
+        isFetchNextPageError,   
         isSuccess,
 
         error,
@@ -152,7 +152,7 @@ export function useUserPosts(userId) {
         hasNextPage,
         isLoading,
         isFetchingNextPage,
-        isError,
+        isFetchNextPageError,
         error,
         isSuccess,
 
@@ -175,6 +175,7 @@ export function useSearchPosts(queryText, { enabled } = {}) {
         hasNextPage,
         isLoading,
         isFetchingNextPage,
+        isFetchNextPageError,
         isError,
         isSuccess,
 
@@ -196,6 +197,7 @@ export function useSearchPosts(queryText, { enabled } = {}) {
         hasNextPage,
         isLoading,
         isFetchingNextPage,
+        isFetchNextPageError,
         isError,
         error,
         isSuccess,

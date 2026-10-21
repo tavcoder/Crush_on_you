@@ -56,6 +56,7 @@ export default function TimelinePage() {
                 isInitialLoading={feedState.isInitialLoading}
                 isLoadingNextPage={feedState.isLoadingNextPage}
                 isLoaded={feedState.isLoaded}
+                isLoadMoreError={feedState.isLoadMoreError}
                 canLoadMore={feedState.canLoadMore}
                 onLoadMore={feedState.onLoadMore}
                 emptyMessage={feedState.emptyMessage}

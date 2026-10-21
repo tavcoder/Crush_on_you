@@ -7,6 +7,7 @@
  * @property {Post[]} posts
  * @property {boolean} isLoading
  * @property {boolean} isFetchingNextPage
+ * @property {boolean} isFetchNextPageError
  * @property {boolean} hasNextPage
  * @property {() => void} fetchNextPage
  * @property {unknown} error
@@ -20,6 +21,7 @@
  * @property {Post[]} results
  * @property {boolean} isLoading
  * @property {boolean} isFetchingNextPage
+ * @property {boolean} isFetchNextPageError
  * @property {boolean} hasNextPage
  * @property {() => void} fetchNextPage
  * @property {unknown} error
@@ -37,6 +39,8 @@
  *   posts: Post[],
  *   isInitialLoading: boolean,
  *   isLoadingNextPage: boolean,
+ *   isLoadedMoreError: boolean,
+ *   isLoaded: boolean,
  *   canLoadMore: boolean,
  *   onLoadMore: () => void,
  *   error: unknown,
@@ -50,7 +54,8 @@ export function selectFeedSource({ feed, search, emptyMessage }) {
             isInitialLoading: search.isLoading,
             isLoadingNextPage: search.isFetchingNextPage,
             isLoaded: search.isSuccess,
-            canLoadMore: search.hasNextPage,
+            canLoadMore: search.hasNextPage && !search.isFetchNextPageError,
+            isLoadMoreError: search.isFetchNextPageError,
             onLoadMore: search.fetchNextPage,
             error: search.error,
             emptyMessage: `No posts match "${search.query}"`,
@@ -62,7 +67,8 @@ export function selectFeedSource({ feed, search, emptyMessage }) {
         isInitialLoading: feed.isLoading,
         isLoadingNextPage: feed.isFetchingNextPage,
         isLoaded: feed.isSuccess,
-        canLoadMore: feed.hasNextPage,
+        canLoadMore: feed.hasNextPage && !feed.isFetchNextPageError,
+        isLoadMoreError: feed.isFetchNextPageError,
         onLoadMore: feed.fetchNextPage,
         error: feed.error,
         emptyMessage,
