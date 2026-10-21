@@ -7,7 +7,7 @@ export function PostCardSkeleton() {
         <article className='card post-card' aria-busy="true" aria-label="Loading post">
             {/* Header: Avatar + Username + Date */}
             <div className="user-info">
-                <SkeletonBase variant="avatar" />
+                <SkeletonBase variant="avatar" avatarSize="md" />
                 <div className="user-info__text">
                     <div style={{ display: 'flex', flexDirection: 'column', gap: '0.25rem' }}>
                         <SkeletonBase variant="title" width="120px" />
