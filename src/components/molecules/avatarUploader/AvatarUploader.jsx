@@ -35,7 +35,6 @@ export function AvatarUploader({ userName, userSurName, avatarUrl }) {
                     }}
                     avatarSize='xl'
                     isCurrentUser={true}
-                    alt={userName}
                 />}
 
             {isError && <span role="alert" className='field__error'>{error?.message ?? 'Failed to upload the image'}</span>}
