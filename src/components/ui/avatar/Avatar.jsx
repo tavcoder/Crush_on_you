@@ -31,7 +31,7 @@ export function Avatar({ user, isCurrentUser = false, avatarSize = "sm", hasStor
             {avatarUrl && !imgError
                 ? <img className="avatar__image"
                     src={avatarUrl}
-                    alt={`${name} ${userSurName}`}
+                    alt={`${userName} ${userSurName}`}
                     onError={() => setImgError(true)}
                 /> : (
                     <span className="avatar__initials">{initials}</span>
