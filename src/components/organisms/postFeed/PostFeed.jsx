@@ -9,7 +9,7 @@ import { UserAuthContext } from "../../../context/UserAuthContext.jsx"
 import { useInfiniteScroll } from '../../../hooks/useInfiniteScroll.js';
 import './PostFeed.css';
 
-export function PostFeed({ posts, query, isInitialLoading, isLoadingNextPage, isLoaded, emptyMessage, canLoadMore, onLoadMore, error }) {
+export function PostFeed({ posts, query, isInitialLoading, isLoadingNextPage, isLoaded, emptyMessage, canLoadMore, onLoadMore, error , onRetry}) {
     const sentinelRef = useInfiniteScroll(onLoadMore, { enabled: canLoadMore });
     const { currentUser } = useContext(UserAuthContext);
     // Estados de carga y vacío
@@ -19,7 +19,7 @@ export function PostFeed({ posts, query, isInitialLoading, isLoadingNextPage, is
     const showError = Boolean(error) && !hasPosts;          // sin datos y con error
     const isEmpty = isLoaded && !hasPosts;
 
-    if (showError) return <ErrorFallback error={error} />
+    if (showError) return <ErrorFallback error={error} onRetry={onRetry} />
 
     return (
         <section

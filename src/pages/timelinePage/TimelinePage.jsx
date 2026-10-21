@@ -5,6 +5,7 @@ import { SortByCard } from "../../components/molecules/sortByCard/SortByCard.jsx
 import { PostFeed } from "../../components/organisms/postFeed/PostFeed.jsx"
 import { useUserPosts, useCreatePost } from "../../hooks/usePosts.js"
 import { useViewedUserProfile } from "../../hooks/useViewedUserProfile.js"
+import { useRetryAll } from "../../hooks/useRetryAll.js"
 import { selectFeedSource } from "../../utils/selectFeedSource.js"
 
 
@@ -17,6 +18,7 @@ export default function TimelinePage() {
         isLoading: isViewedUserLoading,
         error: viewedUserError,
     } = useViewedUserProfile(currentUser);
+    const retryAll = useRetryAll();
 
     // Posts en paralelo al perfil, sin esperar a que resuelva (no en cascada)
     const effectiveUserId = userId ?? currentUser?.id;
@@ -58,6 +60,7 @@ export default function TimelinePage() {
                 onLoadMore={feedState.onLoadMore}
                 emptyMessage={feedState.emptyMessage}
                 error={feedState.error}
+                onRetry={retryAll}
             />
 
         </section>

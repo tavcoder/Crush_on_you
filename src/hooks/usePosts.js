@@ -59,7 +59,7 @@ export function useCreatePost() {
             })
 
             // Reconcilia con el servidor. La paginación es por offset: un post nuevo
-            // desplaza las páginas siguientes y, sin refetch, al cargar más aparece duplicado.
+            // desplaza las páginas siguientes y, sin  al cargar más aparece duplicado.
             queryClient.invalidateQueries({ queryKey: ['posts'] })
             queryClient.invalidateQueries({ queryKey: ['userStats'] })
 
@@ -92,7 +92,7 @@ export function usePosts() {
         isFetchingNextPage,
         isError,
         isSuccess,
-        refetch,
+
         error,
     } = useInfiniteQuery({
         queryKey: ['posts', 'feed'],
@@ -113,7 +113,7 @@ export function usePosts() {
         isError,
         error,
         isSuccess,
-        refetch,
+
     }
 }
 /**
@@ -134,7 +134,7 @@ export function useUserPosts(userId) {
         isFetchingNextPage,
         isError,
         isSuccess,
-        refetch,
+
         error,
     } = useInfiniteQuery({
         queryKey: ['posts', 'byUser', userId],
@@ -155,7 +155,7 @@ export function useUserPosts(userId) {
         isError,
         error,
         isSuccess,
-        refetch,
+
     }
 }
 
@@ -177,7 +177,7 @@ export function useSearchPosts(queryText, { enabled } = {}) {
         isFetchingNextPage,
         isError,
         isSuccess,
-        refetch,        
+
         error,
     } = useInfiniteQuery({
         queryKey: ['posts', 'search', queryText],
@@ -199,7 +199,7 @@ export function useSearchPosts(queryText, { enabled } = {}) {
         isError,
         error,
         isSuccess,
-        refetch,
+
     }
 }
 

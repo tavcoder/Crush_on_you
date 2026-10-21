@@ -47,6 +47,5 @@ export function useSearch(type = 'posts') {
         query,
         isSearching: isActive,
         isSuccess: activeQuery.isSuccess,
-        refetch: activeQuery.refetch,
     }
 }

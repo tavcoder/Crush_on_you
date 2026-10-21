@@ -4,12 +4,14 @@ import { CreatePost } from "../../components/organisms/createPost/CreatePost.jsx
 import { SortByCard } from "../../components/molecules/sortByCard/SortByCard.jsx";
 import { PostFeed } from "../../components/organisms/postFeed/PostFeed.jsx"
 import { usePosts, useCreatePost } from "../../hooks/usePosts.js"
+import { useRetryAll } from "../../hooks/useRetryAll.js"
 import { selectFeedSource } from "../../utils/selectFeedSource.js"
 
 export default function FeedPage() {
-    const feed = usePosts()
+    const feed = usePosts();
+    const retryAll = useRetryAll();
 
-    const { addPost, isAddingPost } = useCreatePost()
+    const { addPost, isAddingPost } = useCreatePost();
     const { currentUser, currentUserError, search } = useOutletContext();
 
 
@@ -36,6 +38,7 @@ export default function FeedPage() {
                 onLoadMore={feedState.onLoadMore}
                 emptyMessage={feedState.emptyMessage}
                 error={feedState.error}
+                onRetry={retryAll}
             />
         </section>
     )

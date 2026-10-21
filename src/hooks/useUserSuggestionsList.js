@@ -6,7 +6,7 @@ import { UserAuthContext } from "../context/UserAuthContext"
 
 export function useUserSuggestionsList(enabled = true) {
 
-    const { users, isLoading, isError, isSuccess, error } = useUserSuggestions(enabled);
+    const { users, isLoading, isError, isSuccess, error, refetch } = useUserSuggestions(enabled);
     const { currentUser, } = useContext(UserAuthContext);
     const currentsFollowings = currentUser?.following;
 
@@ -31,5 +31,6 @@ export function useUserSuggestionsList(enabled = true) {
         isError,
         isSuccess,
         error,
+        refetch,
     }
 }
