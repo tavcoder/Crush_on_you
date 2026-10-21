@@ -25,14 +25,14 @@ export function Layout() {
 
     return (
         <div className="layout">
+            <ConnectionBanner />
+
             <NavBar user={currentUser} />
             <StoriesBar
                 currentUser={currentUser}
                 users={stories}
                 onStorySeen={onStorySeen}
             />
-
-            <ConnectionBanner />
 
             <div className="layout__body">
 
