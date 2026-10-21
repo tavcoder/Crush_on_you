@@ -12,6 +12,7 @@ import { UserAuthContext } from "../context/UserAuthContext.jsx";
  * @property {boolean} hasNextPage
  * @property {boolean} isLoading           - true solo durante la carga inicial
  * @property {boolean} isFetchingNextPage  - true mientras se carga una página adicional
+ * @property {boolean} isFetchNextPageError - true si ocurre un error al cargar una página adicional
  * @property {boolean} isError
  * @property {unknown} error
  */
@@ -59,7 +60,7 @@ export function useCreatePost() {
             })
 
             // Reconcilia con el servidor. La paginación es por offset: un post nuevo
-            // desplaza las páginas siguientes y, sin refetch, al cargar más aparece duplicado.
+            // desplaza las páginas siguientes y, sin  al cargar más aparece duplicado.
             queryClient.invalidateQueries({ queryKey: ['posts'] })
             queryClient.invalidateQueries({ queryKey: ['userStats'] })
 
@@ -90,7 +91,8 @@ export function usePosts() {
         hasNextPage,
         isLoading,
         isFetchingNextPage,
-        isError,
+        isFetchNextPageError,
+        isSuccess,
         error,
     } = useInfiniteQuery({
         queryKey: ['posts', 'feed'],
@@ -108,8 +110,10 @@ export function usePosts() {
         hasNextPage,
         isLoading,
         isFetchingNextPage,
-        isError,
+        isFetchNextPageError,
         error,
+        isSuccess,
+
     }
 }
 /**
@@ -128,7 +132,9 @@ export function useUserPosts(userId) {
         hasNextPage,
         isLoading,
         isFetchingNextPage,
-        isError,
+        isFetchNextPageError,   
+        isSuccess,
+
         error,
     } = useInfiniteQuery({
         queryKey: ['posts', 'byUser', userId],
@@ -146,8 +152,10 @@ export function useUserPosts(userId) {
         hasNextPage,
         isLoading,
         isFetchingNextPage,
-        isError,
+        isFetchNextPageError,
         error,
+        isSuccess,
+
     }
 }
 
@@ -167,7 +175,10 @@ export function useSearchPosts(queryText, { enabled } = {}) {
         hasNextPage,
         isLoading,
         isFetchingNextPage,
+        isFetchNextPageError,
         isError,
+        isSuccess,
+
         error,
     } = useInfiniteQuery({
         queryKey: ['posts', 'search', queryText],
@@ -186,8 +197,11 @@ export function useSearchPosts(queryText, { enabled } = {}) {
         hasNextPage,
         isLoading,
         isFetchingNextPage,
+        isFetchNextPageError,
         isError,
         error,
+        isSuccess,
+
     }
 }
 

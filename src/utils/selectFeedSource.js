@@ -1,3 +1,4 @@
+/*selectFeedSource.jsx*/
 /** @typedef {import('../services/contracts/types.js').Post} Post */
 
 /**
@@ -6,6 +7,7 @@
  * @property {Post[]} posts
  * @property {boolean} isLoading
  * @property {boolean} isFetchingNextPage
+ * @property {boolean} isFetchNextPageError
  * @property {boolean} hasNextPage
  * @property {() => void} fetchNextPage
  * @property {unknown} error
@@ -19,6 +21,7 @@
  * @property {Post[]} results
  * @property {boolean} isLoading
  * @property {boolean} isFetchingNextPage
+ * @property {boolean} isFetchNextPageError
  * @property {boolean} hasNextPage
  * @property {() => void} fetchNextPage
  * @property {unknown} error
@@ -36,6 +39,8 @@
  *   posts: Post[],
  *   isInitialLoading: boolean,
  *   isLoadingNextPage: boolean,
+ *   isLoadedMoreError: boolean,
+ *   isLoaded: boolean,
  *   canLoadMore: boolean,
  *   onLoadMore: () => void,
  *   error: unknown,
@@ -48,7 +53,9 @@ export function selectFeedSource({ feed, search, emptyMessage }) {
             posts: search.results,
             isInitialLoading: search.isLoading,
             isLoadingNextPage: search.isFetchingNextPage,
-            canLoadMore: search.hasNextPage,
+            isLoaded: search.isSuccess,
+            canLoadMore: search.hasNextPage && !search.isFetchNextPageError,
+            isLoadMoreError: search.isFetchNextPageError,
             onLoadMore: search.fetchNextPage,
             error: search.error,
             emptyMessage: `No posts match "${search.query}"`,
@@ -59,7 +66,9 @@ export function selectFeedSource({ feed, search, emptyMessage }) {
         posts: feed.posts,
         isInitialLoading: feed.isLoading,
         isLoadingNextPage: feed.isFetchingNextPage,
-        canLoadMore: feed.hasNextPage,
+        isLoaded: feed.isSuccess,
+        canLoadMore: feed.hasNextPage && !feed.isFetchNextPageError,
+        isLoadMoreError: feed.isFetchNextPageError,
         onLoadMore: feed.fetchNextPage,
         error: feed.error,
         emptyMessage,

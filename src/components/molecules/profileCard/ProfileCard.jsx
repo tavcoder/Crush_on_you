@@ -4,6 +4,7 @@ import { MapPin } from "lucide-react"
 import { UserInfo } from "../userInfo/UserInfo.jsx"
 import { UserStats } from "../userStats/UserStats.jsx"
 import { ProfileCardSkeleton } from "../profileCard/ProfileCardSkeleton.jsx"
+import { ErrorFallback } from "../../ui/feedback/ErrorFallback.jsx"
 import { getUserLocationFormat, getUserFullNameFormat } from "../../../utils/formatUtils.js"
 import { useProfilePath } from "../../../hooks/useProfilePath.js"
 import { useUserStats } from "../../../hooks/useUsers.js"
@@ -14,13 +15,16 @@ import './ProfileCard.css'
  * @param {Object} props
  * @param {User} props.user
  * @param {boolean} props.isLoading
+ * @param {Error} props.error
  */
-export function ProfileCard({ user, isLoading }) {
+export function ProfileCard({ user, isLoading, error }) {
     const { data: stats, isLoading: isStatsLoading } = useUserStats(user?.id)
     const { currentUser } = useContext(UserAuthContext)
     const buildProfilePath = useProfilePath()
 
-    if (!user || isLoading || isStatsLoading || !stats) return <ProfileCardSkeleton />
+    if (!user && error) return <ErrorFallback error={error} compact />
+    if (!user || isLoading || isStatsLoading) return <ProfileCardSkeleton />
+
 
     const isCurrentUser = user.id === currentUser?.id;
     const to = isCurrentUser ? '/profile' : buildProfilePath(user);
@@ -43,9 +47,9 @@ export function ProfileCard({ user, isLoading }) {
                 to={to}
             />
             <UserStats
-                postsCount={stats.postsCount}
-                followers={stats.followersCount}
-                following={stats.followingCount}
+                postsCount={stats?.postsCount}
+                followers={stats?.followersCount}
+                following={stats?.followingCount}
                 userId={isCurrentUser ? undefined : user.id} />
         </section>
     )

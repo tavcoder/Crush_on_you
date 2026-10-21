@@ -39,7 +39,10 @@ function handleResponse(res) {
 
 function request(url, options) {
     return fetch(url, options)
-        .catch(cause => { throw new ApiError('NETWORK', { cause }) })
+        .catch(cause => {
+            // Con el navegador online, un fetch rechazado es un problema del servidor
+            throw new ApiError(navigator.onLine ? 'SERVER' : 'NETWORK', { cause })
+        })
         .then(handleResponse)
 }
 

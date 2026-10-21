@@ -1,0 +1,19 @@
+.error-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-3);
+    padding: var(--space-8) var(--space-5);
+    text-align: center;
+}
+
+.error-state__message {
+    max-width: 36ch;
+    color: var(--color-text-secondary);
+}
+
+.error-state--compact {
+    padding: var(--space-3) var(--space-4);
+    font-size: var(--fs-sm);
+    color: var(--color-text-muted);
+}

@@ -1,11 +1,12 @@
+/*useUserSuggestionsList.js*/
 import { useContext } from 'react'
 import { useUserSuggestions } from '../hooks/useUsers'
 import { UserAuthContext } from "../context/UserAuthContext"
 
 
 export function useUserSuggestionsList(enabled = true) {
- 
-    const { users, isLoading, isError, error } = useUserSuggestions(enabled);
+
+    const { users, isLoading, isError, isSuccess, error, refetch } = useUserSuggestions(enabled);
     const { currentUser, } = useContext(UserAuthContext);
     const currentsFollowings = currentUser?.following;
 
@@ -28,6 +29,8 @@ export function useUserSuggestionsList(enabled = true) {
         suggestionsList,
         isLoading,
         isError,
+        isSuccess,
         error,
+        refetch,
     }
 }

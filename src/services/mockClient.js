@@ -258,7 +258,7 @@ export const mockClient = {
     },
 
     upload(endpoint, file) {
-        const [resource, id] = endpoint.split('/')
+        const [, id] = endpoint.split('/')
         const user = MOCK_DB.users.find(u => u.id === id)
         if (!user) return Promise.reject(new ApiError('NOT_FOUND', { status: 404 }))
 

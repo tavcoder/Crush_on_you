@@ -5,6 +5,7 @@ import { SortByCard } from "../../components/molecules/sortByCard/SortByCard.jsx
 import { PostFeed } from "../../components/organisms/postFeed/PostFeed.jsx"
 import { useUserPosts, useCreatePost } from "../../hooks/usePosts.js"
 import { useViewedUserProfile } from "../../hooks/useViewedUserProfile.js"
+import { useRetryAll } from "../../hooks/useRetryAll.js"
 import { selectFeedSource } from "../../utils/selectFeedSource.js"
 
 
@@ -17,6 +18,7 @@ export default function TimelinePage() {
         isLoading: isViewedUserLoading,
         error: viewedUserError,
     } = useViewedUserProfile(currentUser);
+    const retryAll = useRetryAll();
 
     // Posts en paralelo al perfil, sin esperar a que resuelva (no en cascada)
     const effectiveUserId = userId ?? currentUser?.id;
@@ -28,9 +30,10 @@ export default function TimelinePage() {
     const feedState = selectFeedSource({
         feed: {
             ...userPosts,
-            isLoading: userPosts.isLoading || isViewedUserLoading,
+            isLoading: userPosts.isLoading || isViewedUserLoading
+                || (!effectiveUserId && !currentUserError),
             error: userPosts.error ?? viewedUserError ?? currentUserError,
-        },
+        },/*sin currentUser y esperando se ve el skeleton, sin currentUser y con error se ve el mensaje, y query terminada sin posts muestra el vacío.*/
         search,
         emptyMessage: displayUserProfile
             ? `${displayUserProfile.userName ?? 'This user'} hasn't posted anything yet.`
@@ -52,10 +55,13 @@ export default function TimelinePage() {
                 posts={feedState.posts}
                 isInitialLoading={feedState.isInitialLoading}
                 isLoadingNextPage={feedState.isLoadingNextPage}
+                isLoaded={feedState.isLoaded}
+                isLoadMoreError={feedState.isLoadMoreError}
                 canLoadMore={feedState.canLoadMore}
                 onLoadMore={feedState.onLoadMore}
                 emptyMessage={feedState.emptyMessage}
                 error={feedState.error}
+                onRetry={retryAll}
             />
 
         </section>

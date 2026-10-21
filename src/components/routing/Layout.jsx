@@ -1,11 +1,14 @@
 //Layout.jsx
 import { useContext } from "react"
-import { Outlet } from "react-router"
+import { Outlet, useLocation } from "react-router"
+import { ErrorBoundary } from "react-error-boundary"
+import { ErrorFallback } from "../ui/feedback/ErrorFallback.jsx"
+import { ConnectionBanner } from "../ui/feedback/ConnectionBanner.jsx"
 import { NavBar } from "../molecules/navBar/NavBar"
-import { StoriesBar } from "../organisms/storiesBar/StoriesBar"
 import { LeftSideBar } from "../molecules/leftSideBar/LeftSideBar"
 import { RightSideBar } from "../molecules/rightSideBar/RightSideBar"
 import { BottomNav } from "../molecules/bottomNav/BottomNav"
+import { StoriesBar } from "../organisms/storiesBar/StoriesBar"
 import { UserAuthContext } from "../../context/UserAuthContext"
 import { useSearch } from "../../hooks/useSearch"
 import { useStories } from "../../hooks/useStories"
@@ -14,30 +17,43 @@ import './Layout.css'
 
 
 export function Layout() {
+    const { pathname } = useLocation()
     const search = useSearch('posts')
     const { currentUser, isLoading: currentUserLoading, error: currentUserError } = useContext(UserAuthContext)
     const { stories, onStorySeen } = useStories()
-    const { viewedUser: displayUserProfile } = useViewedUserProfile(currentUser)
+    const { viewedUser: displayUserProfile, error: displayUserError } = useViewedUserProfile(currentUser)
 
     return (
         <div className="layout">
+            <ConnectionBanner />
+
             <NavBar user={currentUser} />
             <StoriesBar
                 currentUser={currentUser}
                 users={stories}
                 onStorySeen={onStorySeen}
             />
+
             <div className="layout__body">
-                <LeftSideBar user={displayUserProfile} isLoading={currentUserLoading} currentUser={currentUser} />
+
+                <LeftSideBar
+                    user={displayUserProfile}
+                    isLoading={currentUserLoading}
+                    currentUser={currentUser}
+                    error={currentUserError}
+                />
+
                 <main className="layout__main">
-                    <Outlet
-                        context={{
-                            currentUser,
-                            currentUserError,
-                            displayUserProfile,
-                            search,
-                        }}
-                    />
+                    <ErrorBoundary FallbackComponent={ErrorFallback} resetKeys={[pathname]}>
+                        <Outlet
+                            context={{
+                                currentUser,
+                                displayUserProfile,
+                                search,
+                                displayUserError: displayUserError ?? currentUserError,
+                            }}
+                        />
+                    </ErrorBoundary>
                 </main>
                 <RightSideBar />
             </div>
