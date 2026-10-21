@@ -17,7 +17,7 @@ import { useSearchQuery } from './useSearchQuery'
 // un hook genérico parametrizado.
 
 export function useSearch(type = 'posts') {
-    const { query, setQuery, clearQuery } = useSearchQuery()
+    const { query} = useSearchQuery()
     const isActive = query.trim().length >= 2
 
     const postsQuery = useSearchPosts(query, {
