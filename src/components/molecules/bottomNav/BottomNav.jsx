@@ -1,15 +1,14 @@
 // BottomNav.jsx
 import { Link, useLocation } from 'react-router'
-import { Home, Search, MessageCircle, User } from "lucide-react";
+import { Home, Search, Users, User } from "lucide-react";
 import { IconButton } from "../../ui/iconButton/IconButton.jsx";
 import { FloatButton } from "../../ui/floatButton/FloatButton.jsx";
 import './BottomNav.css'
 
-const messages = 3;
 const NAV_ITEMS = [
     { to: '/feed', icon: Home, label: 'Home', badge: false },
     { to: '/search', icon: Search, label: 'Search', badge: false },
-    { to: '/messages', icon: MessageCircle, label: 'Messages', badge: Boolean(messages) },
+    { to: '/people/suggestions', icon: Users, label: 'People', badge: false },
     { to: '/profile', icon: User, label: 'Profile', badge: false },
 ];
 
@@ -18,7 +17,9 @@ export function BottomNav() {
 
 
     const navItems = NAV_ITEMS.map(({ to, icon: Icon, label, badge }) => {
-        const isActive = location.pathname === to;
+        const isActive = location.pathname.startsWith(
+            to.startsWith('/people') ? '/people' : to
+        )
         return (
             <IconButton
                 key={to}
