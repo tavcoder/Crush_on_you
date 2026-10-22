@@ -1,3 +1,4 @@
+/*SelectButton.css*/
 .select-button {
     position: relative;
     gap: var(--space-1);
@@ -27,6 +28,10 @@
     inset: 0;
     opacity: 0;
     width: 100%;
+}
+
+.select-button__select:disabled {
+    cursor: not-allowed;
 }
 
 .select-button--disabled {

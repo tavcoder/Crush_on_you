@@ -1,5 +1,6 @@
+/*CreatePost.jsx*/
 import { useState, useRef, useEffect } from "react";
-import { X, Info, Image, Paperclip, Hash, Radio, AtSign, Globe, Users } from "lucide-react";
+import { X, Info, Image, Paperclip, Hash, Radio, AtSign, Globe } from "lucide-react";
 import { Avatar } from '../../ui/avatar/Avatar.jsx'
 import { Button } from '../../ui/button/Button.jsx'
 import { IconButton } from '../../ui/iconButton/IconButton.jsx'
@@ -23,7 +24,15 @@ const SUBMIT_ERROR = "Couldn't publish your post. Please try again."
  */
 export function CreatePost({ user, onPostCreated, isSubmitting = false }) {
     const [content, setContent] = useState('');
-    const [visibility, setVisibility] = useState('public');
+    // módulo
+    // TODO: [DEUDA TÉCNICA] "Best friends" no existe en el backend. Restaurar la opción
+    // y el estado `visibility` cuando haya soporte.
+    const POST_VISIBILITY = 'public'
+
+    const selectOptions = [
+        { value: "public", label: "Public", icon: <Globe /> },
+    ]
+
     const [submitError, setSubmitError] = useState(null);
     const inputRef = useRef(null);
     const textareaRef = useRef(null);
@@ -56,7 +65,7 @@ export function CreatePost({ user, onPostCreated, isSubmitting = false }) {
         if (isSubmitting || !hasText) return;
         setSubmitError(null);
         onPostCreated(
-            { content: trimmedContent, visibility, files: selectedFiles },
+            { content: trimmedContent, visibility: POST_VISIBILITY, files: selectedFiles },
             {
                 // Se limpia solo si el post se creó: si falla, se conserva lo escrito
                 onSuccess: resetForm,
@@ -69,14 +78,7 @@ export function CreatePost({ user, onPostCreated, isSubmitting = false }) {
         inputRef.current?.click();
     };
 
-    const selectOptions = [
-        { value: "public", label: "Public", icon: <Globe /> },
-        { value: "friends", label: "Best friends", icon: <Users /> }
-    ];
 
-    const handleChange = (_name, value) => {
-        setVisibility(value);
-    };
     const isDisabled = isSubmitting;
 
     return (
@@ -192,8 +194,9 @@ export function CreatePost({ user, onPostCreated, isSubmitting = false }) {
                         <SelectButton
                             name="visibility"
                             label="public"
-                            options={selectOptions}
-                            onChange={handleChange} />
+                             options={selectOptions}
+                            disabled
+                            tooltip="Best friends visibility coming soon" />
                     </div>
                 </div>
             </section>
