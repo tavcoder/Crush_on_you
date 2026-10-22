@@ -1,3 +1,5 @@
+/*index.css*/
+
 /* ========================================
    FONTS
    ======================================== */
@@ -110,6 +112,17 @@
   --transition-fast: 150ms ease;
   --transition-base: 250ms ease;
 
+  /* ========================================
+   BREAKPOINTS
+   Layout (navegación y columnas): 1024px. Los @media no admiten var(),
+   así que el valor se repite en: index.css (.sidebar), BottomNav.css,
+   NavBar.css, ConnectionBanner.css y Layout.css.
+     < 1024px: BottomNav, una columna.
+     >= 1024px: NavBar con enlaces + sidebars.
+   Otros 768px (a propósito, no son de layout): texto de IconButton y
+   SelectButton, grid de CreatePost, ProfileForm y AuthPage.
+   ======================================== */
+
   /* Layout */
   --min-width-dropdown: 180px;
   --max-width-sidebar: 280px;
@@ -221,7 +234,7 @@ body {
   display: none;
 }
 
-@media (min-width : 768px) {
+@media (min-width : 1024px) {
   .sidebar {
     max-width: var(--max-width-sidebar);
     width: 100%;
@@ -233,10 +246,11 @@ body {
 
 .page-content {
   max-width: var(--max-width-feed);
+  width: 100%;
+  margin-inline: auto;
   display: flex;
   flex-direction: column;
   gap: var(--space-5);
-  width: 100%;
 }
 
 img,
