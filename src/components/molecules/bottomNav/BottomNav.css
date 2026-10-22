@@ -13,7 +13,7 @@
     padding-bottom: env(safe-area-inset-bottom);
 }
 
-@media (min-width: 768px) {
+@media (min-width: 1024px) {
     .bottom-nav {
         display: none;
     }

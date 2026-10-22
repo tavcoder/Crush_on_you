@@ -125,9 +125,11 @@
 
   /* Layout */
   --min-width-dropdown: 180px;
+  --min-width-sidebar: 200px;
   --max-width-sidebar: 280px;
   --max-width-feed: 680px;
-  --max-width-app: 1200px;
+  /* Derivado: feed + 2 sidebars + 2 gaps, para que los tres máximos quepan a la vez */
+  --max-width-app: calc(var(--max-width-feed) + 2 * var(--max-width-sidebar) + 2 * var(--space-5));
   --bottom-nav-height: 4rem;
 
   --avatar-size-sm: 2rem;
@@ -234,10 +236,10 @@ body {
   display: none;
 }
 
-@media (min-width : 1024px) {
+@media (min-width: 1024px) {
   .sidebar {
-    max-width: var(--max-width-sidebar);
-    width: 100%;
+    flex: 0 0 clamp(var(--min-width-sidebar), 22%, var(--max-width-sidebar));
+    min-width: 0;
     display: flex;
     flex-direction: column;
     gap: var(--space-6);
