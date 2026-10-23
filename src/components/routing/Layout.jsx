@@ -48,9 +48,11 @@ export function Layout() {
                         <Outlet
                             context={{
                                 currentUser,
+                                currentUserError,
+                                currentUserLoading,
                                 displayUserProfile,
-                                search,
                                 displayUserError: displayUserError ?? currentUserError,
+                                search,
                             }}
                         />
                     </ErrorBoundary>
