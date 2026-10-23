@@ -40,7 +40,7 @@ export function Layout() {
                     user={displayUserProfile}
                     isLoading={currentUserLoading}
                     currentUser={currentUser}
-                    error={currentUserError}
+                    error={displayUserError ?? currentUserError}
                 />
 
                 <main className="layout__main">
