@@ -49,18 +49,10 @@
     font-weight: var(--fw-medium);
 }
 
-.nav-bar__search-mobile {
-    display: none;
-}
-
-@media (max-width: 767px) {
+@media (max-width: 1023px) {
 
     .nav-bar__links,
     .nav-bar__search {
         display: none;
-    }
-
-    .nav-bar__search-mobile {
-        display: flex;
     }
 }

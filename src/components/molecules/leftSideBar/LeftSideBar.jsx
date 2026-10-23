@@ -2,7 +2,6 @@
 import { useUserSuggestionsList } from "../../../hooks/useUserSuggestionsList.js"
 import { ProfileCard } from "../profileCard/ProfileCard.jsx"
 import { UserSuggestionsCard } from "../userSuggestionsCard/UserSuggestionsCard.jsx"
-import './LeftSideBar.css'
 
 export function LeftSideBar({ user, isLoading, currentUser, error: currentUserError }) {
     const { suggestionsList, isLoading: suggestionsLoading, isError, error } = useUserSuggestionsList()

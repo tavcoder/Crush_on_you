@@ -39,7 +39,6 @@ function App() {
                 <Route path="/people/:type/:userId" element={<PeoplePage />} />
                 <Route path="/search" element={<ComingSoonPage feature="Search" />} />
                 <Route path="/notifications" element={<ComingSoonPage feature="Notifications" />} />
-                <Route path="/messages" element={<ComingSoonPage feature="Messages" />} />
                 <Route path="/settings" element={<ComingSoonPage feature="Settings" />} />
               </Route>
             </Route>
