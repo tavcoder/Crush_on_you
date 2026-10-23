@@ -1,9 +1,3 @@
-.suggestions-card {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-
 
 .suggestions-card__header {
     display: flex;
