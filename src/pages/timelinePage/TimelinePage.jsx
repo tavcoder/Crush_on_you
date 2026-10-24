@@ -1,7 +1,8 @@
 // pages/TimelinePage.jsx
 import { useOutletContext, useParams } from "react-router";
-import { CreatePost } from "../../components/organisms/createPost/CreatePost.jsx";
+import { ProfileCard } from "../../components/molecules/profileCard/ProfileCard.jsx";
 import { SortByCard } from "../../components/molecules/sortByCard/SortByCard.jsx";
+import { CreatePost } from "../../components/organisms/createPost/CreatePost.jsx";
 import { PostFeed } from "../../components/organisms/postFeed/PostFeed.jsx"
 import { useUserPosts, useCreatePost } from "../../hooks/usePosts.js"
 import { useViewedUserProfile } from "../../hooks/useViewedUserProfile.js"
@@ -44,7 +45,9 @@ export default function TimelinePage() {
     return (
 
         <section className="page-content">
-
+            <div className="mobile-only">
+                <ProfileCard user={displayUserProfile} isLoading={isViewedUserLoading} error={viewedUserError} compact />
+            </div>
             {isOwnProfile && <CreatePost user={currentUser} onPostCreated={addPost} isSubmitting={isAddingPost} />}
             <SortByCard
                 onChange={undefined} //TODO: consumirá un hook useSortPosts que decide la estrategia de fetching.

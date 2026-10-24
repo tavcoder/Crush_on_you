@@ -3,6 +3,7 @@ import { useOutletContext } from "react-router";
 import { CreatePost } from "../../components/organisms/createPost/CreatePost.jsx";
 import { SortByCard } from "../../components/molecules/sortByCard/SortByCard.jsx";
 import { PostFeed } from "../../components/organisms/postFeed/PostFeed.jsx"
+import { ProfileCard } from "../../components/molecules/profileCard/ProfileCard.jsx"
 import { usePosts, useCreatePost } from "../../hooks/usePosts.js"
 import { useRetryAll } from "../../hooks/useRetryAll.js"
 import { selectFeedSource } from "../../utils/selectFeedSource.js"
@@ -12,7 +13,7 @@ export default function FeedPage() {
     const retryAll = useRetryAll();
 
     const { addPost, isAddingPost } = useCreatePost();
-    const { currentUser, currentUserError, search } = useOutletContext();
+    const { currentUser, currentUserError, currentUserLoading, search } = useOutletContext();
 
 
     const feedState = selectFeedSource({
@@ -23,6 +24,9 @@ export default function FeedPage() {
 
     return (
         <section className="page-content">
+            <div className="mobile-only">
+                <ProfileCard user={currentUser} isLoading={currentUserLoading} error={currentUserError} compact />
+            </div>
             <CreatePost user={currentUser} onPostCreated={addPost} isSubmitting={isAddingPost} />
             <SortByCard
                 onChange={undefined} //TODO: consumirá un hook useSortPosts que decide la estrategia de fetching.

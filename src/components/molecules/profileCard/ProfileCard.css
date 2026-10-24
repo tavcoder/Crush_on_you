@@ -14,3 +14,12 @@
     height: 16px;
     color: var(--color-primary);
 }
+
+.profile-card__user-info--compact {
+    align-items: stretch;
+    padding: 0;
+}
+
+.profile-card__user-info--compact .user-info {
+    padding: var(--space-2) var(--space-3);
+}

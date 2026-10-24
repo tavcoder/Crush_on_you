@@ -246,6 +246,13 @@ body {
   }
 }
 
+/* Visible solo en la vista de una columna (< 1024px) */
+@media (min-width: 1024px) {
+  .mobile-only {
+    display: none;
+  }
+}
+
 .page-content {
   max-width: var(--max-width-feed);
   width: 100%;

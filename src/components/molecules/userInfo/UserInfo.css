@@ -27,18 +27,20 @@
     align-items: center;
     gap: var(--space-4);
     min-width: 0;
+    width: 100%;
 }
 
 .user-info__content--row {
     flex-direction: row;
     justify-content: flex-start;
-    padding: var(--space-4) ;
+    padding: var(--space-4);
 }
 
 .user-info__content--column {
     flex-direction: column;
     text-align: center;
     gap: var(--space-2);
+
 }
 
 .user-info__text {
@@ -46,6 +48,11 @@
     flex-direction: column;
     justify-content: start;
     min-width: 0;
+}
+
+.user-info__content--column .user-info__text {
+    align-self: stretch;
+    align-items: center;
 }
 
 .user-info__primary-text {
@@ -64,4 +71,11 @@
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+}
+
+.user-info__content--column .user-info__primary-text,
+.user-info__content--column .user-info__secondary-text {
+    white-space: normal;
+    overflow-wrap: anywhere;
+    text-wrap: balance;
 }
