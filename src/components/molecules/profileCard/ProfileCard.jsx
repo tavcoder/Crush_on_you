@@ -16,14 +16,15 @@ import './ProfileCard.css'
  * @param {User} props.user
  * @param {boolean} props.isLoading
  * @param {Error} props.error
+ * @param {boolean} props.compact
  */
-export function ProfileCard({ user, isLoading, error }) {
+export function ProfileCard({ user, isLoading, error, compact = false }) {
     const { data: stats, isLoading: isStatsLoading } = useUserStats(user?.id)
     const { currentUser } = useContext(UserAuthContext)
     const buildProfilePath = useProfilePath()
 
-    if (!user && error) return <ErrorFallback error={error} compact />
-    if (!user || isLoading || isStatsLoading) return <ProfileCardSkeleton />
+    if (!user && error) return <ErrorFallback error={error} />
+    if (!user || isLoading || isStatsLoading) return <ProfileCardSkeleton compact={compact} />
 
 
     const isCurrentUser = user.id === currentUser?.id;
@@ -33,17 +34,17 @@ export function ProfileCard({ user, isLoading, error }) {
     const secondaryText = getUserLocationFormat(user);
 
     return (
-        <section className="card profile-card__user-info">
+        <section className={`card profile-card__user-info${compact ? ' profile-card__user-info--compact' : ''}`}>
             <UserInfo
                 user={user}
-                avatarSize="lg"
+                avatarSize={compact ? "md" : "lg"}
+                direction={compact ? "row" : "column"}
                 primaryText={primaryText}
                 secondaryText={
-                    secondaryText ?
-                        <><MapPin className="user-info--location-icon" /> {secondaryText}</>
+                    !compact && secondaryText
+                        ? <><MapPin className="user-info--location-icon" /> {secondaryText}</>
                         : null
                 }
-                direction="column"
                 to={to}
             />
             <UserStats
