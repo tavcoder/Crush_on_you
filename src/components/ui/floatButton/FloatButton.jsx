@@ -1,9 +1,11 @@
 /*FloatButton.jsx*/
+import { forwardRef } from 'react'
 import './FloatButton.css'
 
-export function FloatButton({ onClick, disabled }) {
+export const FloatButton = forwardRef(function FloatButton({ onClick, disabled }, ref) {
     return (
         <button
+            ref={ref}
             type='button'
             className='btn-reset btn-float'
             onClick={onClick}
@@ -12,4 +14,4 @@ export function FloatButton({ onClick, disabled }) {
             <span aria-hidden="true">+</span>
         </button>
     )
-}
+})
