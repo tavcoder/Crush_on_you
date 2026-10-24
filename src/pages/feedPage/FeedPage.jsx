@@ -24,7 +24,9 @@ export default function FeedPage() {
 
     return (
         <section className="page-content">
-            <ProfileCard user={currentUser} isLoading={currentUserLoading} error={currentUserError} compact />
+            <div className="mobile-only">
+                <ProfileCard user={currentUser} isLoading={currentUserLoading} error={currentUserError} compact />
+            </div>
             <CreatePost user={currentUser} onPostCreated={addPost} isSubmitting={isAddingPost} />
             <SortByCard
                 onChange={undefined} //TODO: consumirá un hook useSortPosts que decide la estrategia de fetching.
