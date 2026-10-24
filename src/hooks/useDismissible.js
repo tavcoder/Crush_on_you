@@ -1,6 +1,6 @@
 // hooks/useDismissible.js
 import { useEffect, useCallback} from 'react'
-export function useDismissible({ isOpen, onClose, triggerRef, contentRef }) {
+export function useDismissible({ isOpen, onClose, triggerRef, contentRef, closeOnOutsideClick = true }) {
 
     const dismiss = useCallback(() => {
         onClose();
@@ -19,7 +19,7 @@ export function useDismissible({ isOpen, onClose, triggerRef, contentRef }) {
         }
         document.addEventListener('mousedown', handleClickOutside);
         return () => document.removeEventListener('mousedown', handleClickOutside);
-    }, [isOpen, dismiss, contentRef, triggerRef]);
+    }, [isOpen, closeOnOutsideClick,dismiss, contentRef, triggerRef]);
 
     useEffect(() => {
         if (!isOpen) return;
