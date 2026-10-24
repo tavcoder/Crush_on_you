@@ -1,5 +1,5 @@
 /*CreatePost.jsx*/
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useId } from "react";
 import { X, Info, Image, Paperclip, Hash, Radio, AtSign, Globe } from "lucide-react";
 import { Avatar } from '../../ui/avatar/Avatar.jsx'
 import { Button } from '../../ui/button/Button.jsx'
@@ -24,6 +24,11 @@ const SUBMIT_ERROR = "Couldn't publish your post. Please try again."
  */
 export function CreatePost({ user, onPostCreated, isSubmitting = false }) {
     const [content, setContent] = useState('');
+    const uid = useId()
+    const textareaId = `${uid}-textarea`;
+    const fileInputId = `${uid}-file-input`;
+    const hintId = `${uid}-hint`;
+
     // módulo
     // TODO: [DEUDA TÉCNICA] "Best friends" no existe en el backend. Restaurar la opción
     // y el estado `visibility` cuando haya soporte.
@@ -92,16 +97,16 @@ export function CreatePost({ user, onPostCreated, isSubmitting = false }) {
                         value={content}
                         onChange={(e) => setContent(e.target.value)}
                         placeholder="What's on your mind?"
-                        id="create-post-textarea"
+                        id={textareaId}
                         name="create-post"
                         rows={1}
                         aria-label="Post content"
                         required
-                        aria-describedby={needsText ? "create-post-hint" : undefined}
+                        aria-describedby={needsText ? hintId : undefined}
                         disabled={isDisabled}
                     />
                     {needsText && (
-                        <p id="create-post-hint" className="create-post__hint">
+                        <p id={hintId} className="create-post__hint">
                             <Info aria-hidden="true" />
                             {TEXT_REQUIRED_HINT}
                         </p>
@@ -144,11 +149,10 @@ export function CreatePost({ user, onPostCreated, isSubmitting = false }) {
             <section className="create-post__actions">
                 <div role="toolbar" aria-label="Post formatting tools">
                     <div role="group" aria-label="Media uploads">
-                        <label className="sr-only" htmlFor="create-post-file-input">
+                        <label className="sr-only" htmlFor={fileInputId}>
                             Upload images
                         </label>
-                        <input id="create-post-file-input"
-                            ref={inputRef}
+                        <input id={fileInputId}
                             type="file"
                             accept={ALLOWED_FILE_TYPES.join(',')}
                             className="sr-only"
@@ -194,7 +198,7 @@ export function CreatePost({ user, onPostCreated, isSubmitting = false }) {
                         <SelectButton
                             name="visibility"
                             label="public"
-                             options={selectOptions}
+                            options={selectOptions}
                             disabled
                             tooltip="Best friends visibility coming soon" />
                     </div>
