@@ -21,8 +21,9 @@ const SUBMIT_ERROR = "Couldn't publish your post. Please try again."
  * ) => void} props.onPostCreated Normalmente el `mutate` de `useCreatePost`:
  *   el segundo argumento son callbacks por llamada.
  * @param {boolean} [props.isSubmitting]
+ * @param {boolean} [props.autoFocus]
  */
-export function CreatePost({ user, onPostCreated, isSubmitting = false }) {
+export function CreatePost({ user, onPostCreated, isSubmitting = false, autoFocus = false }) {
     const [content, setContent] = useState('');
     const uid = useId()
     const textareaId = `${uid}-textarea`;
@@ -92,6 +93,7 @@ export function CreatePost({ user, onPostCreated, isSubmitting = false }) {
                 <Avatar user={user} avatarSize="md" />
                 <div className="create-post__field">
                     <textarea
+                        autoFocus={autoFocus}
                         ref={textareaRef}
                         className={`create-post__header-input${needsText ? ' create-post__header-input--needs-text' : ''}`}
                         value={content}
@@ -153,6 +155,7 @@ export function CreatePost({ user, onPostCreated, isSubmitting = false }) {
                             Upload images
                         </label>
                         <input id={fileInputId}
+                            ref={inputRef}
                             type="file"
                             accept={ALLOWED_FILE_TYPES.join(',')}
                             className="sr-only"

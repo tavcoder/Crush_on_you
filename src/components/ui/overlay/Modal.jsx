@@ -25,6 +25,8 @@ export function Modal({
     // Foco inicial: el elemento indicado, o el diálogo mismo
     useEffect(() => {
         if (!isOpen) return
+        // Si un hijo ya tiene el foco (autoFocus), se respeta
+        if (dialogRef.current?.contains(document.activeElement)) return
         const target = initialFocusRef?.current ?? dialogRef.current
         target?.focus()
     }, [isOpen, initialFocusRef])

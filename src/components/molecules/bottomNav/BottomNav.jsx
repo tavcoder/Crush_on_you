@@ -12,7 +12,7 @@ const NAV_ITEMS = [
     { to: '/profile', icon: User, label: 'Profile', badge: false },
 ];
 
-export function BottomNav() {
+export function BottomNav({ onCreate, createButtonRef }) {
     const location = useLocation();
 
 
@@ -37,7 +37,7 @@ export function BottomNav() {
     return (
         <nav className="bottom-nav" aria-label="Main navigation">
             {navItems.slice(0, 2)}
-            <FloatButton />
+            <FloatButton ref={createButtonRef} onClick={onCreate} />
             {navItems.slice(2)}
         </nav>
     );

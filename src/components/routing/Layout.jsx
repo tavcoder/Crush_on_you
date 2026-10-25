@@ -9,10 +9,12 @@ import { LeftSideBar } from "../molecules/leftSideBar/LeftSideBar"
 import { RightSideBar } from "../molecules/rightSideBar/RightSideBar"
 import { BottomNav } from "../molecules/bottomNav/BottomNav"
 import { StoriesBar } from "../organisms/storiesBar/StoriesBar"
-import { UserAuthContext } from "../../context/UserAuthContext"
+import { CreatePostDialog } from "../organisms/createPost/CreatePostDialog.jsx"
+import { useCreatePostDialog } from "../../components/organisms/createPost/useCreatePostDialog.js"
 import { useSearch } from "../../hooks/useSearch"
 import { useStories } from "../../hooks/useStories"
 import { useViewedUserProfile } from "../../hooks/useViewedUserProfile.js"
+import { UserAuthContext } from "../../context/UserAuthContext"
 import './Layout.css'
 
 
@@ -22,18 +24,25 @@ export function Layout() {
     const { currentUser, isLoading: currentUserLoading, error: currentUserError } = useContext(UserAuthContext)
     const { stories, onStorySeen } = useStories()
     const { viewedUser: displayUserProfile, error: displayUserError } = useViewedUserProfile(currentUser)
-
+    const createDialog = useCreatePostDialog()
     return (
         <div className="layout">
-            <ConnectionBanner />
 
             <NavBar user={currentUser} />
+            <ConnectionBanner />
             <StoriesBar
                 currentUser={currentUser}
                 users={stories}
                 onStorySeen={onStorySeen}
             />
-
+            <CreatePostDialog
+                isOpen={createDialog.isOpen}
+                onClose={createDialog.close}
+                triggerRef={createDialog.triggerRef}
+                user={currentUser}
+                onPostCreated={createDialog.onPostCreated}
+                isSubmitting={createDialog.isSubmitting}
+            />
             <div className="layout__body">
 
                 <LeftSideBar
@@ -59,7 +68,8 @@ export function Layout() {
                 </main>
                 <RightSideBar />
             </div>
-            <BottomNav />
+            <BottomNav onCreate={createDialog.open} createButtonRef={createDialog.triggerRef} />
+
         </div>
     )
 }

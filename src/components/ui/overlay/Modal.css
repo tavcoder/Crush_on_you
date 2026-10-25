@@ -21,7 +21,9 @@
 }
 
 .modal__title {
-    margin-bottom: var(--space-2);
+    font-size: var(--fs-sm);
+    font-weight: var(--fw-medium);
+    color: var(--color-text-muted);
 }
 
 @keyframes modal-fade-in {
