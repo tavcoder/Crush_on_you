@@ -1,0 +1,11 @@
+/* CloseButton.css */
+.close-button {
+    color: var(--color-text-secondary);
+    border-radius: var(--radius-full);
+    transition: var(--transition-fast);
+}
+
+.close-button:hover {
+    background: var(--color-secondary);
+    color: var(--color-text-on-secondary);
+}

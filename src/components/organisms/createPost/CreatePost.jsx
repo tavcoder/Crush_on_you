@@ -1,10 +1,11 @@
 /*CreatePost.jsx*/
 import { useState, useRef, useEffect, useId } from "react";
-import { X, Info, Image, Paperclip, Hash, Radio, AtSign, Globe } from "lucide-react";
+import { Info, Image, Paperclip, Hash, Radio, AtSign, Globe } from "lucide-react";
 import { Avatar } from '../../ui/avatar/Avatar.jsx'
 import { Button } from '../../ui/button/Button.jsx'
 import { IconButton } from '../../ui/iconButton/IconButton.jsx'
 import { SelectButton } from '../../ui/selectButton/SelectButton.jsx'
+import { CloseButton } from '../../ui/closeButton/CloseButton.jsx'
 import { ALLOWED_FILE_TYPES } from '../../../utils/validateUtils.js'
 import { usePostMedia } from '../../../hooks/usePostMedia.js'
 import './CreatePost.css'
@@ -126,15 +127,12 @@ export function CreatePost({ user, onPostCreated, isSubmitting = false, autoFocu
                         <div className="create-post__previews">
                             {previewUrls.map((url, i) => (
                                 <div key={url} className="create-post__preview">
-                                    <button
-                                        type="button"
+                                    <CloseButton
+                                        className="create-post__preview-remove"
+                                        ariaLabel={`Remove image ${i + 1}`}
                                         onClick={() => handleRemoveFile(i)}
-                                        aria-label={`Remove image ${i + 1}`}
                                         disabled={isDisabled}
-                                        className="btn-reset create-post__preview-remove"
-                                    >
-                                        <X />
-                                    </button>
+                                    />
                                     <img src={url} alt={`Preview ${i + 1}`} />
 
                                 </div>
