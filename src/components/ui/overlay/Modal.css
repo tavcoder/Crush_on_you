@@ -15,9 +15,16 @@
 .modal {
     max-width: 400px;
     width: 100%;
-    padding: var(--space-6);
+    padding: var(--space-2) var(--space-3);
     border-radius: var(--radius-lg);
     animation: modal-scale-in 0.2s ease-out;
+}
+
+.modal__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: var(--space-3);
 }
 
 .modal__title {

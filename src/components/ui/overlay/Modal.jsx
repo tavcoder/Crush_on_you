@@ -1,5 +1,6 @@
 // components/ui/overlay/Modal.jsx
 import { useEffect, useId, useRef } from 'react'
+import { CloseButton } from '../closeButton/CloseButton.jsx'
 import { useDismissible } from '../../../hooks/useDismissible.js'
 import './Modal.css'
 
@@ -16,11 +17,12 @@ export function Modal({
     closeOnOutsideClick = true,
     className = '',
     children,
+    showCloseButton = true,
 }) {
     const dialogRef = useRef(null)
     const titleId = useId()
 
-    useDismissible({ isOpen, onClose, triggerRef, contentRef: dialogRef, closeOnOutsideClick })
+    const { dismiss } = useDismissible({ isOpen, onClose, triggerRef, contentRef: dialogRef, closeOnOutsideClick })
 
     // Foco inicial: el elemento indicado, o el diálogo mismo
     useEffect(() => {
@@ -69,7 +71,10 @@ export function Modal({
                 aria-describedby={describedBy}
                 tabIndex={-1}
             >
-                <h2 id={titleId} className="modal__title">{title}</h2>
+                <div className="modal__header">
+                    <h2 id={titleId} className="modal__title">{title}</h2>
+                    {showCloseButton && <CloseButton onClick={dismiss} ariaLabel="Close dialog" />}
+                </div>
                 {children}
             </div>
         </div>
