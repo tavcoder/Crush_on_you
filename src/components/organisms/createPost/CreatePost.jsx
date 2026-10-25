@@ -1,10 +1,11 @@
 /*CreatePost.jsx*/
-import { useState, useRef, useEffect } from "react";
-import { X, Info, Image, Paperclip, Hash, Radio, AtSign, Globe } from "lucide-react";
+import { useState, useRef, useEffect, useId } from "react";
+import { Info, Image, Paperclip, Hash, Radio, AtSign, Globe } from "lucide-react";
 import { Avatar } from '../../ui/avatar/Avatar.jsx'
 import { Button } from '../../ui/button/Button.jsx'
 import { IconButton } from '../../ui/iconButton/IconButton.jsx'
 import { SelectButton } from '../../ui/selectButton/SelectButton.jsx'
+import { CloseButton } from '../../ui/closeButton/CloseButton.jsx'
 import { ALLOWED_FILE_TYPES } from '../../../utils/validateUtils.js'
 import { usePostMedia } from '../../../hooks/usePostMedia.js'
 import './CreatePost.css'
@@ -21,9 +22,15 @@ const SUBMIT_ERROR = "Couldn't publish your post. Please try again."
  * ) => void} props.onPostCreated Normalmente el `mutate` de `useCreatePost`:
  *   el segundo argumento son callbacks por llamada.
  * @param {boolean} [props.isSubmitting]
+ * @param {boolean} [props.autoFocus]
  */
-export function CreatePost({ user, onPostCreated, isSubmitting = false }) {
+export function CreatePost({ user, onPostCreated, isSubmitting = false, autoFocus = false }) {
     const [content, setContent] = useState('');
+    const uid = useId()
+    const textareaId = `${uid}-textarea`;
+    const fileInputId = `${uid}-file-input`;
+    const hintId = `${uid}-hint`;
+
     // módulo
     // TODO: [DEUDA TÉCNICA] "Best friends" no existe en el backend. Restaurar la opción
     // y el estado `visibility` cuando haya soporte.
@@ -87,21 +94,22 @@ export function CreatePost({ user, onPostCreated, isSubmitting = false }) {
                 <Avatar user={user} avatarSize="md" />
                 <div className="create-post__field">
                     <textarea
+                        autoFocus={autoFocus}
                         ref={textareaRef}
                         className={`create-post__header-input${needsText ? ' create-post__header-input--needs-text' : ''}`}
                         value={content}
                         onChange={(e) => setContent(e.target.value)}
                         placeholder="What's on your mind?"
-                        id="create-post-textarea"
+                        id={textareaId}
                         name="create-post"
                         rows={1}
                         aria-label="Post content"
                         required
-                        aria-describedby={needsText ? "create-post-hint" : undefined}
+                        aria-describedby={needsText ? hintId : undefined}
                         disabled={isDisabled}
                     />
                     {needsText && (
-                        <p id="create-post-hint" className="create-post__hint">
+                        <p id={hintId} className="create-post__hint">
                             <Info aria-hidden="true" />
                             {TEXT_REQUIRED_HINT}
                         </p>
@@ -119,15 +127,12 @@ export function CreatePost({ user, onPostCreated, isSubmitting = false }) {
                         <div className="create-post__previews">
                             {previewUrls.map((url, i) => (
                                 <div key={url} className="create-post__preview">
-                                    <button
-                                        type="button"
+                                    <CloseButton
+                                        className="create-post__preview-remove"
+                                        ariaLabel={`Remove image ${i + 1}`}
                                         onClick={() => handleRemoveFile(i)}
-                                        aria-label={`Remove image ${i + 1}`}
                                         disabled={isDisabled}
-                                        className="btn-reset create-post__preview-remove"
-                                    >
-                                        <X />
-                                    </button>
+                                    />
                                     <img src={url} alt={`Preview ${i + 1}`} />
 
                                 </div>
@@ -144,10 +149,10 @@ export function CreatePost({ user, onPostCreated, isSubmitting = false }) {
             <section className="create-post__actions">
                 <div role="toolbar" aria-label="Post formatting tools">
                     <div role="group" aria-label="Media uploads">
-                        <label className="sr-only" htmlFor="create-post-file-input">
+                        <label className="sr-only" htmlFor={fileInputId}>
                             Upload images
                         </label>
-                        <input id="create-post-file-input"
+                        <input id={fileInputId}
                             ref={inputRef}
                             type="file"
                             accept={ALLOWED_FILE_TYPES.join(',')}
@@ -194,7 +199,7 @@ export function CreatePost({ user, onPostCreated, isSubmitting = false }) {
                         <SelectButton
                             name="visibility"
                             label="public"
-                             options={selectOptions}
+                            options={selectOptions}
                             disabled
                             tooltip="Best friends visibility coming soon" />
                     </div>
