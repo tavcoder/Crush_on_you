@@ -1,20 +1,13 @@
 /*Input.jsx*/
+import { forwardRef } from "react";
 import { Search, X } from "lucide-react";
 import './Input.css'
 
-export function Input({
-    label,
-    value,
-    onChange,
-    onClear,
-    variant = "",
-    type = 'text',
-    placeholder,
-    id,
-    name,
-    className,
-    disabled = false
-}) {
+export const Input = forwardRef(function Input({
+    label, value, onChange, onClear,
+    variant = "", type = 'text', placeholder,
+    id, name, className, disabled = false
+}, ref) {
     const rootClass = [
         'input',
         disabled && 'input--disabled',
@@ -26,6 +19,7 @@ export function Input({
             {variant === "icon" && <Search className="input__icon" aria-hidden="true" />}
             <label htmlFor={id} className="sr-only">{label}</label>
             <input
+                ref={ref}
                 className="input__field"
                 type={type}
                 id={id}
@@ -47,4 +41,4 @@ export function Input({
             )}
         </div>
     )
-}
+})
