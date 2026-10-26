@@ -5,6 +5,7 @@ import { ErrorBoundary } from "react-error-boundary"
 import { ErrorFallback } from "../ui/feedback/ErrorFallback.jsx"
 import { ConnectionBanner } from "../ui/feedback/ConnectionBanner.jsx"
 import { NavBar } from "../molecules/navBar/NavBar"
+import { SearchBar } from "../molecules/searchBar/SearchBar.jsx"
 import { LeftSideBar } from "../molecules/leftSideBar/LeftSideBar"
 import { RightSideBar } from "../molecules/rightSideBar/RightSideBar"
 import { BottomNav } from "../molecules/bottomNav/BottomNav"
@@ -53,6 +54,7 @@ export function Layout() {
                 />
 
                 <main className="layout__main">
+                    <SearchBar className="mobile-only mobile-search" />
                     <ErrorBoundary FallbackComponent={ErrorFallback} resetKeys={[pathname]}>
                         <Outlet
                             context={{

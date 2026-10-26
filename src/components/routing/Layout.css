@@ -31,3 +31,10 @@
         padding-bottom: calc(var(--bottom-nav-height) + env(safe-area-inset-bottom) + var(--space-4));
     }
 }
+
+.mobile-search {
+    width: 100%;
+    max-width: var(--max-width-feed);
+    margin-inline: auto;
+    margin-bottom: var(--space-5);
+}
