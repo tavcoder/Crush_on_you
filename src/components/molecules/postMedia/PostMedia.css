@@ -25,6 +25,18 @@
     display: block;
 }
 
+/* Poca altura (móvil en horizontal): la imagen no puede ocupar más de media pantalla.
+   Misma condición que el bloque de index.css */
+@media (max-width: 1023px) and (max-height: 500px) and (orientation: landscape) {
+
+    .post-media__img,
+    .post-media__images:has(.post-media__img:nth-child(3):last-child) .post-media__img:first-child {
+        aspect-ratio: auto;
+        max-height: 45dvh;
+        object-fit: cover;
+    }
+}
+
 .post-media__profile-details {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
