@@ -37,6 +37,9 @@ export function useUsers(page = 1) {
     });
 }
 
+
+// TODO: [DEUDA TÉCNICA] searchUsers solo pide la página 1 (5 resultados). Paginar en
+// la rama feat/users-search-pagination.
 export function useSearchUsers(query, { enabled } = {}) {
     const userSearch = useQuery({
         queryKey: ['users', 'search', query],

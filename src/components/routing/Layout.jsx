@@ -21,7 +21,8 @@ import './Layout.css'
 
 export function Layout() {
     const { pathname } = useLocation()
-    const search = useSearch('posts')
+    const isPeople = pathname.startsWith('/people')
+    const search = useSearch(isPeople ? 'users' : 'posts')
     const { currentUser, isLoading: currentUserLoading, error: currentUserError } = useContext(UserAuthContext)
     const { stories, onStorySeen } = useStories()
     const { viewedUser: displayUserProfile, error: displayUserError } = useViewedUserProfile(currentUser)

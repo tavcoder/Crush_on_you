@@ -3,7 +3,7 @@ import { useState } from "react";
 import { useUserSuggestionsList } from "../../hooks/useUserSuggestionsList.js"
 import { useFollowers, useFollowing } from "../../hooks/useFollows.js";
 
-export function usePeoplePage(type, userId, profileError) {
+export function usePeoplePage(type, userId, profileError, search) {
 
     const [page, setPage] = useState(1);
 
@@ -27,6 +27,8 @@ export function usePeoplePage(type, userId, profileError) {
         isSuccess: followingSuccess,
         error: followingError }
         = useFollowing(userId, page, type === "following" && !!userId);
+
+    const isSearching = Boolean(search?.isSearching)
 
     const dataByType = {
         suggestions: {
@@ -55,7 +57,16 @@ export function usePeoplePage(type, userId, profileError) {
         }
     };
 
-    const current = dataByType[type];
+    const current = isSearching
+        ? {
+            users: search.results,
+            isLoading: search.isLoading,
+            isError: search.isError,
+            error: search.error,
+            isSuccess: search.isSuccess,
+            pagination: null,   // solo hay primera página: ver deuda
+        }
+        : dataByType[type]
     const { users, pagination } = current;
 
     // followers/following dependen de que el perfil exista; suggestions no
@@ -66,5 +77,5 @@ export function usePeoplePage(type, userId, profileError) {
     const isLoading = current.isLoading || (needsProfile && !profileError);
     const isEmpty = current.isSuccess && users.length === 0;
 
-    return { users, isLoading, isEmpty, isError, error, pagination, setPage };
+    return { users, isLoading, isEmpty, isError, error, pagination, setPage, isSearching };
 }

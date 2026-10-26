@@ -4,7 +4,7 @@ import { PeoplePageContent } from "./PeoplePageContent.jsx";
 import { isValidPeopleType } from "./peopleTypes.js";
 
 export default function PeoplePage() {
-    const { displayUserProfile, currentUser, displayUserError } = useOutletContext();
+    const { displayUserProfile, currentUser, displayUserError, search } = useOutletContext();
 
     const { type = "suggestions" } = useParams();
 
@@ -18,6 +18,7 @@ export default function PeoplePage() {
             displayUserProfile={displayUserProfile}
             currentUser={currentUser}
             profileError={displayUserError}
+            search={search}
         />
     );
 }
