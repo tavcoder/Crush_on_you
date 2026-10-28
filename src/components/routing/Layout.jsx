@@ -11,7 +11,8 @@ import { RightSideBar } from "../molecules/rightSideBar/RightSideBar"
 import { BottomNav } from "../molecules/bottomNav/BottomNav"
 import { StoriesBar } from "../organisms/storiesBar/StoriesBar"
 import { CreatePostDialog } from "../organisms/createPost/CreatePostDialog.jsx"
-import { useCreatePostDialog } from "../../components/organisms/createPost/useCreatePostDialog.js"
+import { useCreatePostDialog } from "../organisms/createPost/useCreatePostDialog.js"
+import { useMobileSearch } from "../molecules/searchBar/useMobileSearch.js"
 import { useSearch } from "../../hooks/useSearch"
 import { useStories } from "../../hooks/useStories"
 import { useViewedUserProfile } from "../../hooks/useViewedUserProfile.js"
@@ -22,7 +23,9 @@ import './Layout.css'
 export function Layout() {
     const { pathname } = useLocation()
     const isPeople = pathname.startsWith('/people')
-    const search = useSearch(isPeople ? 'users' : 'posts')
+    const searchMode = isPeople ? 'users' : 'posts'
+    const search = useSearch(searchMode)
+    const mobileSearch = useMobileSearch()
     const { currentUser, isLoading: currentUserLoading, error: currentUserError } = useContext(UserAuthContext)
     const { stories, onStorySeen } = useStories()
     const { viewedUser: displayUserProfile, error: displayUserError } = useViewedUserProfile(currentUser)
@@ -55,7 +58,13 @@ export function Layout() {
                 />
 
                 <main className="layout__main">
-                    <SearchBar className="mobile-only mobile-search" />
+                    {mobileSearch.isOpen && (
+                        <SearchBar
+                            className="mobile-only mobile-search"
+                            onClose={mobileSearch.closeAndRestoreFocus}
+                            mode={searchMode}
+                        />
+                    )}
                     <ErrorBoundary FallbackComponent={ErrorFallback} resetKeys={[pathname]}>
                         <Outlet
                             context={{
@@ -71,7 +80,13 @@ export function Layout() {
                 </main>
                 <RightSideBar />
             </div>
-            <BottomNav onCreate={createDialog.open} createButtonRef={createDialog.triggerRef} />
+            <BottomNav
+                onCreate={createDialog.open}
+                createButtonRef={createDialog.triggerRef}
+                onSearch={mobileSearch.toggle}
+                isSearchOpen={mobileSearch.isOpen}
+                searchButtonRef={mobileSearch.triggerRef}
+            />
 
         </div>
     )

@@ -1,27 +1,36 @@
 /*SearchBar.jsx*/
-import { forwardRef, useId } from 'react'
+import { useRef, useEffect, useId } from 'react'
 import { Input } from '../../ui/input/Input.jsx'
-import { CloseButton } from '../../ui/closeButton/CloseButton.jsx'
 import { useSearchQuery } from '../../../hooks/useSearchQuery.js'
 
-export const SearchBar = forwardRef(function SearchBar({ className = '', onClose }, ref) {
+const COPY = {
+    posts: { label: 'Search posts', placeholder: 'Search posts...' },
+    users: { label: 'Search people', placeholder: 'Search people...' },
+}
+export function SearchBar({ className = '', onClose, mode = 'posts' }) {
     const id = useId()
     const { query, setQuery, clearQuery } = useSearchQuery()
+    const inputRef = useRef(null)
 
+    const { label, placeholder } = COPY[mode]
+
+    useEffect(() => {
+        inputRef.current?.focus()
+    }, [])
     return (
-        <form role="search" aria-label="Search posts" className={className}
+        <form role="search" aria-label={label} className={className} onKeyDown={(e) => { if (e.key === 'Escape') onClose?.() }}
             onSubmit={(e) => e.preventDefault()}>
             <Input
-                ref={ref}
+                ref={inputRef}
                 variant="icon"
                 id={id}
                 label="Search"
-                placeholder="Search people, posts..."
+                placeholder={placeholder}
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
                 onClear={clearQuery}
+
             />
-            {onClose && <CloseButton ariaLabel="Close search" onClick={onClose} />}
         </form>
     )
-})
+}

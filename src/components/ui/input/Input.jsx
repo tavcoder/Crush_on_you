@@ -1,13 +1,22 @@
 /*Input.jsx*/
-import { forwardRef } from "react";
 import { Search, X } from "lucide-react";
 import './Input.css'
 
-export const Input = forwardRef(function Input({
-    label, value, onChange, onClear,
-    variant = "", type = 'text', placeholder,
-    id, name, className, disabled = false
-}, ref) {
+export function Input({
+    label,
+    value,
+    onChange,
+    onClear,
+    onKeyDown,
+    variant = "",
+    type = 'text',
+    placeholder,
+    id,
+    name,
+    className,
+    disabled = false,
+    ref,
+}) {
     const rootClass = [
         'input',
         disabled && 'input--disabled',
@@ -26,6 +35,7 @@ export const Input = forwardRef(function Input({
                 name={name}
                 value={value}
                 onChange={onChange}
+                onKeyDown={onKeyDown}
                 placeholder={placeholder ?? label}
                 disabled={disabled}
             />
@@ -41,4 +51,4 @@ export const Input = forwardRef(function Input({
             )}
         </div>
     )
-})
+}
