@@ -21,6 +21,8 @@ export function IconButton({
     type = 'button',
     className = '',
     to,
+    ariaExpanded,
+    ref,
 }) {
     const isIconOnly = !children;
     const [isPulsing, setIsPulsing] = useState(false);
@@ -78,7 +80,13 @@ export function IconButton({
         'aria-label': isIconOnly ? ariaLabel : undefined,
         ...(to
             ? { 'aria-current': isPressed ? 'page' : undefined }
-            : { 'aria-pressed': typeof isPressed === 'boolean' && role !== 'checkbox' ? isPressed : undefined }
+            : {
+                'aria-pressed':
+                    typeof isPressed === 'boolean' && role !== 'checkbox' && ariaExpanded === undefined
+                        ? isPressed
+                        : undefined,
+                'aria-expanded': ariaExpanded,
+            }
         ),
     };
 
@@ -92,7 +100,7 @@ export function IconButton({
 
     return (
         <div className="tooltip-wrapper" data-tooltip={tooltip}>
-            <button disabled={disabled} type={type} role={role} aria-checked={ariaChecked} {...commonProps}>
+            <button ref={ref} disabled={disabled} type={type} role={role} aria-checked={ariaChecked} {...commonProps}>
                 {content}
             </button>
         </div>

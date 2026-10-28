@@ -7,13 +7,15 @@ export function Input({
     value,
     onChange,
     onClear,
+    onKeyDown,
     variant = "",
     type = 'text',
     placeholder,
     id,
     name,
     className,
-    disabled = false
+    disabled = false,
+    ref,
 }) {
     const rootClass = [
         'input',
@@ -26,12 +28,14 @@ export function Input({
             {variant === "icon" && <Search className="input__icon" aria-hidden="true" />}
             <label htmlFor={id} className="sr-only">{label}</label>
             <input
+                ref={ref}
                 className="input__field"
                 type={type}
                 id={id}
                 name={name}
                 value={value}
                 onChange={onChange}
+                onKeyDown={onKeyDown}
                 placeholder={placeholder ?? label}
                 disabled={disabled}
             />

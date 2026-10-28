@@ -9,14 +9,16 @@ import { getPeoplePageTitle, getPeoplePageEmptyMessage } from "./peoplePageConte
 import { PeoplePageSkeleton } from "./PeoplePageSkeleton.jsx";
 import './PeoplePageContent.css'
 
-export function PeoplePageContent({ type, displayUserProfile, currentUser, profileError }) {
+export function PeoplePageContent({ type, displayUserProfile, currentUser, profileError, search }) {
 
-    const { users, isLoading, isEmpty, isError, error, pagination, setPage } = usePeoplePage(type, displayUserProfile?.id, profileError);
+    const { users, isLoading, isEmpty, isError, error, pagination, setPage, isSearching } = usePeoplePage(type, displayUserProfile?.id, profileError,search);
     const retryAll = useRetryAll();
 
     const isOwnProfile = currentUser?.id === displayUserProfile?.id
-    const pageTitle = getPeoplePageTitle(type, isOwnProfile, displayUserProfile?.userNick);
-    const emptyMessage = getPeoplePageEmptyMessage(type, isOwnProfile, displayUserProfile?.userNick);
+    const pageTitle = isSearching ? 'SEARCH RESULTS' : getPeoplePageTitle(type, isOwnProfile, displayUserProfile?.userNick);
+    const emptyMessage = isSearching
+        ? `No users match "${search.query}"`
+        : getPeoplePageEmptyMessage(type, isOwnProfile, displayUserProfile?.userNick);
 
     if (isError) return <ErrorFallback error={error} onRetry={retryAll} />
     if (isEmpty) return (

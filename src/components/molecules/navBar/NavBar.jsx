@@ -1,11 +1,10 @@
 /*NavBar.jsx*/
 import { Link, useLocation } from 'react-router'
-import { Bell} from "lucide-react";
-import { Input } from '../../ui/input/Input.jsx'
+import { Bell } from "lucide-react";
 import { BrandLogo } from '../../ui/brandLogo/BrandLogo.jsx'
 import { IconButton } from '../../ui/iconButton/IconButton.jsx'
 import { AvatarMenu } from '../../molecules/avatarMenu/AvatarMenu.jsx'
-import { useSearchQuery } from '../../../hooks/useSearchQuery.js'
+import { SearchBar } from '../../molecules/searchBar/SearchBar.jsx'
 import './NavBar.css'
 
 const NAV_LINKS = [
@@ -14,22 +13,7 @@ const NAV_LINKS = [
     { to: '/people/suggestions', label: 'People' },
 ];
 export function NavBar({ user }) {
-    const { query, setQuery, clearQuery } = useSearchQuery()
     const { pathname } = useLocation()
-    
-    const handleSearch = (e) => {
-        const value = e.target.value
-        setQuery(value)
-    }
-
-    const handleSubmit = (e) => {
-        e.preventDefault()
-        // El param ya está en la URL porque handleSearch lo actualiza en cada keystroke
-    }
-
-    const handleClear = () => {
-        clearQuery()
-    }
 
     const navItems = NAV_LINKS.map(({ to, label }) => {
         const isActive = pathname === to;
@@ -49,17 +33,7 @@ export function NavBar({ user }) {
 
             <BrandLogo />
 
-            <form role="search" onSubmit={handleSubmit} className="nav-bar__search">
-                <Input
-                    variant="icon"
-                    placeholder="Search people, posts..."
-                    id="navbar-search"
-                    label="Search"
-                    value={query}
-                    onChange={handleSearch}
-                    onClear={handleClear}
-                />
-            </form>
+            <SearchBar className="nav-bar__search" />
 
             <div className='nav-bar__actions'>
                 <div className='nav-bar__links'>{navItems}</div>
