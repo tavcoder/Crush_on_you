@@ -1,4 +1,4 @@
-import { Link } from 'react-router'
+/*UsersOnlineCard.jsx*/
 import { UserInfo } from '../userInfo/UserInfo'
 import { EmptyState } from '../../ui/feedback/EmptyState.jsx'
 import { ErrorFallback } from '../../ui/feedback/ErrorFallback.jsx'
