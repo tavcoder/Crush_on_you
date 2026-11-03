@@ -18,4 +18,11 @@
     padding: 0;
     margin: 0;
     display: flex;
+    gap: var(--space-4);
+}
+
+.users-online-card__user-item:hover {
+    color: var(--color-primary);
+    transform: scale(1.05);
+    cursor: pointer;
 }

@@ -27,7 +27,7 @@ export function UsersOnlineCard({ onlineUsers, isLoading, isError, error }) {
 
             <ul className='users-online-card__users-list' role='list'>
                 {onlineUsers.map((user) => (
-                    <li key={user.id} >
+                    <li key={user.id} className='users-online-card__user-item'>
                         <UserInfo
                             user={user}
                             avatarSize="md"

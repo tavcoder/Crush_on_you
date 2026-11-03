@@ -8,7 +8,7 @@
     justify-content: center;
     align-items: center;
     flex-shrink: 0;
-    overflow: hidden;
+    isolation: isolate;
 }
 
 .avatar__image {
@@ -78,16 +78,16 @@
 
 .avatar__online {
     position: absolute;
-    bottom: 0;
-    right: 0;
+    bottom: -0.2rem;
+    right: -0.2rem;
     background-color: var(--color-online);
     border: 2px solid var(--white);
     border-radius: var(--radius-full);
 }
 
 .avatar__online--sm {
-    width: var(--space-2);
-    height: var(--space-2);
+    width: var(--space-3);
+    height: var(--space-3);
 }
 
 .avatar__online--md {
@@ -98,6 +98,15 @@
 .avatar__online--lg {
     width: var(--space-3);
     height: var(--space-3);
+    bottom: 0;
+    right: 0;
+}
+
+.avatar__online--xl {
+    width: var(--space-4);
+    height: var(--space-4);
+    bottom: 0;
+    right: 0;
 }
 
 .avatar__badge {
