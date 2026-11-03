@@ -1,9 +1,12 @@
 // hooks/useStories.js
-import { useState, useMemo, useCallback } from 'react';
-import { useFollowing } from './useFollowing';
+import { useState, useMemo, useCallback, useContext } from 'react';
+import { useFollowing } from './useFollows.js';
+import { UserAuthContext } from "../context/UserAuthContext.jsx";
 
 export function useStories() {
-    const { following } = useFollowing();
+
+    const { currentUser } = useContext(UserAuthContext);
+    const { following } = useFollowing(currentUser?.id);
     // solo usuarios con historias
     const stories = useMemo(() =>
         following.filter(user => user.hasStory),

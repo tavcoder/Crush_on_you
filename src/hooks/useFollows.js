@@ -1,8 +1,8 @@
 // hooks/useFollows.js
+import { useContext } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { getFollowers, getFollowing, followUser, unfollowUser } from '../services/api/follow.api.js'
 import { UserAuthContext } from "../context/UserAuthContext.jsx";
-import { useContext } from "react";
 
 /**
  * Lista paginada de usuarios que siguen al usuario indicado.

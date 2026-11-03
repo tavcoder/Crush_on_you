@@ -6,13 +6,13 @@ import { UsersOnlineCardSkeleton } from '../usersOnlineCard/UsersOnlineCardSkele
 import { useProfilePath } from '../../../hooks/useProfilePath.js'
 import './UsersOnlineCard.css'
 
-export function UsersOnlineCard({ onlineUsers, isLoading, isError, error }) {
+export function UsersOnlineCard({ onlineUsers, isLoading, isSuccess, isError, error }) {
     const buildProfilePath = useProfilePath();
-    const noUsersOnline = onlineUsers?.length === 0;
 
     if (isLoading) return <UsersOnlineCardSkeleton />
     if (isError) return <ErrorFallback error={error} />
-    if (noUsersOnline) return (
+    if (!isSuccess) return;
+    if (onlineUsers.length === 0) return (
         <section className='card users-online-card'>
             <EmptyState
                 content="None of your connections are online right now. Discover new people and keep exploring."
