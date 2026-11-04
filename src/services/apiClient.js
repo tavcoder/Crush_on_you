@@ -1,9 +1,9 @@
 // services/apiClient.js
+import { API_BASE_URL, USE_MOCK, DEMO_MODE } from './config.js'
 import { mockClient, getMockToken, setMockToken, removeMockToken } from './mockClient.js'
+import { simulatePresence } from './demo/simulatePresence.js'
 import { ApiError, codeFromStatus } from './ApiError.js'
 
-const USE_MOCK = import.meta.env.VITE_USE_MOCK === 'true'
-const API_BASE_URL = import.meta.env.VITE_API_URL ?? 'http://localhost:3900/api'
 
 export function getToken() {
     if (USE_MOCK) return getMockToken()
@@ -26,24 +26,23 @@ function authHeaders(endpoint) {
     return !isPublic && token ? { Authorization: token } : {}
 }
 
-function handleResponse(res) {
-    if (!res.ok) {
-        return res.json()
-            .catch(() => ({}))// el catch solo envuelve fetch: los errores de handleResponse ya son ApiError.
-            .then(body => {
-                throw new ApiError(codeFromStatus(res.status), { status: res.status, cause: body })
-            })
-    }
-    return res.json()
+async function handleResponse(res) {
+    if (res.ok) return res.json()
+    const body = await res.json().catch(() => ({}))
+    throw new ApiError(codeFromStatus(res.status), { status: res.status, cause: body })
 }
 
-function request(url, options) {
-    return fetch(url, options)
-        .catch(cause => {
-            // Con el navegador online, un fetch rechazado es un problema del servidor
-            throw new ApiError(navigator.onLine ? 'SERVER' : 'NETWORK', { cause })
-        })
-        .then(handleResponse)
+
+async function request(url, options) {
+    let res
+    try {
+        res = await fetch(url, options)
+    } catch (cause) {
+        // Con el navegador online, un fetch rechazado es un problema del servidor
+        throw new ApiError(navigator.onLine ? 'SERVER' : 'NETWORK', { cause })
+    }
+    const data = await handleResponse(res)
+    return DEMO_MODE ? simulatePresence(data) : data
 }
 
 export const apiClient = {
