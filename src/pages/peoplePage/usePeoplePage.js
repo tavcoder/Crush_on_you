@@ -64,18 +64,20 @@ export function usePeoplePage(type, userId, profileError, search) {
             isError: search.isError,
             error: search.error,
             isSuccess: search.isSuccess,
-            pagination: null,   // solo hay primera página: ver deuda
+            pagination: search.pagination,
         }
         : dataByType[type]
-    const { users, pagination } = current;
+
+    const { users, pagination } = current; 
 
     // followers/following dependen de que el perfil exista; suggestions no
-    const needsProfile = type !== 'suggestions' && !userId;
+    const needsProfile = !isSearching && type !== 'suggestions' && !userId;
     const isError = current.isError || (needsProfile && Boolean(profileError));
     const error = current.error ?? (needsProfile ? profileError : undefined);
-    // sin perfil y sin error es una espera, no un vacío
     const isLoading = current.isLoading || (needsProfile && !profileError);
     const isEmpty = current.isSuccess && users.length === 0;
 
-    return { users, isLoading, isEmpty, isError, error, pagination, setPage, isSearching };
+    const changePage = isSearching ? search.setPage : setPage
+
+    return { users, isLoading, isEmpty, isError, error, pagination, setPage: changePage, isSearching };
 }
