@@ -45,7 +45,8 @@ export function useSearchUsers(query, { enabled, page = 1 } = {}) {
         queryFn: () => searchUsers({ search: query, page }),
         enabled: enabled ?? query.trim().length >= 2,
         staleTime: 1000 * 30,
-        placeholderData: (prev) => prev, // Al cambiar de página se mantiene la lista anterior mientras carga la siguiente, sin parpadeo de skeleton.
+        placeholderData: (prevData, prevQuery) =>
+            prevQuery?.queryKey[2] === query ? prevData : undefined,
     })
     return {
         ...userSearch,
