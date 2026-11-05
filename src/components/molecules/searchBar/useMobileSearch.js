@@ -25,7 +25,6 @@ export function useMobileSearch() {
 
     // Para Escape: cierra y devuelve el foco al botón que lo abrió
     const closeAndRestoreFocus = useCallback(() => {
-        console.log('closeAndRestoreFocus', triggerRef.current)
         close()
         triggerRef.current?.focus()
     }, [close])
