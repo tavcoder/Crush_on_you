@@ -33,7 +33,7 @@ export function Layout() {
     return (
         <div className="layout">
 
-            <NavBar user={currentUser} />
+            <NavBar user={currentUser} searchMode={searchMode} />
             <ConnectionBanner />
             <StoriesBar
                 currentUser={currentUser}

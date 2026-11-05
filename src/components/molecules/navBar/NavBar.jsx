@@ -12,7 +12,7 @@ const NAV_LINKS = [
     { to: '/timeline', label: 'Timeline' },
     { to: '/people/suggestions', label: 'People' },
 ];
-export function NavBar({ user }) {
+export function NavBar({ user, searchMode }) {
     const { pathname } = useLocation()
 
     const navItems = NAV_LINKS.map(({ to, label }) => {
@@ -33,7 +33,7 @@ export function NavBar({ user }) {
 
             <BrandLogo />
 
-            <SearchBar className="nav-bar__search" />
+            <SearchBar className="nav-bar__search" mode={searchMode} />
 
             <div className='nav-bar__actions'>
                 <div className='nav-bar__links'>{navItems}</div>

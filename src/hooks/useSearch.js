@@ -1,6 +1,6 @@
-// hooks/useSearch.js
-import { useSearchUsers } from '../hooks/useUsers'
-import { useSearchPosts } from '../hooks/usePosts'
+/* hooks/useSearch.js*/
+import { useSearchUsers } from './useUsers'
+import { useSearchPosts } from './usePosts'
 import { useSearchQuery } from './useSearchQuery'
 
 
@@ -16,26 +16,19 @@ import { useSearchQuery } from './useSearchQuery'
 // (tags, locations, etc.), considerar lazy initialization o
 // un hook genérico parametrizado.
 
+
 export function useSearch(type = 'posts') {
-    const { query} = useSearchQuery()
+    const { query, page, setPage } = useSearchQuery()
     const isActive = query.trim().length >= 2
 
-    const postsQuery = useSearchPosts(query, {
-        enabled: isActive && type === 'posts'
-    })
-    const usersQuery = useSearchUsers(query, {
-        enabled: isActive && type === 'users'
-    })
+    const postsQuery = useSearchPosts(query, { enabled: isActive && type === 'posts' })
+    const usersQuery = useSearchUsers(query, { enabled: isActive && type === 'users', page })
 
     const activeQuery = type === 'users' ? usersQuery : postsQuery
     const results = type === 'users' ? usersQuery.users : postsQuery.posts
 
-    // TODO: [DEUDA TÉCNICA] useSearchUsers usa useQuery simple (sin paginación).
-    // SideBar solo necesita una página de resultados (autocomplete corto), así que
-    // hasNextPage/fetchNextPage se devuelven "apagados" para type='users'.
-    // Cuando se implemente la página /people con exploración completa de usuarios,
-    // useSearchUsers deberá migrar a useInfiniteQuery (mismo patrón que useSearchPosts)
-    // y estas líneas dejarán de necesitar la rama condicional.
+    // Los posts usan scroll infinito (useInfiniteQuery) y los usuarios paginación
+    // por páginas (useQuery + ?page=), coherente con followers y following.
     return {
         results,
         isLoading: activeQuery.isLoading,
@@ -44,6 +37,9 @@ export function useSearch(type = 'posts') {
         hasNextPage: type === 'posts' ? postsQuery.hasNextPage : false,
         fetchNextPage: type === 'posts' ? postsQuery.fetchNextPage : () => { },
         isFetchingNextPage: type === 'posts' ? postsQuery.isFetchingNextPage : false,
+        isFetchNextPageError: type === 'posts' ? postsQuery.isFetchNextPageError : false,
+        pagination: type === 'users' ? usersQuery.pagination : undefined,
+        setPage,
         query,
         isSearching: isActive,
         isSuccess: activeQuery.isSuccess,

@@ -1,3 +1,4 @@
+/*hooks/useUsers.js*/
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import {
     getUsers,
@@ -38,15 +39,14 @@ export function useUsers(page = 1) {
 }
 
 
-// TODO: [DEUDA TÉCNICA] searchUsers solo pide la página 1 (5 resultados). Paginar en
-// la rama feat/users-search-pagination.
-export function useSearchUsers(query, { enabled } = {}) {
+export function useSearchUsers(query, { enabled, page = 1 } = {}) {
     const userSearch = useQuery({
-        queryKey: ['users', 'search', query],
-        queryFn: () => searchUsers({ search: query }),
+        queryKey: ['users', 'search', query, page],
+        queryFn: () => searchUsers({ search: query, page }),
         enabled: enabled ?? query.trim().length >= 2,
         staleTime: 1000 * 30,
-        placeholderData: (prev) => prev,
+        placeholderData: (prevData, prevQuery) =>
+            prevQuery?.queryKey[2] === query ? prevData : undefined,
     })
     return {
         ...userSearch,
