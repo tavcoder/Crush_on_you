@@ -1,9 +1,12 @@
-// context/UserAuthContext.jsx
+/*context/UserAuthContext.jsx*/
 import { createContext, useState, useCallback } from "react"
 import { useQueryClient } from '@tanstack/react-query'
 import { getToken, saveToken, removeToken } from '../services/apiClient'
 import { useUser } from '../hooks/useUsers.js'
 
+// TODO: [DEUDA TÉCNICA] Separar createContext del provider en dos archivos
+// para que Fast Refresh funcione al editar este archivo.
+// eslint-disable-next-line react-refresh/only-export-components
 export const UserAuthContext = createContext(null)
 
 export function UserAuthProvider({ children }) {
