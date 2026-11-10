@@ -8,7 +8,7 @@ export function useDismissible({ isOpen, onClose, triggerRef, contentRef, closeO
     }, [onClose, triggerRef]);
 
     useEffect(() => {
-        if (!isOpen) return;
+        if (!isOpen || !closeOnOutsideClick)  return;
         function handleClickOutside(e) {
             if (
                 !contentRef.current?.contains(e.target) &&
