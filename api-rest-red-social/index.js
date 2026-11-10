@@ -1,3 +1,4 @@
+/*index.js*/
 // Importar dependencias
 require('dotenv').config();
 const connection = require("./database/connection");

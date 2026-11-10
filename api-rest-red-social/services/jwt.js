@@ -1,9 +1,11 @@
+/*services/jwt.js*/
 // Importar dependencias
 const jwt = require("jwt-simple");
 const moment = require("moment");
 
 // Clave secreta
-const secret = "CLAVE_SECRETA_del_proyecto_DE_LA_RED_soCIAL_987987";
+const secret = process.env.JWT_SECRET;
+if (!secret) throw new Error("JWT_SECRET is not defined");
 
 // Crear una funcion para generar tokens
 const createToken = (user) => {
