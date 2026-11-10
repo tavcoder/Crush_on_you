@@ -1,11 +1,13 @@
 {
   "name": "api-rest-red-social",
   "version": "1.0.0",
-  "description": "API REST con Node, Mongo, Express, JWT para una red social",
+  "description": "API REST con Node.js, MongoDB, Express y JWT para una red social",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon index.js"
+    "start": "node index.js",
+    "dev": "nodemon index.js",
+    "seed": "node seed.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Victor Robles WEB",
   "license": "MIT",
@@ -13,16 +15,18 @@
     "@faker-js/faker": "^9.9.0",
     "bcrypt": "^5.1.1",
     "cors": "^2.8.5",
-    "express": "^4.18.2",
+    "dotenv": "^16.6.1",
+    "express": "^4.22.2",
     "jwt-simple": "^0.5.6",
-    "moment": "^2.29.4",
-    "mongoose": "^6.13.8",
+    "moment": "^2.30.1",
+    "mongoose": "^6.13.10",
     "mongoose-pagination": "^1.0.0",
-    "multer": "^1.4.5-lts.1",
+    "multer": "^1.4.5-lts.2",
+    "multer-storage-cloudinary": "^4.0.0",
     "swagger-ui-express": "^5.0.1",
-    "validator": "^13.7.0"
+    "validator": "^13.15.26"
   },
   "devDependencies": {
-    "nodemon": "^2.0.20"
+    "nodemon": "^2.0.22"
   }
 }
