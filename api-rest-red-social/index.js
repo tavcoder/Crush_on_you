@@ -13,7 +13,13 @@ connection();
 
 // Crear servidor node
 const app = express();
-const puerto = 3900;
+const puerto = process.env.PORT || 3900;
+
+// Orígenes permitidos: lista separada por comas. Sin variable, abierto (solo desarrollo)
+const allowedOrigins = process.env.FRONTEND_URL
+    ? process.env.FRONTEND_URL.split(',').map(o => o.trim())
+    : true;
+app.use(cors({ origin: allowedOrigins }));
 
 // Configurar cors
 app.use(cors());
