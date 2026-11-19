@@ -13,6 +13,37 @@ const { posts, comments, bios } = require('./seedData');
 
 mongoose.connect(process.env.MONGO_URI);
 
+// Seed photos hosted on the author's Cloudinary account.
+// If you use another account, upload your own photos and replace these URLs.
+const IMAGES = {
+    "food.jpg": "https://res.cloudinary.com/ehmyyrd7/image/upload/v1794909592/food.jpg",
+    "food2.jpg": "https://res.cloudinary.com/ehmyyrd7/image/upload/v1794909593/food2.jpg",
+    "food3.jpg": "https://res.cloudinary.com/ehmyyrd7/image/upload/v1794909578/food3.jpg",
+    "food4.jpg": "https://res.cloudinary.com/ehmyyrd7/image/upload/v1794909587/food4.jpg",
+    "people.jpg": "https://res.cloudinary.com/ehmyyrd7/image/upload/v1794909578/people.jpg",
+    "people2.jpg": "https://res.cloudinary.com/ehmyyrd7/image/upload/v1794909588/people2.jpg",
+    "autumn.jpg": "https://res.cloudinary.com/ehmyyrd7/image/upload/v1794909589/autumn.jpg",
+    "autumn2.jpg": "https://res.cloudinary.com/ehmyyrd7/image/upload/v1794909585/autumn2.jpg",
+    "autumn3.jpg": "https://res.cloudinary.com/ehmyyrd7/image/upload/v1794909591/autumn3.jpg",
+    "city.jpg": "https://res.cloudinary.com/ehmyyrd7/image/upload/v1794909591/city.jpg",
+    "beach.jpg": "https://res.cloudinary.com/ehmyyrd7/image/upload/v1794909581/beach.jpg",
+    "beach2.jpg": "https://res.cloudinary.com/ehmyyrd7/image/upload/v1794909587/beach2.jpg",
+    "moon.jpg": "https://res.cloudinary.com/ehmyyrd7/image/upload/v1794909578/moon.jpg",
+    "yoga.jpg": "https://res.cloudinary.com/ehmyyrd7/image/upload/v1794909584/yoga.jpg",
+    "yoga2.jpg": "https://res.cloudinary.com/ehmyyrd7/image/upload/v1794909579/yoga2.jpg",
+    "gym.jpg": "https://res.cloudinary.com/ehmyyrd7/image/upload/v1794909582/gym.jpg",
+    "coffee.jpg": "https://res.cloudinary.com/ehmyyrd7/image/upload/v1794909581/coffee.jpg",
+    "motivation.jpg": "https://res.cloudinary.com/ehmyyrd7/image/upload/v1794909584/motivation.jpg",
+};
+
+// Fail fast if a post points to an image that is not listed above
+for (const p of posts) {
+    if (p.image && !IMAGES[p.image]) {
+        throw new Error(`seedData.js: image "${p.image}" is not defined in IMAGES`);
+    }
+}
+const imageUrl = (name) => (name ? IMAGES[name] : undefined);
+
 // Elige un elemento al azar (se pueden repetir)
 function pickRandom(array) {
     return array[Math.floor(Math.random() * array.length)];
@@ -28,8 +59,7 @@ function shuffle(array) {
     return copy;
 }
 
-// Devuelve una función que entrega elementos sin repetir hasta agotar el array,
-// y entonces vuelve a barajar y empieza otra vuelta
+// Entrega elementos sin repetir hasta agotar el array; luego vuelve a barajar
 function createDeck(array) {
     let deck = shuffle(array);
     let index = 0;
@@ -43,7 +73,7 @@ function createDeck(array) {
     };
 }
 
-const nextPost = createDeck(posts);
+const nextPost = createDeck(posts); // devuelve { text, image }
 const nextBio = createDeck(bios);
 
 async function createFakeUsers(count = 10) {
@@ -79,24 +109,17 @@ async function createFakeUsers(count = 10) {
 }
 
 async function createFakePublications(users, countPerUser = 3) {
-    const techImages = [
-        "https://images.unsplash.com/photo-1606112219348-204d7d8b94ee?w=800&h=600&auto=format&fit=crop&q=80",
-        "https://images.unsplash.com/photo-1518770660439-4636190af475?w=800&h=600&auto=format&fit=crop&q=80",
-        "https://images.unsplash.com/photo-1581091215367-59ab6a6c6c5f?w=800&h=600&auto=format&fit=crop&q=80",
-        "https://images.unsplash.com/photo-1504384308090-c894fdcc538d?w=800&h=600&auto=format&fit=crop&q=80",
-        "https://images.unsplash.com/photo-1519389950473-47ba0277781c?w=800&h=600&auto=format&fit=crop&q=80"
-    ];
-
     for (const user of users) {
         const followersData = await Follow.find({ followed: user._id }).lean();
         const followersIds = followersData.map(f => f.user.toString());
 
         for (let i = 0; i < countPerUser; i++) {
+            const post = nextPost();
             const publication = new Publication({
-                text: nextPost(),
+                text: post.text,
                 user: user._id,
-                file: Math.random() < 0.7 ? `https://picsum.photos/seed/crush-${user._id}-${i}/800/800` : undefined,
-                created_at: faker.date.recent({ days: 30 }), // fecha aleatoria, no siempre "ahora"
+                file: imageUrl(post.image),
+                created_at: faker.date.recent({ days: 30 }),
                 likes: [],
                 comments: []
             });
@@ -126,19 +149,14 @@ async function createFakePublications(users, countPerUser = 3) {
 
 async function createFakeFollows(users, followsPerUser = 3) {
     for (const user of users) {
-        // Filtra a los usuarios que no sean el mismo
         const others = users.filter(u => u._id.toString() !== user._id.toString());
-
-        // Si no hay usuarios disponibles para seguir, no se crea ninguna relación
         if (others.length === 0) continue;
 
-        // Escoge aleatoriamente a quién seguir (sin repetir)
         const followedSet = new Set();
         while (followedSet.size < followsPerUser && followedSet.size < others.length) {
             followedSet.add(pickRandom(others)._id.toString());
         }
 
-        // Guardar las relaciones de seguimiento
         for (const followedId of followedSet) {
             const follow = new Follow({
                 user: user._id,

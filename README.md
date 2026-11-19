@@ -126,8 +126,8 @@ npm run seed
 > that `MONGO_URI` points to. Use a throwaway database, never the deployed one.
 
 It creates 10 fake users (password 123456), follow relationships, and 5 posts
-per user with likes and comments. Post images are picsum. photos URLs, so
-nothing is uploaded to Cloudinary. Emails are random: register your own account
+per user with likes and comments. Post images come from a fixed list of Cloudinary URLs defined in seed.js.
+Emails are random: register your own account
 to log in.
 
 ### 2. Frontend
@@ -189,6 +189,21 @@ dependencies are outdated (multer 1.x is deprecated).
 
 The backend is based on a tutorial by Victor Robles (MIT) and was minimally
 modified. The frontend is original work.
+
+Images used in the demo seed data are sourced from Unsplash.
+**Photographers:**
+- Samuel Boyer
+- Angelica Teran
+- Danielle Cerullo
+- Jared Rice
+- Kike Vega
+- Queensland Australia
+- Gabbi Studios
+- Sammy Swae
+- Dylan Taylor
+- Chad Montano
+- Anastase Maragos
+- Joseph Gonzalez
 
 
 
