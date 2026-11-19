@@ -1,11 +1,13 @@
 # Crush On You
 
 A social networking app built as a frontend portfolio project: React 19, Vite,
-TanStack Query v5 and React Router v6, on top of a Node/Express/MongoDB REST API.
+TanStack Query v5 and React Router v7, on top of a Node/Express/MongoDB REST API.
 
 [Leer en español](./README.es.md)
 
-<!-- ***Demo:**  URL here -->
+## Demo
+
+https://crush-on-you-eta.vercel.app
 
 ## Screenshots
 
@@ -20,20 +22,20 @@ and a retry action in the main content.
 
 ## Features
 
-- ** Authentication: register and log in with JWT; edit profile and upload an avatar.
-- ** Posts: create text posts with one image, like, bookmark, and delete your own.
-- ** Social graph: follow and unfollow, followers and following lists, and
+- **Authentication:** register and log in with JWT; edit profile and upload an avatar.
+- **Posts:** create text posts with one image, like, bookmark, and delete your own.
+- **Social graph:** follow and unfollow, followers and following lists, and
 suggestions (built from the first page of users only).
-- ** Feed and timeline: the feed shows your posts and those of the people you
+- **Feed and timeline:** the feed shows your posts and those of the people you
 follow; a timeline shows one user’s posts. Both use infinite scroll.
-- ** Search: posts (infinite scroll) and people (paginated). The query is kept
+- **Search:** posts (infinite scroll) and people (paginated). The query is kept
 in the URL, and so is the page for people results.
-- ** Responsive layout: three columns from 1024px. Below that, a bottom
+- **Responsive layout:** three columns from 1024px. Below that, a bottom
 navigation, a floating create button that opens the composer in a dialog, and a
 toggleable search bar.
-- ** Resilient states: skeletons, empty states, offline and server-error
+- **Resilient states:** skeletons, empty states, offline and server-error
 handling, and retry actions for data loading.
-- ** Accessibility: focus management in dialogs and search, live regions,
+- **Accessibility:** focus management in dialogs and search, live regions,
 keyboard-friendly navigation and aria-expanded on toggles.
 
 ## Project status
@@ -49,7 +51,7 @@ them. See [Known limitations](#known-limitations).
 |---|---|
 | UI | React 19, Vite |
 | Server state | TanStack Query v5 (`useInfiniteQuery`, optimistic mutations for likes and bookmarks) |
-| Routing | React Router v6 |
+| Routing | React Router v7 |
 | Styling | Plain CSS: custom properties as design tokens, BEM-style naming, mobile-first |
 | Testing | Vitest |
 | Backend | Node.js, Express, MongoDB Atlas, Cloudinary (from a tutorial, minimally modified) |
@@ -61,41 +63,39 @@ pages → components (ui / molecules / organisms) → hooks → services/api →
 ```
 
 
-- ** Components are presentational. They never call TanStack Query or API
+- **Components are presentational.** They never call TanStack Query or API
 functions. A parent consumes a hook and passes data and callbacks down.
-- ** Hooks absorb complexity. Data hooks live in hooks/. Orchestration hooks
+- **Hooks absorb complexity.** Data hooks live in hooks/. Orchestration hooks
 (for example, usePeoplePage, useCreatePostDialog) live next to the feature
 they belong to, and move to hooks/ only when they become cross-cutting.
-- ** Adapters isolate the backend. Raw backend shapes are only imported by
+- **Adapters isolate the backend.** Raw backend shapes are only imported by
 adapters, so hooks and components never see them. The backend was not changed
 to fit the UI: mismatches are resolved in the frontend.
-- ** One source of truth: query keys, URL params (search text and page), design
+- **One source of truth:** query keys, URL params (search text and page), design
 tokens, and environment access (services/config.js is the only file that
 reads import.meta.env).
 
 ## Design decisions
 
-- ** Normalized errors. Every failure becomes an ApiError with a code
+- **Normalized errors.** Every failure becomes an ApiError with a code
 (NETWORK, SERVER, INVALID_CREDENTIALS…). Messages live in a single map
 and are never taken from the backend response, which is in Spanish and has no
 stable error codes.
-- ** List states have a strict priority: cached data, offline, error, empty
+- **List states have a strict priority:** cached data, offline, error, empty
 (only after a successful request), loading. This removed false “no posts”
 messages while offline or while a query was disabled. One documented
 exception: the backend answers 404 for a user with no posts, and the
 frontend treats that case as an empty list.
-- ** Offline vs server down. A device without connection and a server that
+- **Offline vs server down.** A device without connection and a server that
 fails are different problems: one global banner, compact placeholders in
 secondary blocks, and a full message with retry in the main content.
-- ** A single 1024px breakpoint switches navigation and columns. Short landscape
+- **A single 1024px breakpoint** switches navigation and columns. Short landscape
 phones get their own rules, so a post stays visible.
-- ** Accessibility as a requirement: a generic modal with focus trap and focus
+- **Accessibility as a requirement:** a generic modal with focus trap and focus
 return, live regions, and focus handling when the mobile search closes.
 
-*
-
-Requirements: Node.js 18 or later (20 LTS recommended), a MongoDB Atlas database
-and a Cloudinary account.
+Requirements: Node.js 20.19+ or 22.12+ (required by Vite), plus a MongoDB Atlas
+database and Cloudinary account for the backend.
 
 ### 1. Backend
 
@@ -107,7 +107,7 @@ npm run dev
 ```
 
 Fill in `.env` with your `MONGO_URI`, the three `CLOUDINARY_*` values and a
-`JWT_SECRET`. The API listens on port **3900** (fixed in `index.js`).
+`JWT_SECRET`. The API listens on port **3900** by default; override it with `PORT`.
 `JWT_SECRET` must be a long random string; never reuse one that has been
 committed.
 
@@ -136,16 +136,14 @@ From the repository root:
 
 ```bash
 npm install
-copy .env.example .env     # macOS/Linux: cp .env.example .env
 npm run dev
 ```
 
 `VITE_API_URL` defaults to `http://localhost:3900/api`.
+Set `VITE_API_URL` in your environment to use a different API.
 
 ### Scripts
 
-| Script | What it does |
-|---|---|
 | Script | What it does |
 |---|---|
 | `npm run dev` | Development server |
@@ -165,25 +163,25 @@ errors.
 
 ## Known limitations
 
-- ** Presence is simulated in demo mode: the backend has no presence system.
-- ** One image per post; friends-only visibility, attachments, live, hashtags,
+- **Presence:** simulated in demo mode; the backend has no presence system.
+- **Post limits:** one image per post. Friends-only visibility, attachments, live, hashtags,
 mentions and notifications are disabled with a “coming soon” tooltip.
-- ** Comments exist in the API but aren't in the frontend yet.
-- ** Messages were dropped from the MVP (no backend support).
-- ** Suggestions reuse the general user list (first page of 5, filtered). There
+- **Comments:** exist in the API but aren't in the frontend yet.
+- **Messages:** dropped from the MVP (no backend support).
+- **Suggestions:** reuse the general user list (first page of 5, filtered). There
 is no suggestions endpoint.
-- ** Failed likes, bookmarks, and follows roll back silently: the optimistic
+- **Mutation errors:** failed likes, bookmarks, and follows roll back silently: the optimistic
 update is reverted, but no message is shown.
-- ** Empty timeline: the backend answers 404 for a user with no posts, which
+- **Empty timeline:** the backend answers 404 for a user with no posts, which
 the frontend maps to an empty list. For the same reason, an invalid token
 (also a 404) can look like an empty feed.
-- ** Backend: tutorial code, not linted on purpose. A duplicate email returns
+- **Backend:** tutorial code, not linted on purpose. A duplicate email returns
 200 with no user (handled in the frontend), CORS is open, and some
 dependencies are outdated (multer 1.x is deprecated).
-- ** No automatic logout when the session expires.
-- ** Search sends a request per keystroke (no debounce).
-- ** Disabled buttons with tooltips are not reachable by keyboard.
-- ** The mock client (VITE_USE_MOCK) is out of sync with the real routes.
+- **Session expiry:** there is no automatic logout.
+- **Search:** sends a request per keystroke (no debounce).
+- **Disabled controls:** buttons with tooltips are not reachable by keyboard.
+- **Mock client:** `VITE_USE_MOCK` is out of sync with the real routes.
 
 ## Credits
 

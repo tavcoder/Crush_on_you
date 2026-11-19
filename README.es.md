@@ -1,14 +1,16 @@
 # Crush On You
 
 Aplicación de red social creada como proyecto de portfolio frontend: React 19,
-Vite, TanStack Query v5 y React Router v6, sobre una API REST con Node, Express
+Vite, TanStack Query v5 y React Router v7, sobre una API REST con Node, Express
 y MongoDB.
 
 [Read in English](./README.md)
 
 > La documentación está en español, pero la interfaz de la aplicación está en inglés.
 
-<!-- **Demo:**  URL desplegada -->
+## Demo
+
+https://crush-on-you-eta.vercel.app
 
 ## Capturas
 
@@ -52,7 +54,7 @@ backend no las soporta. Consulta las [limitaciones conocidas](#limitaciones-cono
 |---|---|
 | UI | React 19, Vite |
 | Estado de servidor | TanStack Query v5 (`useInfiniteQuery`, mutaciones optimistas para likes y guardados) |
-| Rutas | React Router v6 |
+| Rutas | React Router v7 |
 | Estilos | CSS puro: custom properties como tokens de diseño, nomenclatura estilo BEM, mobile-first |
 | Tests | Vitest |
 | Backend | Node.js, Express, MongoDB Atlas, Cloudinary (de un tutorial, con modificaciones mínimas) |
@@ -100,8 +102,8 @@ pages → components (ui / molecules / organisms) → hooks → services/api →
 
 ## Primeros pasos
 
-Requisitos: Node.js 18 o superior (recomendado 20 LTS), una base de datos
-MongoDB Atlas y una cuenta de Cloudinary.
+Requisitos: Node.js 20.19+ o 22.12+ (requerido por Vite); MongoDB Atlas
+y una cuenta de Cloudinary para el backend.
 
 ### 1. Backend
 
@@ -113,7 +115,7 @@ npm run dev
 ```
 
 Rellena `.env` con tu `MONGO_URI`, los tres valores `CLOUDINARY_*` y un
-`JWT_SECRET`. La API escucha en el puerto **3900** (fijo en `index.js`).
+`JWT_SECRET`. La API escucha en el puerto **3900** por defecto; puedes cambiarlo con `PORT`.
 `JWT_SECRET` debe ser una cadena aleatoria larga; no reutilices nunca una que
 haya sido commiteada.
 
@@ -143,11 +145,11 @@ Desde la raíz del repositorio:
 
 ```bash
 npm install
-copy .env.example .env     # macOS/Linux: cp .env.example .env
 npm run dev
 ```
 
 `VITE_API_URL` vale por defecto `http://localhost:3900/api`.
+Define `VITE_API_URL` en el entorno si quieres usar otra API.
 
 ### Scripts
 
@@ -171,10 +173,11 @@ errores.
 ## Limitaciones conocidas
 
 - **La presencia es simulada** en el modo demo: el backend no tiene sistema de presencia.
-- **Una imagen por post** la visibilidad solo para amigos, adjuntos, directo,
-  hashtags, menciones y notificaciones están desactivados con un tooltip de "coming soon".
+- **Límites de las publicaciones:** una imagen por post. La visibilidad solo para
+  amigos, los adjuntos, los directos, hashtags, menciones y notificaciones no están
+  implementados; el frontend los marca como "coming soon".
 - **Los comentarios** existen en la API, pero todavía no forman parte del frontend.
-- **Messages** se descartó del MVP (sin soporte en el backend).
+- **Mensajes** se descartaron del MVP (sin soporte en el backend).
 - **Las sugerencias** reutilizan la lista general de usuarios (primera página de
   5, filtrada). No existe un endpoint de sugerencias.
 - **Los likes, guardados y follows fallidos** se revierten en silencio: se
