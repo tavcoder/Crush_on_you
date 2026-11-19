@@ -194,3 +194,19 @@ errores.
 
 El backend se basa en un tutorial de Victor Robles (MIT) y se modificó lo
 mínimo. El frontend es trabajo original.
+
+Las imágenes utilizadas en los datos de ejemplo (seed data) de la demo proceden de Unsplash.
+
+**Fotógrafos:**
+- Samuel Boyer
+- Angelica Teran
+- Danielle Cerullo
+- Jared Rice
+- Kike Vega
+- Queensland Australia
+- Gabbi Studios
+- Sammy Swae
+- Dylan Taylor
+- Chad Montano
+- Anastase Maragos
+- Joseph Gonzalez

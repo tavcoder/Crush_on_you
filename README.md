@@ -190,5 +190,20 @@ dependencies are outdated (multer 1.x is deprecated).
 The backend is based on a tutorial by Victor Robles (MIT) and was minimally
 modified. The frontend is original work.
 
+Images used in the demo seed data are sourced from Unsplash.
+**Photographers:**
+- Samuel Boyer
+- Angelica Teran
+- Danielle Cerullo
+- Jared Rice
+- Kike Vega
+- Queensland Australia
+- Gabbi Studios
+- Sammy Swae
+- Dylan Taylor
+- Chad Montano
+- Anastase Maragos
+- Joseph Gonzalez
+
 
 
