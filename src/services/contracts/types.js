@@ -1,4 +1,4 @@
-// services/contracts/types.js
+/*types.js*/
 
 // ========================================
 // RAW — tal y como viene de la API (backend)
@@ -19,12 +19,12 @@
  * @property {boolean} [isUnseen]
  * @property {Array<string|{userId:string}>} [following]
  * @property {Array<string|{userId:string}>} [followers]
- * @property {Array<{id:string,label:string}>} [interests]
+ * @property {string[]} [interests]
+ * @property {string[]} [bookmarks]
  * @property {Object} [profileDetails]
  * @property {string|null} [profileDetails.education]
  * @property {string|null} [profileDetails.drink]
  * @property {string|null} [profileDetails.languages]
- * @property {string|null} [profileDetails.marijuana]
  * @property {string|null} [profileDetails.smoke]
  * @property {string|null} [profileDetails.bio]
  */
@@ -41,11 +41,12 @@
  * @typedef {Object} PostRaw
  * @property {string} _id
  * @property {string} text
- * @property {string} user          // id del autor
+ * @property {string|UserRaw} user
  * @property {string} [file]        // nombre de fichero de imagen
  * @property {string} [created_at]
  * @property {Array<string>} [likes]
- * @property {Array<Object>} [comments]
+ * @property {CommentRaw[]} [comments]
+ * @property {boolean} [isBookmarked]
  */
 
 // ========================================
@@ -60,17 +61,10 @@
  */
 
 /**
- * @typedef {Object} Interest
- * @property {string} id
- * @property {string} label
- */
-
-/**
  * @typedef {Object} ProfileDetails
  * @property {string|null} [education]
  * @property {string|null} [drink]
  * @property {string|null} [languages]
- * @property {string|null} [marijuana]
  * @property {string|null} [smoke]
  * @property {string|null} [bio]
  */
@@ -96,6 +90,7 @@
  * @property {string} userName
  * @property {string} userSurName
  * @property {string} userNick
+ * @property {string} email
  * @property {string|null} avatarUrl
  * @property {string|null} city
  * @property {string|null} country
@@ -105,7 +100,8 @@
  * @property {FollowRelation[]} following
  * @property {FollowRelation[]} followers
  * @property {ProfileDetails} profileDetails
- * @property {Interest[]} interests
+ * @property {string[]} interests
+ * @property {string[]} bookmarks
  */
 
 
@@ -114,7 +110,7 @@
  * @typedef {Object} Post
  * @property {string} id
  * @property {string} authorId
- * @property {User} author
+ * @property {User|null} author
  * @property {string} content
  * @property {string[]} images
  * @property {PostStats} stats
@@ -141,6 +137,16 @@
  */
 
 /**
+ * Payload usado para registrar un usuario.
+ * @typedef {Object} RegisterPayload
+ * @property {string} name
+ * @property {string} surname
+ * @property {string} nick
+ * @property {string} email
+ * @property {string} password
+ */
+
+/**
  * @typedef {Object} LoginUserSummary
  * @property {string} id
  * @property {string} name
@@ -151,8 +157,55 @@
  * @typedef {Object} LoginResponseRaw
  * @property {"success"|"error"} status
  * @property {string} message
- * @property {LoginUserSummary} user
+ * @property {LoginUserSummary} [user]
+ * @property {string} [token]
+ */
+
+/**
+ * Resultado normalizado devuelto por loginUser.
+ * @typedef {Object} LoginResult
  * @property {string} token
+ * @property {string} userId
+ */
+
+/**
+ * Payload usado para actualizar el perfil del usuario.
+ * @typedef {Object} UpdateProfilePayload
+ * @property {string} userName
+ * @property {string} userSurName
+ * @property {string} userNick
+ * @property {string} email
+ * @property {string|null} [city]
+ * @property {string|null} [country]
+ * @property {string[]} [interests]
+ * @property {string|null} [bio]
+ * @property {string|null} [education]
+ * @property {string|null} [languages]
+ * @property {string|null} [smoke]
+ * @property {string|null} [drink]
+ */
+
+/**
+ * Credenciales usadas para iniciar sesión.
+ * @typedef {Object} LoginPayload
+ * @property {string} email
+ * @property {string} password
+ */
+
+/**
+ * Datos necesarios para crear una publicación.
+ * @typedef {Object} CreatePostPayload
+ * @property {string} content
+ * @property {File[]} [files]
+ */
+
+/**
+ * Respuesta cruda de los contadores del usuario.
+ * @typedef {Object} UserCountersRaw
+ * @property {string} userId
+ * @property {number} following
+ * @property {number} followed
+ * @property {number} publications
  */
 
 /**
@@ -186,9 +239,18 @@
  * @typedef {Object} UploadAvatarResponseRaw
  * @property {"success"|"error"} status
  * @property {UserRaw} user
- * @property {Object} file
- * @property {string} file.filename
- * @property {string} file.originalname
+ * @property {UploadFileMetadata} file
+ */
+
+/**
+ * Metadatos disponibles en las subidas de Multer/Cloudinary.
+ * @typedef {Object} UploadFileMetadata
+ * @property {string} [fieldname]
+ * @property {string} [filename]
+ * @property {string} [originalname]
+ * @property {string} [mimetype]
+ * @property {number} [size]
+ * @property {string} [path]
  */
 
 /**
@@ -204,6 +266,27 @@
  * @property {Object} [identity]   // usuario autenticado (req.user)
  * @property {FollowRaw} [follow]  // relación de follow creada
  * @property {string} [message]
+ */
+
+/**
+ * Documento Follow poblado con el usuario incluido.
+ * @typedef {Object} PopulatedFollowRaw
+ * @property {string} _id
+ * @property {UserRaw} [user]
+ * @property {UserRaw} [followed]
+ */
+
+/**
+ * Respuesta cruda del listado de seguidores o seguidos.
+ * @typedef {Object} FollowsListResponseRaw
+ * @property {"success"|"error"} status
+ * @property {string} [message]
+ * @property {PopulatedFollowRaw[]} [follows]
+ * @property {number} [total]
+ * @property {number} [page]
+ * @property {number} [pages]
+ * @property {Array<string|{userId:string}>} [user_following]
+ * @property {Array<string|{userId:string}>} [user_follow_me]
  */
 
 /**
@@ -225,6 +308,15 @@
  * @property {"success"|"error"} status
  * @property {string} message
  * @property {PostRaw} publicationStored
+ */
+
+/**
+ * Resultado devuelto por createPost después de adaptar el post.
+ * @typedef {Object} CreatePostResult
+ * @property {"success"|"error"} status
+ * @property {string} message
+ * @property {Post} publicationStored
+ * @property {boolean} imageUploadFailed
  */
 
 /**
@@ -255,9 +347,7 @@
  * @typedef {Object} UploadPostImageResponseRaw
  * @property {"success"|"error"} status
  * @property {PostRaw} publication
- * @property {Object} file
- * @property {string} file.filename
- * @property {string} file.originalname
+ * @property {UploadFileMetadata} file
  */
 
 /**
@@ -276,5 +366,62 @@
  * @property {"success"|"error"} status
  * @property {string} message
  * @property {number} likesCount
+ */
+
+/**
+ * @typedef {Object} ToggleBookmarkResponseRaw
+ * @property {"success"|"error"} status
+ * @property {string} message
+ * @property {boolean} isBookmarked
+ */
+
+/**
+ * Comentario crudo incluido en una publicación.
+ * @typedef {Object} CommentRaw
+ * @property {string} _id
+ * @property {string|UserRaw} user
+ * @property {string} text
+ * @property {string} [created_at]
+ */
+
+/**
+ * @typedef {Object} AddCommentResponseRaw
+ * @property {"success"|"error"} status
+ * @property {string} [message]
+ * @property {CommentRaw} [comment]
+ */
+
+/**
+ * @typedef {Object} RemoveCommentResponseRaw
+ * @property {"success"|"error"} status
+ * @property {string} message
+ * @property {PostRaw} [publication]
+ */
+
+/**
+ * @typedef {Object} ListCommentsResponseRaw
+ * @property {"success"|"error"} status
+ * @property {CommentRaw[]} [comments]
+ * @property {string} [message]
+ */
+
+/**
+ * @typedef {Object} SearchUsersResponseRaw
+ * @property {"success"|"error"} status
+ * @property {string} [message]
+ * @property {UserRaw[]} users
+ * @property {number} page
+ * @property {number} total
+ * @property {number} pages
+ */
+
+/**
+ * @typedef {Object} SearchPostsResponseRaw
+ * @property {"success"|"error"} status
+ * @property {string} [message]
+ * @property {number} page
+ * @property {number} total
+ * @property {number} pages
+ * @property {PostRaw[]} publications
  */
 export { }

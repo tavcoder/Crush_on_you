@@ -1,4 +1,4 @@
-// components/ui/closeButton/CloseButton.jsx
+/*CloseButton.jsx*/
 import { X } from 'lucide-react'
 import './CloseButton.css'
 

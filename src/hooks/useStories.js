@@ -1,4 +1,4 @@
-// hooks/useStories.js
+/*useStories.js*/
 import { useState, useMemo, useCallback, useContext } from 'react';
 import { useFollowing } from './useFollows.js';
 import { UserAuthContext } from "../context/UserAuthContext.jsx";

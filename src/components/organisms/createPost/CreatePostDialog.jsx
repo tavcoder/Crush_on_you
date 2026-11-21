@@ -1,4 +1,4 @@
-// components/organisms/createPost/CreatePostDialog.jsx
+/*CreatePostDialog.jsx*/
 import { Modal } from '../../ui/overlay/Modal.jsx'
 import { CreatePost } from './CreatePost.jsx'
 

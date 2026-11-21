@@ -1,4 +1,4 @@
-// posts.api.js
+/*posts.api.js*/
 import { apiClient } from '../apiClient'
 import { adaptPost, adaptPostList } from './adapters/posts.adapter'
 
@@ -67,7 +67,7 @@ const sanitizeFile = (file) => {
  * ya adaptada a `Post`.
  *
  * @param {{ content:string, files?:File[] }} data
- * @returns {Promise<import('../contracts/types.js').CreatePostResponseRaw & { publicationStored: import('../contracts/types.js').Post }>}
+ * @returns {Promise<import('../contracts/types.js').CreatePostResult>}
  */
 export const createPost = async (data) => {
     const res = await apiClient.call('POST', 'publication/save', {
@@ -116,6 +116,10 @@ export const createPost = async (data) => {
 export const likePost = (id) =>
     apiClient.call('POST', `publication/${id}/like`)
 
+/**
+ * @param {string} id
+ * @returns {Promise<import('../contracts/types.js').ToggleBookmarkResponseRaw>}
+ */
 export const bookmarkPost = (id) =>
     apiClient.call('POST', `publication/${id}/bookmark`)
 

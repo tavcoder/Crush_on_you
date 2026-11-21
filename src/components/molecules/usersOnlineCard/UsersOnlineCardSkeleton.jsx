@@ -1,4 +1,4 @@
-//UsersOnlineCardSkeleton
+/*UsersOnlineCardSkeleton.jsx*/
 import { SkeletonBase } from "../../ui/skeletons/SkeletonBase";
 
 export function UsersOnlineCardSkeleton() {

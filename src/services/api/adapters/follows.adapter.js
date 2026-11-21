@@ -1,4 +1,4 @@
-// services/api/adapters/follows.adapter.js
+/*follows.adapter.js*/
 import { adaptUser } from './users.adapter.js';
 
 const POPULATED_FIELD_BY_TYPE = {
@@ -22,7 +22,7 @@ const POPULATED_FIELD_BY_TYPE = {
  * Este adapter trata esa ausencia como lista vacía en vez de asumir que
  * el backend siempre manda la forma completa.
  *
- * @param {Object} response
+ * @param {import('../../contracts/types.js').FollowsListResponseRaw} response
  * @param {'followers' | 'following'} type
  * @returns {import('../../contracts/types.js').PaginatedUsers}
  */

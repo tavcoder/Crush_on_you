@@ -1,4 +1,4 @@
-//mockClient
+/*mockClient.js*/
 import { postsData } from './mocks/post.mock'
 import { usersData } from './mocks/users.mock'
 import { enrichPostsWithUserData } from '../utils/postsUtils'

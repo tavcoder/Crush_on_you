@@ -1,6 +1,14 @@
-// hooks/useForm.js
+/*useForm.js*/
 import { useState, useCallback } from 'react';
 
+/**
+ * @param {Object} options
+ * @param {Object<string, *>} options.initialValues
+ * @param {Object<string, (value: *) => string|undefined>} options.validators
+ * @param {(formData: Object<string, *>) => void|Promise<void>} options.onSubmit
+ * @param {string[]} [options.requiredFields]
+ * @returns {Object}
+ */
 export function useForm({ initialValues, validators, onSubmit, requiredFields = [] }) {
     const [formData, setFormData] = useState(initialValues);
     const [errors, setErrors] = useState({});

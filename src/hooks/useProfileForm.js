@@ -1,10 +1,14 @@
-// hooks/useProfileForm.js
+/*useProfileForm.js*/
 import { useCallback, useMemo, useState } from 'react';
 import { useNavigate, useLocation } from 'react-router';
 import { useForm } from './useForm';
 import { useUpdateProfile } from '../hooks/useUsers'
 import { fieldValidators } from '../utils/validateUtils';
 
+/**
+ * @param {import('../services/contracts/types.js').User | undefined} user
+ * @returns {Object}
+ */
 export function useProfileForm(user) {
     const navigate = useNavigate();
     const location = useLocation();

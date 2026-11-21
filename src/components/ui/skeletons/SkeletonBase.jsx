@@ -1,4 +1,4 @@
-// SkeletonBase.jsx
+/*SkeletonBase.jsx*/
 import './SkeletonBase.css';
 
 export function SkeletonBase({

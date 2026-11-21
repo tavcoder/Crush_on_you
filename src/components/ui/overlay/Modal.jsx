@@ -1,4 +1,4 @@
-// components/ui/overlay/Modal.jsx
+/*Modal.jsx*/
 import { useEffect, useId, useRef } from 'react'
 import { CloseButton } from '../closeButton/CloseButton.jsx'
 import { useDismissible } from '../../../hooks/useDismissible.js'
@@ -7,6 +7,20 @@ import './Modal.css'
 const FOCUSABLE =
     'button:not([disabled]), [href], input:not([disabled]):not([tabindex="-1"]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])'
 
+/**
+ * @param {Object} props
+ * @param {boolean} props.isOpen
+ * @param {() => void} props.onClose
+ * @param {React.RefObject<HTMLElement|null>} [props.triggerRef]
+ * @param {string} props.title
+ * @param {string} [props.describedBy]
+ * @param {React.RefObject<HTMLElement|null>} [props.initialFocusRef]
+ * @param {boolean} [props.closeOnOutsideClick]
+ * @param {string} [props.className]
+ * @param {React.ReactNode} props.children
+ * @param {boolean} [props.showCloseButton]
+ * @returns {JSX.Element|null}
+ */
 export function Modal({
     isOpen,
     onClose,

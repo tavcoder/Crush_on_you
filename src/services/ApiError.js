@@ -1,4 +1,4 @@
-// services/ApiError.js
+/*ApiError.js*/
 export const ERROR_MESSAGES = {
     NETWORK: "You're offline. Check your connection and try again.",
     INVALID_CREDENTIALS: 'Incorrect email or password.',

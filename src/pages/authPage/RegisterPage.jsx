@@ -1,4 +1,4 @@
-// pages/RegisterPage/RegisterPage.jsx
+/*RegisterPage.jsx*/
 
 import { Link } from 'react-router';
 import { Hearts } from './Hearts.jsx';

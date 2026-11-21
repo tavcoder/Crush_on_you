@@ -1,4 +1,4 @@
-//LeftSideBar.jsx
+/*LeftSideBar.jsx*/
 import { useUserSuggestionsList } from "../../../hooks/useUserSuggestionsList.js"
 import { ProfileCard } from "../profileCard/ProfileCard.jsx"
 import { UserSuggestionsCard } from "../userSuggestionsCard/UserSuggestionsCard.jsx"

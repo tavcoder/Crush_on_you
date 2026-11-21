@@ -1,4 +1,4 @@
-// components/ui/feedback/ErrorFallback.jsx
+/*ErrorFallback.jsx*/
 import { ApiError,isConnectionError } from '../../../services/ApiError.js'
 import { Button } from '../button/Button.jsx'
 import './ErrorFallback.css'

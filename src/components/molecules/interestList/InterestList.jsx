@@ -1,4 +1,4 @@
-// components/molecules/interestList/InterestList.jsx
+/*InterestList.jsx*/
 import { IconButton } from '../../ui/iconButton/IconButton.jsx';
 import './InterestList.css';
 

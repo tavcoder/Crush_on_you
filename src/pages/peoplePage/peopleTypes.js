@@ -1,4 +1,4 @@
-// PeoplePage/peopleTypes.js
+/*peopleTypes.js*/
 export const PEOPLE_TYPES_CONFIG = {
     suggestions: {
         title: { own: "Suggested for you", other: null },

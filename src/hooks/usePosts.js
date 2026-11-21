@@ -1,4 +1,4 @@
-// hooks/usePosts.js
+/*usePosts.js*/
 import { useContext } from "react";
 import { useMutation, useQueryClient, useInfiniteQuery } from '@tanstack/react-query'
 import { getPosts, createPost, getPostsByUser, searchPosts, likePost, bookmarkPost, deletePost } from '../services/api/posts.api.js'
@@ -22,13 +22,20 @@ function getNextPageParam(lastPage) {
     const total = lastPage.pagination?.totalPages ?? 1
     return current < total ? current + 1 : undefined
 }
+
+/**
+ * @typedef {Object} CreatePostMutationResult
+ * @property {(data: import('../services/contracts/types.js').CreatePostPayload) => void} addPost
+ * @property {boolean} isAddingPost
+ */
+
 /**
  * Crea publicaciones nuevas y actualiza la cache del feed general.
- * Independiente de si el feed está montado — escribe directamente
+ * Independiente de si el feed está montado â€” escribe directamente
  * en la cache de React Query, así que funciona desde cualquier pantalla
  * (feed, perfil, etc.) sin disparar una petición del feed innecesaria.
  *
- * @returns {{ addPost: (data: { content: string, files?: File[] }) => void, isAddingPost: boolean }}
+ * @returns {CreatePostMutationResult}
  */
 export function useCreatePost() {
     const queryClient = useQueryClient()
@@ -78,7 +85,7 @@ export function useCreatePost() {
 
 /**
  * Devuelve publicaciones del feed general del usuario autenticado,
- * paginadas con scroll infinito. Solo lectura — para crear posts, usar `useCreatePost`.
+ * paginadas con scroll infinito. Solo lectura —  para crear posts, usar `useCreatePost`.
  *
  * @returns {UseInfinitePostsBase & { posts: import('../services/contracts/types.js').Post[] }}
  */
@@ -205,6 +212,10 @@ export function useSearchPosts(queryText, { enabled } = {}) {
     }
 }
 
+/**
+ * Mutación para alternar el like de una publicación.
+ * @returns {import('@tanstack/react-query').UseMutationResult<import('../services/contracts/types.js').ToggleLikeResponseRaw, unknown, string>}
+ */
 export function useLikePost() {
     const queryClient = useQueryClient();
 
@@ -283,6 +294,10 @@ export function useLikePost() {
     });
 }
 
+/**
+ * Mutación para alternar el bookmark de una publicación.
+ * @returns {import('@tanstack/react-query').UseMutationResult<import('../services/contracts/types.js').ToggleBookmarkResponseRaw, unknown, string>}
+ */
 export function useBookmarkPost() {
     const queryClient = useQueryClient();
 
@@ -348,6 +363,10 @@ export function useBookmarkPost() {
     });
 }
 
+/**
+ * Mutación para eliminar una publicación.
+ * @returns {import('@tanstack/react-query').UseMutationResult<import('../services/contracts/types.js').DeletePostResponseRaw, unknown, string>}
+ */
 export function useDeletePost() {
     const queryClient = useQueryClient();
 

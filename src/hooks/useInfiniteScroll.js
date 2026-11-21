@@ -1,4 +1,4 @@
-// hooks/useInfiniteScroll.js
+/*useInfiniteScroll.js*/
 import { useRef, useEffect } from 'react';
 
 export function useInfiniteScroll(onIntersect, { enabled = true } = {}) {

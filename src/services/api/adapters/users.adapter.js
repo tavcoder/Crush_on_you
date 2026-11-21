@@ -1,4 +1,4 @@
-// services/api/adapters/users.adapter.js
+/*users.adapter.js*/
 
 function normalizeFollowItem(item) {
     if (typeof item === 'string') return { userId: item };
@@ -11,7 +11,7 @@ function normalizeFollowItem(item) {
 // services/api/adapters/users.adapter.js (agregar esta función)
 
 /**
- * @param {{ userId: string, following: number, followed: number, publications: number }} raw
+ * @param {import('../contracts/types.js').UserCountersRaw} raw
  * @returns {import('../contracts/types.js').UserStats}
  */
 export const adaptUserStats = (raw) => {

@@ -1,4 +1,4 @@
-// services/api/follow.api.js
+/*follow.api.js*/
 import { apiClient } from './../apiClient.js'
 import { adaptFollowList } from './adapters/follows.adapter.js'
 

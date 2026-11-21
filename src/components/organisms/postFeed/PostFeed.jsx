@@ -1,4 +1,4 @@
-// PostFeed.jsx
+/*PostFeed.jsx*/
 import { useContext } from 'react';
 import { PostCard } from '../postCard/PostCard.jsx';
 import { PostCardSkeleton } from '../postCard/PostCardSkeleton.jsx';
@@ -10,6 +10,21 @@ import { UserAuthContext } from "../../../context/UserAuthContext.jsx"
 import { useInfiniteScroll } from '../../../hooks/useInfiniteScroll.js';
 import './PostFeed.css';
 
+/**
+ * @param {Object} props
+ * @param {import('../../../services/contracts/types.js').Post[]} props.posts
+ * @param {string} [props.query]
+ * @param {boolean} props.isInitialLoading
+ * @param {boolean} props.isLoadingNextPage
+ * @param {boolean} props.isLoaded
+ * @param {boolean} props.isLoadMoreError
+ * @param {string} props.emptyMessage
+ * @param {boolean} props.canLoadMore
+ * @param {() => void} props.onLoadMore
+ * @param {unknown} [props.error]
+ * @param {() => void} [props.onRetry]
+ * @returns {JSX.Element}
+ */
 export function PostFeed({ posts, query, isInitialLoading, isLoadingNextPage, isLoaded, isLoadMoreError, emptyMessage, canLoadMore, onLoadMore, error, onRetry }) {
     const sentinelRef = useInfiniteScroll(onLoadMore, { enabled: canLoadMore });
     const { currentUser } = useContext(UserAuthContext);

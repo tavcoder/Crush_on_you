@@ -1,4 +1,4 @@
-//BrandLogo.jsx
+/*BrandLogo.jsx*/
 import { Link } from "react-router";
 import { Heart } from "lucide-react";
 import './BrandLogo.css'
@@ -13,7 +13,7 @@ export function BrandLogo({ asLink = true, size = "xs" }) {
 
     if (asLink) {
         return (
-            <Link to="/feed" className="brand-logo" aria-label="Crush On You — go to feed">
+            <Link to="/feed" className="brand-logo" aria-label="Crush On You â€” go to feed">
                 {content}
             </Link>
         )

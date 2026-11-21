@@ -1,4 +1,4 @@
-// hooks/useIsOnline.js
+/*useIsOnline.js*/
 import { useSyncExternalStore } from 'react'
 
 const subscribe = (callback) => {

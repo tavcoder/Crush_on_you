@@ -16,6 +16,9 @@ import './PostCard.css'
 /**
  * @param {Object} props
  * @param {Post} props.post
+ * @param {string} [props.query]
+ * @param {boolean} props.isCurrentUser
+ * @returns {JSX.Element}
  */
 
 export function PostCard({ post, query, isCurrentUser }) {

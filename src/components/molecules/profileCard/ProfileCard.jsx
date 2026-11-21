@@ -1,4 +1,4 @@
-// ProfileCard.jsx
+/*ProfileCard.jsx*/
 import { useContext } from "react"
 import { MapPin } from "lucide-react"
 import { UserInfo } from "../userInfo/UserInfo.jsx"

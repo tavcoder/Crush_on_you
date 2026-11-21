@@ -1,4 +1,4 @@
-// PeoplePageSkeleton.jsx
+/*PeoplePageSkeleton.jsx*/
 import { SkeletonBase } from '../../components/ui/skeletons/SkeletonBase';
 
 export function PeoplePageSkeleton({ count = 3 }) {

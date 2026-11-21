@@ -1,4 +1,4 @@
-// posts.mock.js
+/*post.mock.js*/
 export const postsData = [
     {
         id: "post_1",
