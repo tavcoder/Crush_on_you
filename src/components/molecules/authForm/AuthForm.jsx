@@ -1,4 +1,4 @@
-//AuthForm.jsx
+/*AuthForm.jsx*/
 import { useState } from 'react';
 import { Eye, EyeOff } from 'lucide-react';
 import { Button } from '../../ui/button/Button';

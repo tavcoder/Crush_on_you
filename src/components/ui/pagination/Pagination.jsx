@@ -1,4 +1,4 @@
-/*components/ui/pagination/Pagination.jsx*/
+/*Pagination.jsx*/
 import { ChevronLeft, ChevronRight } from "lucide-react"
 import { RoundButton } from '../roundButton/RoundButton.jsx'
 import './Pagination.css'

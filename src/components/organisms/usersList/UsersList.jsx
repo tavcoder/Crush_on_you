@@ -1,4 +1,4 @@
-/*UserList.jsx*/
+/*UsersList.jsx*/
 import { UserInfo } from '../../molecules/userInfo/UserInfo'
 import { FollowButton } from '../../ui/followButton/FollowButton'
 import { getFollowedByFormat } from '../../../utils/formatUtils.js'

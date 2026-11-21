@@ -1,20 +1,33 @@
-// services/apiClient.js
+/*apiClient.js*/
 import { API_BASE_URL, USE_MOCK, DEMO_MODE } from './config.js'
 import { mockClient, getMockToken, setMockToken, removeMockToken } from './mockClient.js'
 import { simulatePresence } from './demo/simulatePresence.js'
 import { ApiError, codeFromStatus } from './ApiError.js'
 
 
+/**
+ * Obtiene el token activo desde el almacenamiento configurado.
+ * @returns {string|null}
+ */
 export function getToken() {
     if (USE_MOCK) return getMockToken()
     return localStorage.getItem('token')
 }
 
+/**
+ * Guarda el token activo en localStorage y sincroniza el cliente mock.
+ * @param {string} token
+ * @returns {void}
+ */
 export function saveToken(token) {
     localStorage.setItem('token', token)
     if (USE_MOCK) setMockToken(token)
 }
 
+/**
+ * Elimina el token activo.
+ * @returns {void}
+ */
 export function removeToken() {
     localStorage.removeItem('token')
     if (USE_MOCK) removeMockToken()

@@ -1,4 +1,4 @@
-// components/organisms/profileForm/ProfileForm.jsx
+/*ProfileForm.jsx*/
 import { SelectButton } from '../../ui/selectButton/SelectButton'
 import { InterestList } from '../../molecules/interestList/InterestList.jsx';
 import { Button } from '../../ui/button/Button.jsx';

@@ -1,4 +1,4 @@
-// StoriesBarSkeleton.jsx
+/*StoriesBarSkeleton.jsx*/
 import { SkeletonBase } from '../../ui/skeletonBase/SkeletonBase.jsx'
 import './StoriesBar.css'
 

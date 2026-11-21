@@ -1,4 +1,4 @@
-// hooks/useSearchQuery.js
+/*useSearchQuery.js*/
 import { useCallback } from 'react'
 import { useLocation, useSearchParams, useNavigate } from 'react-router'
 

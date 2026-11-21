@@ -1,4 +1,4 @@
-// useCreatePostDialog.js
+/*useCreatePostDialog.js*/
 import { useCallback, useRef, useState } from 'react'
 import { useNavigate } from 'react-router'
 import { useCreatePost } from '../../../hooks/usePosts.js'

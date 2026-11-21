@@ -1,4 +1,4 @@
-// hooks/useFollows.js
+/*useFollows.js*/
 import { useContext } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { getFollowers, getFollowing, followUser, unfollowUser } from '../services/api/follow.api.js'
@@ -6,7 +6,7 @@ import { UserAuthContext } from "../context/UserAuthContext.jsx";
 
 /**
  * Lista paginada de usuarios que siguen al usuario indicado.
- * useQuery simple (no infinite scroll) — decisión consciente para MVP,
+ * useQuery simple (no infinite scroll) —  decisión consciente para MVP,
  * mismo criterio que useSearchUsers. Se puede promover a useInfiniteQuery
  * más adelante si la UI lo requiere.
  *
@@ -42,8 +42,8 @@ export function useFollowers(userId, page = 1, enabled = true) {
 
 /**
  * Lista paginada de usuarios a los que sigue el usuario indicado.
- * useQuery simple (no infinite scroll) — mismo criterio que useFollowers.
- * Ver TODO en useFollowers sobre invalidación pendiente de cache.
+ * useQuery simple (no infinite scroll) —  decisión consciente para MVP,
+ * mismo criterio que useFollowers. Ver TODO en useFollowers sobre invalidación pendiente de cache.
  *
  * @param {string} userId
  * @param {number} [page]
@@ -65,6 +65,10 @@ export function useFollowing(userId, page = 1, enabled = true) {
     }
 }
 
+/**
+ * Mutación para seguir a un usuario.
+ * @returns {import('@tanstack/react-query').UseMutationResult<import('../services/contracts/types.js').SaveFollowResponseRaw, unknown, string>}
+ */
 export function useFollowUser() {
     const queryClient = useQueryClient();
     const { currentUser } = useContext(UserAuthContext);
@@ -137,6 +141,10 @@ export function useFollowUser() {
     });
 }
 
+/**
+ * Mutación para dejar de seguir a un usuario.
+ * @returns {import('@tanstack/react-query').UseMutationResult<import('../services/contracts/types.js').UnfollowResponseRaw, unknown, string>}
+ */
 export function useUnfollowUser() {
     const queryClient = useQueryClient();
     const { currentUser } = useContext(UserAuthContext);

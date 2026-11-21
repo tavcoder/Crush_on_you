@@ -1,4 +1,4 @@
-// components/ui/feedback/LoadingFallback.jsx
+/*LoadingFallback.jsx*/
 import { useEffect, useState } from 'react'
 import { Heart } from 'lucide-react'
 import './LoadingFallback.css'

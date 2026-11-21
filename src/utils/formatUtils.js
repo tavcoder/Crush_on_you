@@ -1,4 +1,4 @@
-/* formatUtils.js */
+/*formatUtils.js*/
 
 // === User Formatting ===
 // util interno — no se exporta

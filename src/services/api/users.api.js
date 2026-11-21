@@ -1,4 +1,4 @@
-// services/api/users.api.js
+/*users.api.js*/
 import { apiClient } from '../apiClient'
 import { ApiError } from '../ApiError.js'
 import { adaptUser, adaptUserList, adaptUserStats } from './adapters/users.adapter.js'
@@ -35,7 +35,7 @@ export const getUsers = ({ page = 1 } = {}) =>
  */
 /**
  * ⚠️ El backend devuelve el campo de seguidores en singular: `res.follower`
- * (no `res.followers`). Confirmado contra el endpoint real — no es un typo
+* (no `res.followers`). Confirmado contra el endpoint real — no es un typo
  * es así como lo nombra la API. Si este endpoint cambia de forma,
  * revisar aquí primero antes de asumir que el frontend tiene el bug.
  */
@@ -51,6 +51,10 @@ export const getUserById = (id) =>
             return adaptUser(raw);
         });
 
+/**
+ * @param {string} userId
+ * @returns {Promise<import('../contracts/types.js').UserStats>}
+ */
 export const getUserStats = (userId) =>
     apiClient
         .get(`user/counters/${userId}`)
@@ -61,7 +65,7 @@ export const searchUsers = ({ search, page = 1 }) =>
         .get(`user/search/${encodeURIComponent(search)}/${page}`)
         .then(adaptUserList)
 
-// TODO: [DEUDA TÉCNICA] No hay endpoint de sugerencias. Usa getUsers como fallback.
+// TODO: [DEUDA TÃ‰CNICA] No hay endpoint de sugerencias. Usa getUsers como fallback.
 export const getUserSuggestions = ({ page = 1 } = {}) =>
     apiClient
         .get(`user/list/${page}`)
@@ -69,7 +73,8 @@ export const getUserSuggestions = ({ page = 1 } = {}) =>
 
 // ─── MUTATIONS ───
 /**
- * @returns {Promise<import('../contracts/types.js').LoginResponseRaw>}
+ * @param {import('../contracts/types.js').LoginPayload} payload
+ * @returns {Promise<import('../contracts/types.js').LoginResult>}
  */
 export const loginUser = ({ email, password }) =>
     apiClient.call('POST', 'user/login', { email, password })
@@ -80,7 +85,7 @@ export const loginUser = ({ email, password }) =>
         }))
 
 /**
- * @param {{ name:string, surname:string, nick:string, email:string, password:string }} payload
+ * @param {import('../contracts/types.js').RegisterPayload} payload
  * @returns {Promise<import('../contracts/types.js').User>}
  */
 export const registerUser = ({ name, surname, nick, email, password }) =>
@@ -89,7 +94,7 @@ export const registerUser = ({ name, surname, nick, email, password }) =>
         .then(res => adaptUser(res.user))
 
 /**
-* @param {import('../contracts/types.js').User} data
+* @param {import('../contracts/types.js').UpdateProfilePayload} data
 * @returns {Promise<import('../contracts/types.js').User>}
 */
 export const updateProfile = (data) =>

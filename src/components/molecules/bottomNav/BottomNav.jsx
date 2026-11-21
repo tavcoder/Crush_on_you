@@ -1,4 +1,4 @@
-// BottomNav.jsx
+/*BottomNav.jsx*/
 import { useLocation } from 'react-router'
 import { Home, Search, Users, User } from "lucide-react";
 import { IconButton } from "../../ui/iconButton/IconButton.jsx";

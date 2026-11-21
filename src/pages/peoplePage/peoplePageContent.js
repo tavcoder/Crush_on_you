@@ -1,4 +1,4 @@
-// peoplePageContent.js
+/*peoplePageContent.js*/
 import { PEOPLE_TYPES_CONFIG } from "./peopleTypes.js";
 
 function resolve(entry, userNick) {

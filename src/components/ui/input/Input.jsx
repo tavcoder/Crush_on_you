@@ -2,6 +2,23 @@
 import { Search, X } from "lucide-react";
 import './Input.css'
 
+/**
+ * @param {Object} props
+ * @param {string} props.label
+ * @param {string} props.value
+ * @param {(event: React.ChangeEvent<HTMLInputElement>) => void} props.onChange
+ * @param {(() => void)} [props.onClear]
+ * @param {(event: React.KeyboardEvent<HTMLInputElement>) => void} [props.onKeyDown]
+ * @param {string} [props.variant]
+ * @param {string} [props.type]
+ * @param {string} [props.placeholder]
+ * @param {string} [props.id]
+ * @param {string} [props.name]
+ * @param {string} [props.className]
+ * @param {boolean} [props.disabled]
+ * @param {React.Ref<HTMLInputElement>} [props.ref]
+ * @returns {JSX.Element}
+ */
 export function Input({
     label,
     value,

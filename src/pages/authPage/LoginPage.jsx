@@ -1,4 +1,4 @@
-// pages/LoginPage/LoginPage.jsx
+/*LoginPage.jsx*/
 
 import { Link } from 'react-router';
 import { Hearts } from './Hearts.jsx';

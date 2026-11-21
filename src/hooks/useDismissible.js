@@ -1,4 +1,4 @@
-// hooks/useDismissible.js
+/*useDismissible.js*/
 import { useEffect, useCallback} from 'react'
 export function useDismissible({ isOpen, onClose, triggerRef, contentRef, closeOnOutsideClick = true }) {
 

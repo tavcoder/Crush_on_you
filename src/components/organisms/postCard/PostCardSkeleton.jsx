@@ -1,4 +1,4 @@
-// PostCardSkeleton.jsx
+/*PostCardSkeleton.jsx*/
 import { SkeletonBase } from '../../ui/skeletons/SkeletonBase';
 import './PostCard.css';
 

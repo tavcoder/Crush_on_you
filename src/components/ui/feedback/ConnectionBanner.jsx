@@ -1,4 +1,4 @@
-// components/ui/feedback/ConnectionBanner.jsx
+/*ConnectionBanner.jsx*/
 import { useConnectionStatus } from '../../../hooks/useConnectionStatus.js'
 import { useRetryAll } from '../../../hooks/useRetryAll.js'
 import { ERROR_MESSAGES } from '../../../services/ApiError.js'

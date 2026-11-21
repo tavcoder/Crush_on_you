@@ -1,4 +1,4 @@
-//UserStats.jsx
+/*UserStats.jsx*/
 import { Link } from 'react-router'
 import { getStatsFormat } from "../../../utils/formatUtils.js"
 import { getTimelinePath, getPeoplePath } from "../../../utils/routeUtils.js"

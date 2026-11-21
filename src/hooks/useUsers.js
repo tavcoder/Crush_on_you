@@ -1,4 +1,4 @@
-/*hooks/useUsers.js*/
+/*useUsers.js*/
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import {
     getUsers,

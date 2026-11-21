@@ -1,4 +1,4 @@
-// pages/ComingSoonPage.jsx
+/*ComingSoonPage.jsx*/
 import { Link } from 'react-router'
 import { Sparkles } from 'lucide-react'
 import './ComingSoonPage.css'

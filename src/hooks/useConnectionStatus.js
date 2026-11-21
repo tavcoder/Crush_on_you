@@ -1,4 +1,4 @@
-// hooks/useConnectionStatus.js
+/*useConnectionStatus.js*/
 import { useCallback, useSyncExternalStore } from 'react'
 import { useQueryClient } from '@tanstack/react-query'
 import { useIsOnline } from './useIsOnline.js'

@@ -1,4 +1,4 @@
-/* hooks/useSearch.js*/
+/*useSearch.js*/
 import { useSearchUsers } from './useUsers'
 import { useSearchPosts } from './usePosts'
 import { useSearchQuery } from './useSearchQuery'

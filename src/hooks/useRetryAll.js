@@ -1,4 +1,4 @@
-// hooks/useRetryAll.js
+/*useRetryAll.js*/
 import { useQueryClient } from '@tanstack/react-query'
 
 export function useRetryAll() {

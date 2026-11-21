@@ -1,4 +1,4 @@
-// pages/TimelinePage.jsx
+/*TimelinePage.jsx*/
 import { useOutletContext, useParams } from "react-router";
 import { ProfileCard } from "../../components/molecules/profileCard/ProfileCard.jsx";
 import { SortByCard } from "../../components/molecules/sortByCard/SortByCard.jsx";

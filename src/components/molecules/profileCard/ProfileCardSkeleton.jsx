@@ -1,4 +1,4 @@
-//ProfileCardSkeleton
+/*ProfileCardSkeleton.jsx*/
 import { SkeletonBase } from "../../ui/skeletons/SkeletonBase";
 
 export function ProfileCardSkeleton() {

@@ -1,4 +1,4 @@
-// hooks/useAuthForm.js
+/*useAuthForm.js*/
 import { useContext, useCallback } from 'react';
 import { useNavigate } from 'react-router';
 import { UserAuthContext } from '../context/UserAuthContext';
@@ -26,6 +26,10 @@ const FORM_CONFIG = {
     }
 };
 
+/**
+ * @param {'login'|'register'} [mode]
+ * @returns {Object}
+ */
 export function useAuthForm(mode = 'login') { // 'login' | 'register'
     const { login: authLogin } = useContext(UserAuthContext);
     const navigate = useNavigate();

@@ -1,4 +1,4 @@
-//SortByCard.jsx
+/*SortByCard.jsx*/
 import { SelectButton } from '../../ui/selectButton/SelectButton'
 import './SortByCard.css'
 

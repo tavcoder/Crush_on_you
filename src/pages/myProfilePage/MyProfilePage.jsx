@@ -1,4 +1,4 @@
-// pages/myProfilePage/MyProfilePage.jsx
+/*MyProfilePage.jsx*/
 import { useOutletContext } from "react-router";
 import { ErrorFallback } from '../../components/ui/feedback/ErrorFallback.jsx';
 import { LoadingFallback } from '../../components/ui/feedback/LoadingFallback.jsx';

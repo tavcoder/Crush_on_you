@@ -1,4 +1,4 @@
-// ProtectedRoute.jsx
+/*ProtectedRoute.jsx*/
 import { useContext } from 'react'
 import { Navigate, Outlet } from 'react-router'
 import { UserAuthContext } from '../../context/UserAuthContext'

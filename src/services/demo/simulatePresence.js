@@ -1,4 +1,4 @@
-// services/demo/simulatePresence.js
+/*simulatePresence.js*/
 // Solo para grabar la demo: el backend no soporta presencia.
 const isDemoOnline = (id) =>
     [...id].reduce((sum, ch) => sum + ch.charCodeAt(0), 0) % 3 !== 0

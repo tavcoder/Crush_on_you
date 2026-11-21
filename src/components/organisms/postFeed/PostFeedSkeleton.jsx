@@ -1,4 +1,4 @@
-// PostFeedSkeleton.jsx
+/*PostFeedSkeleton.jsx*/
 import { PostCardSkeleton } from '../postCard/PostCardSkeleton';
 import './PostFeed.css';
 

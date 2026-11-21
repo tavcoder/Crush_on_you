@@ -1,4 +1,4 @@
-// services/api/adapters/posts.adapter.js
+/*posts.adapter.js*/
 import { adaptUser } from './users.adapter.js';  // ← importa el adapter de usuario
 
 /**
@@ -49,10 +49,9 @@ export function adaptPost(raw, currentUserId) {
 /**
  * Adapta una respuesta paginada de la API
  * @param {Object} response
- * @param {import('../../contracts/types.js').PostRaw[]} response.data
- * @param {Object} [response.pagination]
- * @param {number} [response.pagination.currentPage]
- * @param {number} [response.pagination.totalPages]
+ * @param {import('../../contracts/types.js').PostRaw[]} [response.publications]
+ * @param {number} [response.page]
+ * @param {number} [response.pages]
  * @param {string} [currentUserId]
  * @returns {import('../../contracts/types.js').PaginatedPosts}
  */

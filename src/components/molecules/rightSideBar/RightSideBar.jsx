@@ -1,4 +1,4 @@
-//RightSideBar.jsx
+/*RightSideBar.jsx*/
 import { useOnlineUsers } from "../../../hooks/useOnlineUsers.js"
 import { UsersOnlineCard } from "../usersOnlineCard/UsersOnlineCard.jsx"
 import './RightSideBar.css'

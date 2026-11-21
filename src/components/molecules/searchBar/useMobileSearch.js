@@ -1,4 +1,4 @@
-// components/molecules/searchBar/useMobileSearch.js
+/*useMobileSearch.js*/
 import { useCallback, useRef, useState } from 'react'
 import { useLocation } from 'react-router'
 import { useSearchQuery } from '../../../hooks/useSearchQuery.js'

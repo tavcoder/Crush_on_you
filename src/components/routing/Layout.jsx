@@ -1,4 +1,4 @@
-//Layout.jsx
+/*Layout.jsx*/
 import { useContext } from "react"
 import { Outlet, useLocation } from "react-router"
 import { ErrorBoundary } from "react-error-boundary"
