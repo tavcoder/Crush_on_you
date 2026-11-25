@@ -103,6 +103,7 @@
 
   /* Z-index */
   --z-base: 0;
+  --z-bottom-nav: 1
   --z-dropdown: 10;
   --z-sticky: 20;
   --z-modal: 30;
