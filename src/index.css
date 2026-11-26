@@ -103,7 +103,7 @@
 
   /* Z-index */
   --z-base: 0;
-  --z-dropdown: 10;
+  --z-bottom-nav: 1 --z-dropdown: 10;
   --z-sticky: 20;
   --z-modal: 30;
   --z-toast: 40;
@@ -213,6 +213,7 @@ body {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
+  overflow-x: clip;
 }
 
 /* Layout controla solo la estructura de columnas */
@@ -271,7 +272,8 @@ body {
   flex-direction: column;
   gap: var(--space-5);
 }
-.empty-state{
+
+.empty-state {
   padding: var(--space-5);
 }
 

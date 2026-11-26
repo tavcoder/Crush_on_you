@@ -15,8 +15,10 @@ export function UsersList({ usersList, currentUser, type = 'suggestions' }) {
 
                 const userFollower = currentUser?.followers?.some((followerUser) => followerUser.userId === user.id);
                 const secondaryText = userFollower ? `Following you` : undefined;
+                const isCurrentUser = user.id === currentUser?.id;
 
                 return (
+
                     <li key={user.id} className='users-list__item' role='listitem'>
 
                         <UserInfo
@@ -27,10 +29,9 @@ export function UsersList({ usersList, currentUser, type = 'suggestions' }) {
                             to={buildProfilePath(user)}
                         />
 
-                        <FollowButton
-                            userId={user.id}
-                            currentUser={currentUser}
-                        />
+                        {!isCurrentUser && (
+                            <FollowButton userId={user.id} currentUser={currentUser} />
+                        )}
                     </li>)
             }
             )}
